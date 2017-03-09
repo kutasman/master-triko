@@ -1,0 +1,12 @@
+/bootstrap/compiled.php
+.env.*.php
+.env.php
+.env
+.idea/
+/node_modules/
+/vendor/*
+/.phpstorm.meta.php
+/_ide_helper.php
+/public/css/
+/public/fonts/
+/public/js/
