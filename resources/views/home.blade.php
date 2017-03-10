@@ -1,17 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
-
-                <div class="panel-body">
-                    You are logged in!
-                </div>
-            </div>
-        </div>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Create your perfect trico</h1>
+        <p>... just in few steps.</p>
+        <p>
+            {{ HTML::link(route('craft.general'),'Create perfect trico', ['class' => 'btn btn-primary btn-lg']) }}
+        </p>
     </div>
 </div>
 @endsection

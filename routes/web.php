@@ -16,6 +16,11 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
+Route::group(['prefix' => 'craft'], function (){
+	Route::get('/general', 'CraftController@general')->name('craft.general');
+	Route::post('/models', 'CraftController@models')->name('craft.models');
+});
+
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'], function (){
 	Route::get('/', 'AdminController@index');
 	Route::resource('products', 'ProductController',['only' => ['index','create' ,'store']]);
