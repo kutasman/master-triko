@@ -43,9 +43,13 @@ class ProductController extends Controller
     {
 	    $this->validate($request,[
         	'title' => 'required',
-		    'description' => 'required'
+		    'description' => 'required',
+		    'price' => 'required|numeric|min:0',
         ]);
-	    dd($request->all());
+
+	    $product = Product::create($request->all());
+
+	    return redirect()->route('products.edit', ['id' => $product->id]);
 
     }
 
@@ -68,7 +72,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+    	$product->with('attributes');
+        return view('admin.products.edit', compact('product'));
     }
 
     /**

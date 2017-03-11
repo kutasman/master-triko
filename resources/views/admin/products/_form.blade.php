@@ -4,6 +4,8 @@
 
 {!! BootForm::textarea('description') !!}
 
+{!! BootForm::number('price') !!}
+
 {!! BootForm::submit('Save', ['value' => 'Save']) !!}
 
 <div class="form-group">

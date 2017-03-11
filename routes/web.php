@@ -16,12 +16,16 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
+Route::get('/catalog', 'CatalogController@catalog')->name('catalog');
+
 Route::group(['prefix' => 'craft'], function (){
 	Route::get('/general', 'CraftController@general')->name('craft.general');
 	Route::post('/models', 'CraftController@models')->name('craft.models');
 });
 
+
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'], function (){
 	Route::get('/', 'AdminController@index');
-	Route::resource('products', 'ProductController',['only' => ['index','create' ,'store']]);
+	Route::resource('products', 'ProductController',['except' => ['show']]);
+	Route::resource('attributes', 'AttributesController', ['except' => ['show']]);
 });
