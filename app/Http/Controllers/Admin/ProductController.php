@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -30,7 +32,7 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
-        return view('admin.products.create', compact(['product']));
+        return view('admin.products.create', compact('product'));
     }
 
     /**
@@ -72,7 +74,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->with('attributes');
+    	$product->with(['attributes','images']);
         return view('admin.products.edit', compact('product'));
     }
 
@@ -85,7 +87,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+	    //
     }
 
     /**
@@ -97,5 +99,27 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function addImage(Request $request, Product $product)
+    {
+    	$this->validate($request, [
+    		'image' => 'image|required'
+	    ]);
+
+    	$image_path = $request->file('image')->store('products',['disk' => 'public']);
+
+    	$product->images()->create([
+    		'path' => $image_path
+	    ]);
+    	return redirect()->route('products.edit', $product->id);
+    }
+
+    public function removeImage(Product $product ,Image $image){
+
+    	Storage::disk('public')->delete($image->path);
+		$image->delete();
+
+		return redirect()->route('products.edit', $product->id);
     }
 }

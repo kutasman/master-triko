@@ -9,7 +9,23 @@
 
     <ul class="list-group">
         @forelse($products as $product)
-            <li class="list-group-item">{{ $product->title }}, {!! HTML::link(route('products.edit', ['id' => $product->id]), 'Edit') !!}</li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-2">
+                        {{ HTML::image('storage/' . $product->images()->first()['path'], null, ['class' => 'img-thumbnail']) }}
+
+
+                    </div>
+                    <div class="col-xs-6">
+                        {{ $product->title }}
+                    </div>
+                    <div class="col-xs-2">
+                        {{ HTML::link(route('products.edit', ['id' => $product->id]), 'Edit') }}
+                    </div>
+                </div>
+
+                {{ $product->title }},
+            </li>
 
         @empty
             <div>Empty here</div>

@@ -18,4 +18,9 @@ class Product extends Model
 	{
 		return $this->hasMany(Attribute::class);
 	}
+
+	public function images()
+	{
+		return $this->morphMany(Image::class, 'imageable');
+	}
 }

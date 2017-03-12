@@ -16,7 +16,7 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
-Route::get('/catalog', 'CatalogController@catalog')->name('catalog');
+//Route::get('/catalog', 'CatalogController@catalog')->name('catalog');
 
 Route::group(['prefix' => 'craft'], function (){
 	Route::get('/general', 'CraftController@general')->name('craft.general');
@@ -27,5 +27,9 @@ Route::group(['prefix' => 'craft'], function (){
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth'], function (){
 	Route::get('/', 'AdminController@index');
 	Route::resource('products', 'ProductController',['except' => ['show']]);
+	Route::post('products/{product}/add-image', 'ProductController@addImage')->name('products.add_image');
+	Route::delete('/products/{product}/delete-image/{image}', 'ProductController@removeImage')->name('products.delete-image');
 	Route::resource('attributes', 'AttributesController', ['except' => ['show']]);
+	Route::resource('images', 'ImagesController', ['except' => ['show']]);
+	//Route::post('')
 });
