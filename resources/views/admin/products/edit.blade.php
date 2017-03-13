@@ -26,7 +26,6 @@
                     {{ HTML::link('#', 'Delete',['onclick' => 'event.preventDefault();
                                                      document.getElementById("delete-image-form").submit();']) }}
 
-
                     {!! BootForm::open(['method' => 'delete', 'id' => 'delete-image-form','route' => ['products.delete-image', $product->id, $image->id]]) !!}
 
                     {!! BootForm::close() !!}
@@ -43,10 +42,30 @@
         </div>
         <div class="tab-pane fade" id="attributes">
             <h2>Attributes</h2>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <ul class="list-group">
+                            @foreach($product->attributes as $attribute)
+                            <li class="list-group-item">{{ $attribute->name }}, {{ $attribute->description }}</li>
+                            @endforeach
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {!! BootForm::open(['route' => ['attributes.store', $product->id]]) !!}
+
+                    {!! BootForm::text('name') !!}
+                    {!! BootForm::textarea('description') !!}
+                    {!! BootForm::select('type_id', 'Type', $attributeTypes) !!}
+
+                    {!! BootForm::submit('Add') !!}
+                    {!! BootForm::close() !!}
+                </div>
+            </div>
+
+
             <p>
-                @foreach($product->attributes as $attribute)
-                    {{ $attribute->name }}
-                @endforeach
+
             </p>
         </div>
 

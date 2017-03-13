@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Attribute;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -37,17 +38,18 @@ class AttributesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Product $product)
     {
         $this->validate($request, [
         	'name' => 'string|required',
 	        'description' => 'string',
-	        'type' => 'string|required',
+	        'type_id' => 'numeric|min:1|required',
         ]);
 
-        $attribute = Attribute::create($request->all());
+        $attribute = $product->attributes()->create($request->all());
 
-        return redirect()->route('attributes.edit', ['id' => $attribute->id]);
+
+        return redirect()->route('products.edit', ['id' => $product->id]);
     }
 
     /**
@@ -88,8 +90,9 @@ class AttributesController extends Controller
 		]);
 
 		$attribute->fill($request->all());
+		$attribute->save();
 
-		return view('admin.attributes.edit', compact('attribute'));
+		return redirect()->route('attributes.edit', $attribute->id);
     }
 
     /**

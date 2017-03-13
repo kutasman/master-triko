@@ -17,11 +17,20 @@ class CreateAttributesTable extends Migration
             $table->increments('id');
             $table->string('name', 60);
             $table->string('description', 260);
-            $table->string('type', 40);
+            $table->integer('type_id')->unsigned();
             $table->integer('product_id')->unsigned()->nullable()->default(null);
 
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
+        });
+
+        Schema::create('attribute_types', function (Blueprint $table){
+
+        	$table->increments('id');
+			$table->string('name');
+        	$table->string('type', 40);
+
+        	$table->timestamps();
         });
     }
 
@@ -32,6 +41,10 @@ class CreateAttributesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attributes');
+	    Schema::disableForeignKeyConstraints();
+	    Schema::dropIfExists('attributes');
+	    Schema::dropIfExists('attribute_types');
+	    Schema::enableForeignKeyConstraints();
+
     }
 }

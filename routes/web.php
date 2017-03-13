@@ -29,7 +29,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::resource('products', 'ProductController',['except' => ['show']]);
 	Route::post('products/{product}/add-image', 'ProductController@addImage')->name('products.add_image');
 	Route::delete('/products/{product}/delete-image/{image}', 'ProductController@removeImage')->name('products.delete-image');
-	Route::resource('attributes', 'AttributesController', ['except' => ['show']]);
+	Route::post('products/add-attribute', 'ProductController@addAttribute')->name('products.addAttribute');
+	Route::resource('attributes', 'AttributesController', ['except' => ['show', 'store']]);
+	Route::post('attributes/{product}', 'AttributesController@store')->name('attributes.store');
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	//Route::post('')
 });

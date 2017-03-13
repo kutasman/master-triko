@@ -8,7 +8,7 @@ class Attribute extends Model
 {
 
 	protected $fillable = [
-		'name', 'description', 'type'
+		'name', 'description', 'type_id'
 	];
 
 	//Relations_____________

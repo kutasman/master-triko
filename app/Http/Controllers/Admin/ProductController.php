@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attribute;
+use App\Models\AttributeType;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return view('admin.products.index', compact(['products']));
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -75,7 +77,14 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
     	$product->with(['attributes','images']);
-        return view('admin.products.edit', compact('product'));
+	    $attributes = Attribute::whereProductId(null)->get();
+
+	    $attributeTypes = AttributeType::pluck('id','type')->mapWithKeys(function ($type){
+	    	return [$type['id'] => $type['type']];
+	    });
+	    $attributeTypes = AttributeType::pluck('type', 'id');
+
+	    return view('admin.products.edit', compact('product', 'attributes', 'attributeTypes'));
     }
 
     /**
@@ -101,7 +110,13 @@ class ProductController extends Controller
         //
     }
 
-    public function addImage(Request $request, Product $product)
+	/**
+	 * @param Request $request
+	 * @param Product $product
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function addImage(Request $request, Product $product)
     {
     	$this->validate($request, [
     		'image' => 'image|required'
@@ -115,7 +130,13 @@ class ProductController extends Controller
     	return redirect()->route('products.edit', $product->id);
     }
 
-    public function removeImage(Product $product ,Image $image){
+	/**
+	 * @param Product $product
+	 * @param Image $image
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function removeImage(Product $product ,Image $image){
 
     	Storage::disk('public')->delete($image->path);
 		$image->delete();
