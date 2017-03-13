@@ -4,6 +4,8 @@
 
 {!! BootForm::textarea('description') !!}
 
+{!! BootForm::select('categories[]', 'Categories', $categories, $product->categories->pluck('id')->toArray(), ['multiple']) !!}
+
 {!! BootForm::number('price') !!}
 
 {!! BootForm::submit('Save', ['value' => 'Save']) !!}

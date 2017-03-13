@@ -11,7 +11,7 @@ class AttributeTypes extends Seeder
      */
     public function run()
     {
-        $types = ['radio', 'checkbox', 'text', 'number'];
+        $types = ['radio', 'checkbox', 'select', 'text', 'number'];
 
         foreach ($types as $type){
 

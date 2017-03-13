@@ -33,5 +33,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::resource('attributes', 'AttributesController', ['except' => ['show', 'store']]);
 	Route::post('attributes/{product}', 'AttributesController@store')->name('attributes.store');
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
-	//Route::post('')
+	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
 });

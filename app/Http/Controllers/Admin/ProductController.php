@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeType;
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -34,7 +35,8 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
-        return view('admin.products.create', compact('product'));
+    	$categories = Category::pluck('name', 'id');
+        return view('admin.products.create', compact('product', 'categories'));
     }
 
     /**
@@ -46,12 +48,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 	    $this->validate($request,[
-        	'title' => 'required',
-		    'description' => 'required',
+        	'title' => 'string|required',
+		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
+		    'categories' => 'required',
+	        'categories.*' => 'numeric|required|min:0'
         ]);
 
 	    $product = Product::create($request->all());
+
+	    $product->categories()->attach($request->categories);
 
 	    return redirect()->route('products.edit', ['id' => $product->id]);
 
@@ -76,15 +82,14 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->with(['attributes','images']);
+    	$product->with(['attributes','images', 'categories']);
 	    $attributes = Attribute::whereProductId(null)->get();
 
-	    $attributeTypes = AttributeType::pluck('id','type')->mapWithKeys(function ($type){
-	    	return [$type['id'] => $type['type']];
-	    });
 	    $attributeTypes = AttributeType::pluck('type', 'id');
 
-	    return view('admin.products.edit', compact('product', 'attributes', 'attributeTypes'));
+	    $categories = Category::pluck('name', 'id');
+
+	    return view('admin.products.edit', compact('product', 'attributes', 'attributeTypes', 'categories'));
     }
 
     /**
@@ -96,7 +101,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-	    //
+	    $this->validate($request,[
+		    'title' => 'string|required',
+		    'description' => 'string',
+		    'price' => 'required|numeric|min:0',
+		    'categories' => 'required',
+		    'categories.*' => 'numeric|required|min:0'
+	    ]);
+
+	    $product->fill($request->all());
+	    $product->categories()->sync($request->categories);
+
+	    return redirect()->route('products.edit', $product->id);
     }
 
     /**
