@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CategoriesController extends Controller
+class ProductTypesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $prodTypes = ProductType::all();
 
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.product_types.index', compact('prodTypes'));
     }
 
     /**
@@ -27,8 +27,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-    	$category = new Category();
-        return view('admin.categories.create', compact('category'));
+        //
     }
 
     /**
@@ -39,15 +38,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-		$this->validate($request, [
-		  'name' => 'string|required',
-		  'description' => 'string'
-		]);
-
-		$category = Category::create($request->all());
-
-		return redirect()->route('categories.index');
-
+        //
     }
 
     /**
@@ -56,9 +47,10 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show( $id)
     {
-        //
+    	$type = ProductType::find($id);
+		return view('admin.product_types.show', compact('type'));
     }
 
     /**
@@ -67,9 +59,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-		return view('admin.categories.edit', compact('category'));
+        //
     }
 
     /**

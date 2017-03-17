@@ -1,6 +1,5 @@
 @extends('admin.layouts.admin')
-
+@section('page-title', 'Create Product')
 @section('content')
-    <h2 class="page-header">Create Product</h2>
     @include('admin.products._form')
 @stop

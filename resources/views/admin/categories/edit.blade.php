@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
+@section('page-title', 'Edit Category')
 
 @section('content')
-    <h2 class="page-header">Edit Category</h2>
 
     @include('admin.categories._form')
 

@@ -1,8 +1,6 @@
 @extends('admin.layouts.admin')
-
+@section('page-title', 'Edit Attribute')
 @section('content')
-
-    <h2 class="page-header">Edit Attribute</h2>
 
     @include('admin.attributes._form')
 

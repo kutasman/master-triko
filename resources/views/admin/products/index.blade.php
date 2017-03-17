@@ -1,36 +1,31 @@
 @extends('admin.layouts.admin')
 
+@section('page-title', 'Products')
+
+@section('toolbar')
+    {{ HTML::link( route('products.create'), 'Create Product', ['class' => 'btn btn-success pull-right']) }}
+
+@endsection
+
 @section('content')
 
-    <h2 class="page-header">
-        Products
-        {{ HTML::link( route('products.create'), 'Create Product', ['class' => 'btn btn-success pull-right']) }}
-    </h2>
-
-    <ul class="list-group">
-        @forelse($products as $product)
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col-xs-2">
-                        {{ HTML::image('storage/' . $product->images()->first()['path'], null, ['class' => 'img-thumbnail']) }}
-
-
-                    </div>
-                    <div class="col-xs-6">
-                        {{ $product->title }}
-                    </div>
-                    <div class="col-xs-2">
-                        {{ HTML::link(route('products.edit', ['id' => $product->id]), 'Edit') }}
-                    </div>
+    <div class="list-group">
+        @foreach($products as $product)
+        <a href="{{ route('products.edit', ['id' => $product->id]) }}" class="list-group-item">
+            <div class="row">
+                <div class="col-xs-2">
+                    {{ HTML::image('storage/' . $product->images->first()['path'], null, ['class' => 'img-thumbnail']) }}
                 </div>
+                <div class="col-xs-10">
+                    <h4 class="list-group-item-heading">{{ $product->title }} <small class="badge">{{ $product->code }}</small>
+                        <i><small class="text-muted">{{ $product->type_slug }} </small></i>
+                    </h4>
+                    <p class="list-group-item-text">Content goes here</p>
+                </div>
+            </div>
 
-                {{ $product->title }},
-            </li>
-
-        @empty
-            <div>Empty here</div>
-        @endforelse
-    </ul>
-
+        </a>
+        @endforeach
+    </div>
 
 @endsection

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Models\Modificator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CategoriesController extends Controller
+class ModificatorsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-
-        return view('admin.categories.index', compact('categories'));
+        //
     }
 
     /**
@@ -27,8 +25,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-    	$category = new Category();
-        return view('admin.categories.create', compact('category'));
+        //
     }
 
     /**
@@ -40,14 +37,15 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
 		$this->validate($request, [
-		  'name' => 'string|required',
-		  'description' => 'string'
+			'name' => 'string',
+			'description' => 'string',
+			'type' => 'string',
+			'product_id' => 'numeric|exists:products,id',
 		]);
 
-		$category = Category::create($request->all());
+		$modificator = Modificator::create($request->all());
 
-		return redirect()->route('categories.index');
-
+		return redirect()->route('products.edit', $request->product_id);
     }
 
     /**
@@ -56,7 +54,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Modificator $modificator)
     {
         //
     }
@@ -67,9 +65,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-		return view('admin.categories.edit', compact('category'));
+        //
     }
 
     /**

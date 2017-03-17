@@ -64,7 +64,14 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-        @yield('content')
+            <div class="page-header">
+                <h2>@yield('page-title')
+                    <small>@yield('page-title-subtext')</small>
+                    @yield('toolbar')
+                </h2>
+            </div>
+
+            @yield('content')
 
         </div>
 

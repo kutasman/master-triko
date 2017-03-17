@@ -4,9 +4,11 @@
 
 {!! BootForm::textarea('description') !!}
 
-{!! BootForm::select('categories[]', 'Categories', $categories, $product->categories->pluck('id')->toArray(), ['multiple']) !!}
-
 {!! BootForm::number('price') !!}
+
+{!! BootForm::text('code') !!}
+
+{!! BootForm::select('type_slug', 'Product type', $productTypes, $product->exists ? $product->type_slug : '') !!}
 
 {!! BootForm::submit('Save', ['value' => 'Save']) !!}
 

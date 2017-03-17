@@ -8,6 +8,7 @@ use App\Models\AttributeType;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Storage;
 
@@ -22,7 +23,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('images')->get();
 
         return view('admin.products.index', compact('products'));
     }
@@ -35,8 +36,9 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
-    	$categories = Category::pluck('name', 'id');
-        return view('admin.products.create', compact('product', 'categories'));
+	    $productTypes = ProductType::pluck('name', 'slug');
+
+	    return view('admin.products.create', compact('product', 'productTypes'));
     }
 
     /**
@@ -51,15 +53,14 @@ class ProductController extends Controller
         	'title' => 'string|required',
 		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'categories' => 'required',
-	        'categories.*' => 'numeric|required|min:0'
+		    'code' => 'string|required',
+		    'type_slug' => 'string|required|exists:product_types,slug',
         ]);
 
+
 	    $product = Product::create($request->all());
-
-	    $product->categories()->attach($request->categories);
-
-	    return redirect()->route('products.edit', ['id' => $product->id]);
+	    $product->meta()->create([]);
+	    return redirect()->route('products.edit', $product->id);
 
     }
 
@@ -82,14 +83,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->with(['attributes','images', 'categories']);
-	    $attributes = Attribute::whereProductId(null)->get();
+    	$product->with(['images', 'meta']);
 
-	    $attributeTypes = AttributeType::pluck('type', 'id');
+    	$productTypes = ProductType::pluck('name', 'slug');
 
-	    $categories = Category::pluck('name', 'id');
-
-	    return view('admin.products.edit', compact('product', 'attributes', 'attributeTypes', 'categories'));
+	    return view('admin.products.edit', compact('product', 'productTypes' ));
     }
 
     /**
@@ -105,14 +103,28 @@ class ProductController extends Controller
 		    'title' => 'string|required',
 		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'categories' => 'required',
-		    'categories.*' => 'numeric|required|min:0'
+		    'code' => 'string|required',
+		    'type_slug' => 'string|required|exists:product_types,slug',
 	    ]);
 
-	    $product->fill($request->all());
-	    $product->categories()->sync($request->categories);
+	    $product->update($request->all());
+
 
 	    return redirect()->route('products.edit', $product->id);
+    }
+
+
+    public function updateMeta(Request $request, Product $product)
+    {
+		$this->validate($request,[
+			'gender' => 'string|required',
+			'sport' => 'string|required',
+		]);
+
+		$product->meta->fill($request->all())->save();
+
+		return redirect()->route('products.edit', $product->id);
+
     }
 
     /**
