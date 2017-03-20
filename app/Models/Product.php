@@ -27,22 +27,9 @@ class Product extends Model
 		return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
 	}
 
-	public function meta()
-	{
-		if ( $this->exists){
-			return $this->hasOne('App\Models\Meta' . ucfirst($this->type_slug));
-		} else {
-			throw new \Exception('no such product meta model');
-		}
-	}
-
 	public function type()
 	{
 		return $this->belongsTo(ProductType::class, 'type_slug', 'slug');
 	}
 
-	public function modificators()
-	{
-		return $this->hasMany(Modificator::class);
-	}
 }

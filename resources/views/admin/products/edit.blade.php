@@ -51,16 +51,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-8">
                 <ul class="list-group">
-                    {!! BootForm::open(['route' => ['products.update_meta', $product->id], 'method' => 'PUT']) !!}
 
-                    {!! BootForm::select('gender', null, ['male' => 'male', 'female' => 'female'], $product->meta->gender) !!}
-                    {!! BootForm::select('sport', null, [
-                        'powerlifting' => 'powerlifting',
-                        'wrestling' => 'wrestling',
-                    ], $product->meta->sport) !!}
-
-                    {!! BootForm::submit('Save') !!}
-                    {!! BootForm::close() !!}
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-4">
@@ -72,24 +63,7 @@
     <div class="tab-pane fade" id="modificators">
 
         <div class="row">
-            <div class="col-sm-8">
-                <ul class="list-group">
-                    @foreach($product->modificators as $modificator)
-                        <li class="list-group-item">{{ $loop->iteration . '). ' }}{{ $modificator->name }}, type: {{ $modificator->type }}</li>
-                    @endforeach
-                </ul>
 
-            </div>
-            <div class="col-sm-4">
-                {!! BootForm::open(['route' => 'modificators.store']) !!}
-
-                {!! BootForm::hidden('product_id', $product->id) !!}
-                {!! BootForm::text('name') !!}
-                {!! BootForm::text('description') !!}
-                {!! BootForm::select('type', 'Type', ['text'=> 'text']) !!}
-                {!! BootForm::submit() !!}
-                {!! BootForm::close() !!}
-            </div>
         </div>
 
 

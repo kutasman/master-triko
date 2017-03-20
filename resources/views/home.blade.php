@@ -6,7 +6,9 @@
         <h1>Create your perfect trico</h1>
         <p>... just in few steps.</p>
         <p>
-            {{ HTML::link(route('craft.general'),'Create perfect trico', ['class' => 'btn btn-primary btn-lg']) }}
+            @foreach($productTypes as $productType)
+                {{ HTML::link('#', $productType->name) }}
+            @endforeach
         </p>
     </div>
 </div>

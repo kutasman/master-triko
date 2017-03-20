@@ -59,7 +59,6 @@ class ProductController extends Controller
 
 
 	    $product = Product::create($request->all());
-	    $product->meta()->create([]);
 	    return redirect()->route('products.edit', $product->id);
 
     }
@@ -83,7 +82,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->with(['images', 'meta']);
+    	$product->with(['images']);
 
     	$productTypes = ProductType::pluck('name', 'slug');
 

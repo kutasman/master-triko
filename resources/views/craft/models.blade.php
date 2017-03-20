@@ -1,4 +1,4 @@
-@extends('layouts.craft')
+@extends('layouts.factory')
 
 @section('panel-title')
     <span class="badge">2</span> Choose model

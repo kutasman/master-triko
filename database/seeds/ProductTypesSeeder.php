@@ -13,8 +13,8 @@ class ProductTypesSeeder extends Seeder
     public function run()
     {
         $productTypes = [
-        	'default',
 	        'triko',
+	        'default',
         ];
 
         foreach ($productTypes as $type){
