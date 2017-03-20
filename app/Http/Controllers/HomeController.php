@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Factory;
+use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 
@@ -24,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-    	$productTypes = ProductType::all();
-        return view('home', compact('productTypes'));
+    	$factories = Factory::all();
+        return view('home', compact('factories'));
     }
 }

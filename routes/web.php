@@ -13,6 +13,7 @@
 
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
+Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->name('factory');
 
 Auth::routes();
 

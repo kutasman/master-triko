@@ -36,9 +36,8 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
-	    $productTypes = ProductType::pluck('name', 'slug');
 
-	    return view('admin.products.create', compact('product', 'productTypes'));
+	    return view('admin.products.create', compact('product'));
     }
 
     /**
@@ -51,10 +50,7 @@ class ProductController extends Controller
     {
 	    $this->validate($request,[
         	'title' => 'string|required',
-		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'code' => 'string|required',
-		    'type_slug' => 'string|required|exists:product_types,slug',
         ]);
 
 
@@ -84,9 +80,8 @@ class ProductController extends Controller
     {
     	$product->with(['images']);
 
-    	$productTypes = ProductType::pluck('name', 'slug');
 
-	    return view('admin.products.edit', compact('product', 'productTypes' ));
+	    return view('admin.products.edit', compact('product' ));
     }
 
     /**
@@ -100,10 +95,7 @@ class ProductController extends Controller
     {
 	    $this->validate($request,[
 		    'title' => 'string|required',
-		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'code' => 'string|required',
-		    'type_slug' => 'string|required|exists:product_types,slug',
 	    ]);
 
 	    $product->update($request->all());
@@ -113,18 +105,7 @@ class ProductController extends Controller
     }
 
 
-    public function updateMeta(Request $request, Product $product)
-    {
-		$this->validate($request,[
-			'gender' => 'string|required',
-			'sport' => 'string|required',
-		]);
 
-		$product->meta->fill($request->all())->save();
-
-		return redirect()->route('products.edit', $product->id);
-
-    }
 
     /**
      * Remove the specified resource from storage.
