@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFactoriesTable extends Migration
+class CreateCategoryFactoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateFactoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('factories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-
-            $table->index('slug');
-            $table->timestamps();
+        Schema::create('category_factory', function (Blueprint $table) {
+        	$table->integer('category_id');
+        	$table->integer('factory_id');
         });
     }
 
@@ -30,6 +26,6 @@ class CreateFactoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('factories');
+        Schema::dropIfExists('category_factory');
     }
 }

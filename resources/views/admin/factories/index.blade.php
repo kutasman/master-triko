@@ -8,7 +8,6 @@
         @foreach($factories as $factory)
 
             <li class="list-group-item">{{ $factory->name }}
-            {{ HTML::link(route('factories.show', $factory->id), 'go inside') }}
             </li>
         @endforeach
     </ul>

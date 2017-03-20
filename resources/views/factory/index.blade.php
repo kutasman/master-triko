@@ -24,8 +24,6 @@
                             {!! BootForm::submit() !!}
                             {!! BootForm::close() !!}
 
-                            
-
                         </div>
                     </div>
                 </div>

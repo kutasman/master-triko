@@ -18,4 +18,9 @@ class Category extends Model
 	{
 		return $this->belongsToMany(Product::class, 'category_product', 'category_id', 'product_id');
 	}
+
+	public function factories()
+	{
+		return $this->belongsToMany(Factory::class, 'category_factory');
+	}
 }
