@@ -77,7 +77,9 @@ class FactoriesController extends Controller
      */
     public function edit(Factory $factory)
     {
-    	//
+    	$categories = Category::all();
+
+    	return view('admin.factories.edit', compact('factory', 'categories'));
     }
 
     /**
@@ -87,9 +89,19 @@ class FactoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Factory $factory)
     {
-        //
+	    $this->validate($request, [
+		    'name' => 'string|required',
+		    'slug' => 'string|required|unique:factories,slug,' . $factory->id,
+		    'categories.*' => 'numeric',
+		    'categories' => 'nullable'
+	    ]);
+
+	    $factory->categories()->sync($request->categories);
+
+	    return redirect()->route('factories.edit', $factory->id);
+
     }
 
     /**
