@@ -6,8 +6,5 @@
 @endsection
 
 @section('content')
-
-    <h2 class="page-header">
-    </h2>
     {{ $categories }}
 @endsection

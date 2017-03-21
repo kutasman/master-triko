@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeType;
 use App\Models\Category;
+use App\Models\Factory;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductType;
@@ -36,9 +37,9 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
-	    $productTypes = ProductType::pluck('name', 'slug');
+    	$factories = Factory::all();
 
-	    return view('admin.products.create', compact('product', 'productTypes'));
+	    return view('admin.products.create', compact('product', 'factories'));
     }
 
     /**
@@ -51,10 +52,7 @@ class ProductController extends Controller
     {
 	    $this->validate($request,[
         	'title' => 'string|required',
-		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'code' => 'string|required',
-		    'type_slug' => 'string|required|exists:product_types,slug',
         ]);
 
 
@@ -83,10 +81,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
     	$product->with(['images']);
-
-    	$productTypes = ProductType::pluck('name', 'slug');
-
-	    return view('admin.products.edit', compact('product', 'productTypes' ));
+    	$factories = Factory::all();
+	    return view('admin.products.edit', compact('product', 'factories'));
     }
 
     /**
@@ -100,10 +96,7 @@ class ProductController extends Controller
     {
 	    $this->validate($request,[
 		    'title' => 'string|required',
-		    'description' => 'string',
 		    'price' => 'required|numeric|min:0',
-		    'code' => 'string|required',
-		    'type_slug' => 'string|required|exists:product_types,slug',
 	    ]);
 
 	    $product->update($request->all());
@@ -113,18 +106,7 @@ class ProductController extends Controller
     }
 
 
-    public function updateMeta(Request $request, Product $product)
-    {
-		$this->validate($request,[
-			'gender' => 'string|required',
-			'sport' => 'string|required',
-		]);
 
-		$product->meta->fill($request->all())->save();
-
-		return redirect()->route('products.edit', $product->id);
-
-    }
 
     /**
      * Remove the specified resource from storage.

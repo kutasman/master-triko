@@ -2,6 +2,7 @@
 
 {!! BootForm::text('name') !!}
 {!! BootForm::textarea('description') !!}
+{!! BootForm::select('parent_id', 'Parent category', $categories->pluck('name', 'id')->prepend('top level',null), $category->parent_id) !!}
 
 {!! BootForm::submit('Save') !!}
 

@@ -13,6 +13,7 @@
 
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
+Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->name('factory');
 
 Auth::routes();
 
@@ -27,4 +28,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
+	Route::resource('factories', 'FactoriesController');
 });

@@ -2,13 +2,9 @@
 
 {!! BootForm::text('title') !!}
 
-{!! BootForm::textarea('description') !!}
-
 {!! BootForm::number('price') !!}
 
-{!! BootForm::text('code') !!}
-
-{!! BootForm::select('type_slug', 'Product type', $productTypes, $product->exists ? $product->type_slug : '') !!}
+{!! BootForm::select('factory_id', 'Factory', $factories->pluck('name', 'id'), $product->factory_id) !!}
 
 {!! BootForm::submit('Save', ['value' => 'Save']) !!}
 

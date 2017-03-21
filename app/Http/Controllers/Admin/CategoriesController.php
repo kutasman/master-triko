@@ -28,7 +28,8 @@ class CategoriesController extends Controller
     public function create()
     {
     	$category = new Category();
-        return view('admin.categories.create', compact('category'));
+    	$categories = Category::all();
+        return view('admin.categories.create', compact('category', 'categories'));
     }
 
     /**
@@ -40,8 +41,9 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
 		$this->validate($request, [
-		  'name' => 'string|required',
-		  'description' => 'string'
+			'name' => 'string|required',
+			'description' => 'string',
+			'parent_id' => 'numeric|nullable',
 		]);
 
 		$category = Category::create($request->all());

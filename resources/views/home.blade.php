@@ -5,11 +5,15 @@
     <div class="container">
         <h1>Create your perfect trico</h1>
         <p>... just in few steps.</p>
-        <p>
-            @foreach($productTypes as $productType)
-                {{ HTML::link('#', $productType->name) }}
+        <div class="list-group">
+            @foreach($categories as $category)
+                <h2>{{ $category->name }}</h2>
+                @foreach($category->factories as $factory)
+                    <a href="{{ route('factory', $factory->id) }}" class="list-group-item">{{ $factory->name }}</a>
+                @endforeach
             @endforeach
-        </p>
+        </div>
+
     </div>
 </div>
 @endsection

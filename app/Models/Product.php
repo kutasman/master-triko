@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-    	'title', 'description','price', 'type_slug', 'code'
+    	'title','price', 'factory_id'
     ];
 
     //Relations
@@ -30,6 +30,11 @@ class Product extends Model
 	public function type()
 	{
 		return $this->belongsTo(ProductType::class, 'type_slug', 'slug');
+	}
+
+	public function factory()
+	{
+		return $this->belongsTo(Factory::class);
 	}
 
 }
