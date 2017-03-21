@@ -98,8 +98,9 @@ class FactoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Factory $factory)
     {
-        //
+        $factory->delete();
+        return redirect()->route('factories.index');
     }
 }
