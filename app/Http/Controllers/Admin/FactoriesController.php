@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use App\Models\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,7 +28,8 @@ class FactoriesController extends Controller
     public function create()
     {
         $factory = new Factory();
-        return view('admin.factories.create', compact('factory'));
+        $categories = Category::all();
+        return view('admin.factories.create', compact('factory', 'categories'));
     }
 
     /**
@@ -40,13 +42,17 @@ class FactoriesController extends Controller
     {
         $this->validate($request, [
         	'name' => 'string|required',
-	        'slug' => 'string|required|unique:factories,slug'
+	        'slug' => 'string|required|unique:factories,slug',
+	        'categories.*' => 'numeric',
+	        'categories' => 'nullable'
         ]);
 
         $factory = new Factory();
         $factory->fill($request->all());
         $factory->slug = str_slug($request->slug);
         $factory->save();
+
+        $factory->categories()->sync($request->categories);
 
         return redirect()->route('factories.index');
 

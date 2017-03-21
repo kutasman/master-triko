@@ -8,8 +8,9 @@ class Factory extends Model
 {
 
 	protected $fillable = ['name'];
-    //Relations
 
+    //Relations______________
+	
 	public function products()
 	{
 		return $this->hasMany(Product::class);
