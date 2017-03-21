@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use App\Models\AttributeType;
 use App\Models\Category;
+use App\Models\Factory;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductType;
@@ -36,8 +37,9 @@ class ProductController extends Controller
     public function create()
     {
     	$product = new Product();
+    	$factories = Factory::all();
 
-	    return view('admin.products.create', compact('product'));
+	    return view('admin.products.create', compact('product', 'factories'));
     }
 
     /**
@@ -79,9 +81,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
     	$product->with(['images']);
-
-
-	    return view('admin.products.edit', compact('product' ));
+    	$factories = Factory::all();
+	    return view('admin.products.edit', compact('product', 'factories'));
     }
 
     /**

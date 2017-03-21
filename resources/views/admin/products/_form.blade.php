@@ -4,8 +4,7 @@
 
 {!! BootForm::number('price') !!}
 
-{!! BootForm::text('factory_id') !!}
-
+{!! BootForm::select('factory_id', 'Factory', $factories->pluck('name', 'id'), $product->factory_id) !!}
 
 {!! BootForm::submit('Save', ['value' => 'Save']) !!}
 

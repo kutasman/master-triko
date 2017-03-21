@@ -13,7 +13,7 @@
                         <div class="col-xs-4">
                             <h3>{{ $product->title }}</h3>
 
-                        @foreach($product->images as $image)
+                            @foreach($product->images as $image)
                                 {{ HTML::image('storage/' . $image->path, null, ['class' => 'img-thumbnail col-xs-3']) }}
                             @endforeach
                         </div>

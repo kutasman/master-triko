@@ -10,7 +10,7 @@ class Factory extends Model
 	protected $fillable = ['name'];
 
     //Relations______________
-	
+
 	public function products()
 	{
 		return $this->hasMany(Product::class);
