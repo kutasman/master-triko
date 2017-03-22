@@ -24,6 +24,16 @@
                             {!! BootForm::submit() !!}
                             {!! BootForm::close() !!}
 
+                            <div class="well">
+                                <h3>Modificators</h3>
+                                @foreach($product->modificators as $mod)
+                                    @if('text' == $mod->type)
+                                        {!! BootForm::text(str_slug($mod->name) . '-' . $mod->id, $mod->name) !!}
+                                    @elseif('select' == $mod->type)
+                                        {!! BootForm::select(str_slug($mod->name) . '-' . $mod->id, $mod->name, $mod->options->pluck('name', 'value')) !!}
+                                    @endif
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>

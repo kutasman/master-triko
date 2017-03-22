@@ -20,4 +20,9 @@ class Factory extends Model
 	{
 		return $this->belongsToMany(Category::class, 'category_factory');
 	}
+
+	public function modificators()
+	{
+		return $this->morphToMany(Modificator::class, 'modificable');
+	}
 }

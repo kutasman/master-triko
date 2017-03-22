@@ -152,4 +152,24 @@ class ProductController extends Controller
 
 		return redirect()->route('products.edit', $product->id);
     }
+
+    public function createModificator(Request $request, Product $product)
+    {
+		$this->validate($request, [
+			'name' => 'string|required',
+			'type' => 'string|required',
+		]);
+
+		$product->modificators()->create($request->all());
+
+		return redirect()->route('products.edit', $product->id);
+    }
+
+    public function addModificator(Request $request, Product $product)
+    {
+
+		$product->modificators()->syncWithoutDetaching($request->modificators);
+
+		return redirect()->route('products.edit', $product->id);
+    }
 }

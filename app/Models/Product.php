@@ -37,4 +37,9 @@ class Product extends Model
 		return $this->belongsTo(Factory::class);
 	}
 
+	public function modificators()
+	{
+		return $this->morphToMany(Modificator::class, 'modificable');
+	}
+
 }

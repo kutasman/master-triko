@@ -63,7 +63,63 @@
     <div class="tab-pane fade" id="modificators">
 
         <div class="row">
+            <div class="col-xs-8">
+                <ul class="list-group">
+                    @forelse($product->modificators as $mod)
 
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{{ $mod->name }}<small>{{ $mod->type }}</small></h3>
+                                </div>
+                                <div class="panel-body">
+                                    @if('select' == $mod->type)
+                                        <ul class="list-group">
+                                            @foreach($mod->options as $option)
+                                                <li class="list-group-item">{{ $option }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                    @endif
+
+                                </div>
+                                @if('select' == $mod->type)
+                                    <div class="panel-footer">
+                                        {!! BootForm::horizontal(['route' => ['modificators.add_option', $mod->id]]) !!}
+                                        {!! BootForm::text('name') !!}
+                                        {!! BootForm::number('value', 'Price increase') !!}
+
+                                        {!! BootForm::submit('Add option') !!}
+                                        {!! BootForm::close() !!}
+                                    </div>
+                                @endif
+                            </div>
+
+                    @empty
+                        nothing here
+                    @endforelse
+                </ul>
+            </div>
+            <div class="col-xs-4">
+
+                <h3>Add modificator</h3>
+
+                {!! BootForm::open(['route' => ['products.add_modificator', $product->id], 'method' => 'PUT']) !!}
+                {!! BootForm::checkboxes('modificators[]', 'Factory modificators', $product->factory->modificators->pluck('name', 'id'), $product->modificators->pluck('id')->toArray()) !!}
+                {!! BootForm::submit('add') !!}
+                {!! BootForm::close() !!}
+                @foreach($product->factory->modificators as $modificator)
+                    {{ $modificator->name }}
+                @endforeach
+
+                <h3>Create modificator</h3>
+                {!! BootForm::open(['route' => ['products.create_modificator', $product->id]]) !!}
+
+                {!! BootForm::select('type', null, ['text'=> 'text', 'select' => 'select']) !!}
+                {!! BootForm::text('name') !!}
+
+                {!! BootForm::submit('Add modificator') !!}
+                {!! BootForm::close() !!}
+            </div>
         </div>
 
 

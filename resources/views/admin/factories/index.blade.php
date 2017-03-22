@@ -9,12 +9,25 @@
     @foreach($factories as $factory)
 
         <li  class="list-group-item">
-            {{ HTML::link(route('factories.edit', $factory->id), $factory->name ) }}
+            {{ HTML::link(route('factories.show', $factory->id), $factory->name ) }}
             <small class="text-muted">Categories:
                 @foreach($factory->categories as $category)
                     {{ $category->name }}
                 @endforeach
             </small>
+            <small class="text-muted">Modificators:
+                @foreach($factory->modificators as $modificator)
+                    {{ $modificator->name }}, type: {{ $modificator->type }}
+                @endforeach
+            </small>
+
+            <div class="well-sm">
+                {!! BootForm::open(['route' => ['factories.create_modificator', $factory->id]]) !!}
+                {!! BootForm::text('name') !!}
+                {!! BootForm::select('type', null, ['select' => 'select', 'text' => 'text']) !!}
+                {!! BootForm::submit('add modificator') !!}
+                {!! BootForm::close() !!}
+            </div>
 
             <a href="#" onclick="event.preventDefault();document.getElementById('factory-delete-{{ $factory->id }}').submit();" class="text-danger pull-right">delete</a href="#">
             {!! BootForm::open(['route' => ['factories.destroy', $factory->id], 'method' => 'DELETE', 'id' => 'factory-delete-' . $factory->id ]) !!}

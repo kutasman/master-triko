@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Modificator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class ModificatorsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function addOptions(Request $request, Modificator $modificator)
+    {
+		$this->validate($request, $this->getValidationRules($modificator));
+
+		$modificator->options()->create($request->all());
+
+		return redirect()->back();
+
+    }
+
+    protected function getValidationRules(Modificator $modificator)
+    {
+    	switch ($modificator->type){
+		    case 'select':
+		    	return [
+		    		'name' => 'string|required',
+				    'value' => 'numeric|required',
+			    ];
+		    	break;
+	    }
+    }
+}
