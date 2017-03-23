@@ -36,7 +36,23 @@ class ModificatorsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    	$this->validate($request, [
+    		'name' => 'string|required',
+		    'type' => 'string|required',
+		    'modificable_id' => 'numeric|min:0',
+		    'modificable_type' => 'string|required',
+	    ]);
+
+		$class_name = $request->modificable_type;
+
+    	if (class_exists($class_name)){
+    		$model = $class_name::findOrFail($request->modificable_id);
+    		$model->modificators()->create($request->only('name', 'type'));
+	    } else {
+    		throw new \Exception('no such model');
+	    }
+
+	    return redirect()->back();
     }
 
     /**
@@ -84,9 +100,9 @@ class ModificatorsController extends Controller
         //
     }
 
-    public function addOptions(Request $request, Modificator $modificator)
+    public function createOptions(Request $request, Modificator $modificator)
     {
-		$this->validate($request, $this->getValidationRules($modificator));
+		$this->validate($request, $this->getOptionValidationRules($modificator));
 
 		$modificator->options()->create($request->all());
 
@@ -94,15 +110,33 @@ class ModificatorsController extends Controller
 
     }
 
-    protected function getValidationRules(Modificator $modificator)
+    public function detach(Request $request, $modificator_id)
     {
-    	switch ($modificator->type){
-		    case 'select':
-		    	return [
-		    		'name' => 'string|required',
-				    'value' => 'numeric|required',
-			    ];
-		    	break;
+    	$this->validate($request,[
+    		'modificable_id' => 'numeric|min:0,required',
+		    'modificable_type' => 'string|required',
+	    ]);
+    	$class_name = $request->modificable_type;
+    	if (class_exists($class_name)){
+    		$modificable = $class_name::findOrFail($request->modificable_id);
+    		$modificable->modificators()->detach($modificator_id);
+	    } else {
+    		throw new \Exception('no such model');
+	    }
+
+	    return redirect()->back();
+    }
+
+    protected function getOptionValidationRules(Modificator $modificator)
+    {
+    	$type = $modificator->type;
+    	if ( in_array($type, ['text', 'select'])){
+    		return [
+			    'name' => 'string|required',
+			    'value' => 'numeric|required',
+		    ];
+	    } else {
+    		throw new \Exception('undefined modificator type');
 	    }
     }
 }

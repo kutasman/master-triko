@@ -28,10 +28,9 @@
                 {!! HTML::image('storage/' .$image->path, null, ['class' => 'thumbnail col-xs-12 col-sm-4']) !!}
 
                 {{ HTML::link('#', 'Delete',['onclick' => 'event.preventDefault();
-                                                 document.getElementById("delete-image-form").submit();']) }}
+                                                 document.getElementById("delete-image-form-'.$image->id.'").submit();']) }}
 
-                {!! BootForm::open(['method' => 'delete', 'id' => 'delete-image-form','route' => ['products.delete-image', $product->id, $image->id]]) !!}
-
+                {!! BootForm::open(['method' => 'delete', 'id' => 'delete-image-form-' . $image->id,'route' => ['products.delete-image', $product->id, $image->id]]) !!}
                 {!! BootForm::close() !!}
             @endforeach
         </div>
@@ -67,32 +66,40 @@
                 <ul class="list-group">
                     @forelse($product->modificators as $mod)
 
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">{{ $mod->name }}<small>{{ $mod->type }}</small></h3>
-                                </div>
-                                <div class="panel-body">
-                                    @if('select' == $mod->type)
-                                        <ul class="list-group">
-                                            @foreach($mod->options as $option)
-                                                <li class="list-group-item">{{ $option }}</li>
-                                            @endforeach
-                                        </ul>
-
-                                    @endif
-
-                                </div>
-                                @if('select' == $mod->type)
-                                    <div class="panel-footer">
-                                        {!! BootForm::horizontal(['route' => ['modificators.add_option', $mod->id]]) !!}
-                                        {!! BootForm::text('name') !!}
-                                        {!! BootForm::number('value', 'Price increase') !!}
-
-                                        {!! BootForm::submit('Add option') !!}
-                                        {!! BootForm::close() !!}
-                                    </div>
-                                @endif
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {{ $mod->name }}<small>{{ $mod->type }}</small>
+                                    <a href="#" class="pull-right text-danger" onclick="event.preventDefault();document.getElementById('detach-modificator-form-{{ $mod->id }}').submit();">detach</a>
+                                    {!! BootForm::open(['id' => 'detach-modificator-form-' . $mod->id, 'method' => 'DELETE', 'route' => ['modificators.detach', $mod->id]]) !!}
+                                    {!! BootForm::hidden('modificable_id', $product->id) !!}
+                                    {!! BootForm::hidden('modificable_type', $product->getMorphClass()) !!}
+                                    {!! BootForm::close() !!}
+                                </h3>
                             </div>
+                            <div class="panel-body">
+                                @if('select' == $mod->type)
+                                    <ul class="list-group">
+                                        @foreach($mod->options as $option)
+                                            <li class="list-group-item">
+                                                {{ $option->name }}, <span class="text-success">(+ {{ $option->value }} грн.)</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+
+                            </div>
+                            @if('select' == $mod->type)
+                                <div class="panel-footer">
+                                    {!! BootForm::horizontal(['route' => ['modificators.create_option', $mod->id]]) !!}
+                                    {!! BootForm::text('name') !!}
+                                    {!! BootForm::number('value', 'Price increase') !!}
+
+                                    {!! BootForm::submit('Add option') !!}
+                                    {!! BootForm::close() !!}
+                                </div>
+                            @endif
+                        </div>
 
                     @empty
                         nothing here
@@ -101,24 +108,18 @@
             </div>
             <div class="col-xs-4">
 
-                <h3>Add modificator</h3>
+                <h3>Attach modificator</h3>
 
                 {!! BootForm::open(['route' => ['products.add_modificator', $product->id], 'method' => 'PUT']) !!}
                 {!! BootForm::checkboxes('modificators[]', 'Factory modificators', $product->factory->modificators->pluck('name', 'id'), $product->modificators->pluck('id')->toArray()) !!}
-                {!! BootForm::submit('add') !!}
-                {!! BootForm::close() !!}
-                @foreach($product->factory->modificators as $modificator)
-                    {{ $modificator->name }}
-                @endforeach
-
-                <h3>Create modificator</h3>
-                {!! BootForm::open(['route' => ['products.create_modificator', $product->id]]) !!}
-
-                {!! BootForm::select('type', null, ['text'=> 'text', 'select' => 'select']) !!}
-                {!! BootForm::text('name') !!}
-
                 {!! BootForm::submit('Add modificator') !!}
                 {!! BootForm::close() !!}
+
+
+                <h3>Create modificator</h3>
+
+                @include('admin.modificators._create_form', ['modificable_model' => $product])
+
             </div>
         </div>
 

@@ -18,6 +18,10 @@
             @foreach($factory->modificators as $modificator)
                 {{ $modificator->name }} <br>
             @endforeach
+
+            <div class="well-sm">
+                @include('admin.modificators._create_form', ['modificable_model' => $factory])
+            </div>
         </div>
         <div class="tab-pane fade" id="products">
             <div class="list-group">

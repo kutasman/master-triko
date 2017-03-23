@@ -21,13 +21,7 @@
                 @endforeach
             </small>
 
-            <div class="well-sm">
-                {!! BootForm::open(['route' => ['factories.create_modificator', $factory->id]]) !!}
-                {!! BootForm::text('name') !!}
-                {!! BootForm::select('type', null, ['select' => 'select', 'text' => 'text']) !!}
-                {!! BootForm::submit('add modificator') !!}
-                {!! BootForm::close() !!}
-            </div>
+
 
             <a href="#" onclick="event.preventDefault();document.getElementById('factory-delete-{{ $factory->id }}').submit();" class="text-danger pull-right">delete</a href="#">
             {!! BootForm::open(['route' => ['factories.destroy', $factory->id], 'method' => 'DELETE', 'id' => 'factory-delete-' . $factory->id ]) !!}
