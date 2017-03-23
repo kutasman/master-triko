@@ -30,6 +30,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
 	Route::resource('factories', 'FactoriesController');
 	Route::resource('modificators', 'ModificatorsController');
-	Route::post('modificators/{modificator}/option', 'ModificatorsController@createOptions')->name('modificators.create_option');
+
+	Route::resource('mod-options', 'ModOptionsController', ['except' => 'store']);
+	Route::post('modificators/{modificator}/mod-options', 'ModOptionsController@store')->name('mod-options.store');
+
+	//Route::post('modificators/{modificator}/option', 'ModificatorsController@createOptions')->name('modificators.create_option');
 	Route::delete('/modificators/{modificator}/detach', 'ModificatorsController@detach')->name('modificators.detach');
 });

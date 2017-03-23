@@ -15,13 +15,39 @@
     <!-- TAB CONTENT -->
     <div class="tab-content">
         <div class="active tab-pane fade in" id="modificators">
-            @foreach($factory->modificators as $modificator)
-                {{ $modificator->name }} <br>
-            @endforeach
 
-            <div class="well-sm">
-                @include('admin.modificators._create_form', ['modificable_model' => $factory])
+            <div class="row">
+                <div class="col-xs-8">
+                    @foreach($factory->modificators as $mod)
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ $mod->name }}, <small>type: {{ $mod->type }}</small></h3>
+                            </div>
+                            @if('select' == $mod->type)
+                            <ul class="list-group">
+                                @forelse($mod->options as $option)
+                                    <li class="list-group-item">
+                                        {{ $option->name }}, <span class="text-success">+ {{ $option->value }}</span>
+                                    </li>
+                                @empty
+                                    nothing here
+                                @endforelse
+                            </ul>
+                            <div class="panel-footer">
+                                <h4>Add option</h4>
+                                @include('admin.mod_options._create_form', ['modificator' => $mod])
+                            </div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+                <div class="col-xs-4">
+                    <h3>Create modificator</h3>
+                    @include('admin.modificators._create_form', ['modificable_model' => $factory])
+                </div>
             </div>
+
+
         </div>
         <div class="tab-pane fade" id="products">
             <div class="list-group">

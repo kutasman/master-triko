@@ -15,7 +15,9 @@ class ModificatorsController extends Controller
      */
     public function index()
     {
-        //
+    	$modificators = Modificator::with(['products', 'factories'])->get();
+
+        return view('admin.modificators.index', compact('modificators'));
     }
 
     /**
@@ -95,9 +97,11 @@ class ModificatorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Modificator $modificator)
     {
-        //
+		$modificator->delete();
+
+		return redirect()->back();
     }
 
     public function createOptions(Request $request, Modificator $modificator)

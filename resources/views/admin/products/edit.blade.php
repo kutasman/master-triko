@@ -63,13 +63,12 @@
 
         <div class="row">
             <div class="col-xs-8">
-                <ul class="list-group">
                     @forelse($product->modificators as $mod)
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    {{ $mod->name }}<small>{{ $mod->type }}</small>
+                                    {{ $mod->name }} <span class="label label-default">{{ $mod->type }}</span>
                                     <a href="#" class="pull-right text-danger" onclick="event.preventDefault();document.getElementById('detach-modificator-form-{{ $mod->id }}').submit();">detach</a>
                                     {!! BootForm::open(['id' => 'detach-modificator-form-' . $mod->id, 'method' => 'DELETE', 'route' => ['modificators.detach', $mod->id]]) !!}
                                     {!! BootForm::hidden('modificable_id', $product->id) !!}
@@ -77,26 +76,18 @@
                                     {!! BootForm::close() !!}
                                 </h3>
                             </div>
-                            <div class="panel-body">
-                                @if('select' == $mod->type)
-                                    <ul class="list-group">
-                                        @foreach($mod->options as $option)
-                                            <li class="list-group-item">
-                                                {{ $option->name }}, <span class="text-success">(+ {{ $option->value }} грн.)</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-
-                            </div>
+                            @if('select' == $mod->type)
+                                <ul class="list-group">
+                                    @foreach($mod->options as $option)
+                                        <li class="list-group-item">
+                                            {{ $option->name }}, <span class="text-success">(+ {{ $option->value }} грн.)</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                             @if('select' == $mod->type)
                                 <div class="panel-footer">
-                                    {!! BootForm::horizontal(['route' => ['modificators.create_option', $mod->id]]) !!}
-                                    {!! BootForm::text('name') !!}
-                                    {!! BootForm::number('value', 'Price increase') !!}
-
-                                    {!! BootForm::submit('Add option') !!}
-                                    {!! BootForm::close() !!}
+                                    @include('admin.mod_options._create_form',['modificator' => $mod])
                                 </div>
                             @endif
                         </div>
@@ -104,7 +95,6 @@
                     @empty
                         nothing here
                     @endforelse
-                </ul>
             </div>
             <div class="col-xs-4">
 
