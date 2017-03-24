@@ -24,6 +24,9 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="{{ route('cart.show') }}" class="navbar-link">Cart: <span class="badge">{{ count(session('cart')) }}</span> </a>
+                </li>
                 <!-- Authentication Links -->
                 @if (Auth::guest())
                     <li><a href="{{ route('login') }}">Login</a></li>

@@ -12,4 +12,9 @@ class ModSelectOption extends Model
 	{
 		return $this->belongsTo(Modificator::class);
 	}
+
+	public function getNameAttribute($name)
+	{
+		return $name .=  ($this->attributes['value']) ? ' (+' . $this->attributes['value'] . ' грн.)' : '';
+	}
 }

@@ -80,7 +80,7 @@
                                 <ul class="list-group">
                                     @foreach($mod->options as $option)
                                         <li class="list-group-item">
-                                            {{ $option->name }}, <span class="text-success">(+ {{ $option->value }} грн.)</span>
+                                            {{ $option->name }}
                                         </li>
                                     @endforeach
                                 </ul>

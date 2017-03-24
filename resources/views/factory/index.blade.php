@@ -9,6 +9,12 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session('status'))
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <strong>{{ session('status') }}</strong> <a href="{{ route('cart.show') }}">Go to cart</a>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-xs-4">
                             <h3>{{ $product->title }}</h3>
@@ -19,21 +25,25 @@
                         </div>
                         <div class="col-xs-8">
                             {!! BootForm::open(['route' => ['factory', $factory->id], 'id' => 'filter-form']) !!}
-                            {!! BootForm::select('model', 'Model', $factory->products->pluck('title', 'id'), $product->id) !!}
+                            {!! BootForm::select('model', 'Model', $factory->products->pluck('title', 'id'), $product->id,[
+                            'onchange' => 'document.getElementById("filter-form").submit()'
+                            ]) !!}
 
-                            {!! BootForm::submit() !!}
                             {!! BootForm::close() !!}
 
-                            <div class="well">
-                                <h3>Modificators</h3>
-                                @foreach($product->modificators as $mod)
-                                    @if('text' == $mod->type)
-                                        {!! BootForm::text(str_slug($mod->name) . '-' . $mod->id, $mod->name) !!}
-                                    @elseif('select' == $mod->type)
-                                        {!! BootForm::select(str_slug($mod->name) . '-' . $mod->id, $mod->name, $mod->options->pluck('name', 'value')) !!}
-                                    @endif
-                                @endforeach
-                            </div>
+                            {!! BootForm::open(['route' => ['cart.add_product', $product->id] ]) !!}
+                                <div class="well">
+                                    <h3>Modificators</h3>
+                                    @foreach($product->modificators as $mod)
+                                        @if('text' == $mod->type)
+                                            {!! BootForm::text('modificators[' . $mod->id . ']', $mod->name) !!}
+                                        @elseif('select' == $mod->type)
+                                            {!! BootForm::select('modificators[' . $mod->id . ']', $mod->name, $mod->options->pluck('name', 'id')) !!}
+                                        @endif
+                                    @endforeach
+                                </div>
+                            {!! BootForm::submit('Add to cart', ['class' => 'btn btn-success']) !!}
+                            {!! BootForm::close() !!}
                         </div>
                     </div>
                 </div>

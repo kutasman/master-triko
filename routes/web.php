@@ -15,6 +15,9 @@ Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
 Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->name('factory');
 
+Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_product');
+Route::get('cart', 'CartController@show')->name('cart.show');
+
 Auth::routes();
 
 
