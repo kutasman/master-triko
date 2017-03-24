@@ -152,4 +152,18 @@ class ProductController extends Controller
 
 		return redirect()->route('products.edit', $product->id);
     }
+
+	/**
+	 * @param Request $request
+	 * @param Product $product
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function addModificator(Request $request, Product $product)
+    {
+
+		$product->modificators()->syncWithoutDetaching($request->modificators);
+
+		return redirect()->route('products.edit', $product->id);
+    }
 }

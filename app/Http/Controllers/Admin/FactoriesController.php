@@ -65,9 +65,10 @@ class FactoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Factory $factory)
     {
-        //
+    	$factory->load('modificators');
+        return view('admin.factories.show', compact('factory'));
     }
 
     /**
@@ -117,5 +118,12 @@ class FactoriesController extends Controller
     {
         $factory->delete();
         return redirect()->route('factories.index');
+    }
+
+    public function createModificator(Request $request, Factory $factory)
+    {
+    	$factory->modificators()->create($request->all());
+
+    	return redirect()->back();
     }
 }

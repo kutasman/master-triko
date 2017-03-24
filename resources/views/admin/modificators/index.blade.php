@@ -5,11 +5,32 @@
 
 @section('content')
 
-    <ul class="list-group">
-        @foreach($modificators as $modificator)
 
-            <li class="list-group-item">{{ $modificator->name }}, {{ $modificator=>type }}</li>
 
-        @endforeach
-    </ul>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Factory</th>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($modificators as $mod)
+                <tr>
+                    <td>{{ $mod->factories->pluck('name') }}</td>
+                    <td>{{ $mod->products->pluck('title') }}</td>
+                    <td>{{ $mod->name }}</td>
+                    <td>
+                        {!! BootForm::open(['route' => ['modificators.destroy',$mod->id], 'method' => 'DELETE']) !!}
+                        {!! BootForm::submit('delete',['btn btn-link']) !!}
+                        {!! BootForm::close() !!}
+                    </td>
+                </tr>
+
+            @endforeach
+
+            </tbody>
+        </table>
 @endsection

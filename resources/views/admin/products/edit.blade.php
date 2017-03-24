@@ -28,10 +28,9 @@
                 {!! HTML::image('storage/' .$image->path, null, ['class' => 'thumbnail col-xs-12 col-sm-4']) !!}
 
                 {{ HTML::link('#', 'Delete',['onclick' => 'event.preventDefault();
-                                                 document.getElementById("delete-image-form").submit();']) }}
+                                                 document.getElementById("delete-image-form-'.$image->id.'").submit();']) }}
 
-                {!! BootForm::open(['method' => 'delete', 'id' => 'delete-image-form','route' => ['products.delete-image', $product->id, $image->id]]) !!}
-
+                {!! BootForm::open(['method' => 'delete', 'id' => 'delete-image-form-' . $image->id,'route' => ['products.delete-image', $product->id, $image->id]]) !!}
                 {!! BootForm::close() !!}
             @endforeach
         </div>
@@ -63,7 +62,55 @@
     <div class="tab-pane fade" id="modificators">
 
         <div class="row">
+            <div class="col-xs-8">
+                    @forelse($product->modificators as $mod)
 
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {{ $mod->name }} <span class="label label-default">{{ $mod->type }}</span>
+                                    <a href="#" class="pull-right text-danger" onclick="event.preventDefault();document.getElementById('detach-modificator-form-{{ $mod->id }}').submit();">detach</a>
+                                    {!! BootForm::open(['id' => 'detach-modificator-form-' . $mod->id, 'method' => 'DELETE', 'route' => ['modificators.detach', $mod->id]]) !!}
+                                    {!! BootForm::hidden('modificable_id', $product->id) !!}
+                                    {!! BootForm::hidden('modificable_type', $product->getMorphClass()) !!}
+                                    {!! BootForm::close() !!}
+                                </h3>
+                            </div>
+                            @if('select' == $mod->type)
+                                <ul class="list-group">
+                                    @foreach($mod->options as $option)
+                                        <li class="list-group-item">
+                                            {{ $option->name }}, <span class="text-success">(+ {{ $option->value }} грн.)</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            @if('select' == $mod->type)
+                                <div class="panel-footer">
+                                    @include('admin.mod_options._create_form',['modificator' => $mod])
+                                </div>
+                            @endif
+                        </div>
+
+                    @empty
+                        nothing here
+                    @endforelse
+            </div>
+            <div class="col-xs-4">
+
+                <h3>Attach modificator</h3>
+
+                {!! BootForm::open(['route' => ['products.add_modificator', $product->id], 'method' => 'PUT']) !!}
+                {!! BootForm::checkboxes('modificators[]', 'Factory modificators', $product->factory->modificators->pluck('name', 'id'), $product->modificators->pluck('id')->toArray()) !!}
+                {!! BootForm::submit('Add modificator') !!}
+                {!! BootForm::close() !!}
+
+
+                <h3>Create modificator</h3>
+
+                @include('admin.modificators._create_form', ['modificable_model' => $product])
+
+            </div>
         </div>
 
 
