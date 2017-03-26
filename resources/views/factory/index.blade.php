@@ -36,9 +36,9 @@
                                     <h3>Modificators</h3>
                                     @foreach($product->modificators as $mod)
                                         @if('text' == $mod->type)
-                                            {!! BootForm::text('modificators[' . $mod->id . ']', $mod->name) !!}
+                                            {!! BootForm::text('modificators['. $mod->type .'][' . $mod->id . ']', $mod->name) !!}
                                         @elseif('select' == $mod->type)
-                                            {!! BootForm::select('modificators[' . $mod->id . ']', $mod->name, $mod->options->pluck('name', 'id')) !!}
+                                            {!! BootForm::select('modificators['.$mod->type.'][' . $mod->id . ']', $mod->name, $mod->options->pluck('name', 'id')) !!}
                                         @endif
                                     @endforeach
                                 </div>

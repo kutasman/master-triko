@@ -36,6 +36,14 @@ class CreateModificatorsTable extends Migration
 	        $table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');
         });
 
+        Schema::create('mod_text_options', function (Blueprint $table){
+        	$table->increments('id');
+        	$table->integer('modificator_id')->unsigned();
+        	$table->string('placeholder');
+        	$table->timestamps();
+        	$table->foreign('modificator_id')->references('id')->on('modificators')->onDelte('cascade');
+        });
+
     }
 
     /**

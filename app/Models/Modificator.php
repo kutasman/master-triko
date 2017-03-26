@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class Modificator extends Model
 {
 
+
 	protected $fillable = ['name', 'type'];
+
+
     //Relations______________
 
 	public function factories()
@@ -27,11 +30,11 @@ class Modificator extends Model
 		{
 			return $this->hasMany($this->getOptionModelName(), 'modificator_id');
 		} else {
-			throw new ModelNotFoundException();
+			throw new ModelNotFoundException('can\'t find model for unknown mod type');
 		}
 	}
 
-	protected function getOptionModelName()
+	public function getOptionModelName()
 	{
 
 		return 'App\Models\Mod' . ucfirst($this->type) . 'Option';
