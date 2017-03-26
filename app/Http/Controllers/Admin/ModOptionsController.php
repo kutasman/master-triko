@@ -38,7 +38,7 @@ class ModOptionsController extends Controller
     {
         $this->validate($request, [
         	'name' => 'string|required',
-	        'value' => 'numeric|required',
+	        'rise' => 'numeric|required',
         ]);
 		$modificator->options()->create($request->all());
 		return redirect()->back();

@@ -26,22 +26,14 @@ class CreateModificatorsTable extends Migration
 			$table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');
         });
 
-        Schema::create('mod_select_options', function(Blueprint $table){
+        Schema::create('mod_options', function(Blueprint $table){
 			$table->increments('id');
 			$table->integer('modificator_id')->unsigned();
 			$table->string('name');
-	        $table->float('value');
+	        $table->float('rise');
 	        $table->timestamps();
 
 	        $table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');
-        });
-
-        Schema::create('mod_text_options', function (Blueprint $table){
-        	$table->increments('id');
-        	$table->integer('modificator_id')->unsigned();
-        	$table->string('placeholder');
-        	$table->timestamps();
-        	$table->foreign('modificator_id')->references('id')->on('modificators')->onDelte('cascade');
         });
 
     }
@@ -57,7 +49,7 @@ class CreateModificatorsTable extends Migration
 
         Schema::dropIfExists('modificators');
         Schema::dropIfExists('modificables');
-        Schema::dropIfExists('mod_select_options');
+        Schema::dropIfExists('mod_options');
 
         Schema::enableForeignKeyConstraints();
     }
