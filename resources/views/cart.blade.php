@@ -1,60 +1,50 @@
 @extends('layouts.app')
 
 @section('content')
-    <ul class="list-group">
 {{ $cart }}
-
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
         @forelse($products as $product)
-            <pre>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    {{ HTML::image('storage/' . $product->images->first()['path'], null) }}
 
-            {{ $product }}
-            </pre>
-           {{-- <li class="list-group-item">
-                <div class="row">
-                    <div class="col-xs-2">
-                        {{ HTML::image('storage/' . $product->images->first()['path'], null, ['class' => 'img-thumbnail']) }}
-
-
-                    </div>
-                    <div class="col-xs-8">
-                        {{ $product->title }}
-                        @forelse($product->cart_modificators as $mod)
-                            {{ $mod->name }}:
-                            @forelse($mod->options as $option)
-                                {{ $option->name }}: {{ $option->value }}
+                    <div class="caption">
+                        <h3>{{ $product->title }}, <span class="text-success">{{ $product->price }} грн.</span> </h3>
+                        <p>
+                            @forelse($product->cart_modificators as $mod)
+                                {{ $mod->name }}:
+                                @if('text' != $mod->type)
+                                    @foreach($mod->options as $option)
+                                        {{ $option->name }}
+                                    @endforeach
+                                @else
+                                    {{ $mod->value }}
+                                @endif
+                                <br/>
                             @empty
+
                             @endforelse
-                        @empty
-                        @endforelse
+                        </p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a>
+                            <span class="pull-right text-success">Total: {{ $product->price }}</span>
+                        </p>
                     </div>
                 </div>
-            </li>--}}
+            </div>
         @empty
             <h2>Cart is empty</h2>
         @endforelse
-
-       {{-- @forelse($products as $product)
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col-xs-2">
-                        {{ HTML::image('storage/' . $product->images->first()['path'], null, ['class' => 'img-thumbnail']) }}
-                    </div>
-                    <div class="col-xs-8">
-
                     </div>
                 </div>
-            </li>
-        @empty
-            <h2>Cart is empty</h2>
-        @endforelse
---}}
+                <div class="panel-footer">
+                    @if($products->count())
+                            <h2 class="text-right text-success">Total: {{ $products->sum('price') }}</h2>
+                    @endif
 
-    </ul>
-
-    @if(!$cart)
-    <div class="alert alert-success">
-        <h2 class="text-right">Total: {{ $products->sum('price') }}</h2>
-    </div>
-    @endif
+                </div>
+            </div>
 
 @endsection

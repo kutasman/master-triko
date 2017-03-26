@@ -54,9 +54,7 @@ class CartController extends Controller
 
 							$modificators->push($modificator);
 						});
-
 					}
-
 				}
 
 				$product->cart_modificators = $modificators;
