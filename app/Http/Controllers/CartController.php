@@ -31,6 +31,7 @@ class CartController extends Controller
 				$product = Product::whereId($item['product_id'])->with(['images' => function($query){
 					$query->limit(1);
 				}])->first();
+
 			    $modificators = new Collection();
 
 			    //Iterate throw item modificators
@@ -40,16 +41,16 @@ class CartController extends Controller
 
 						$modData = collect($modData);
 
-						$modData->each(function($options, $modId) use (&$modificators, $modType){
+						$modData->each(function($values, $modId) use (&$modificators, $modType){
 							$modificator = Modificator::find($modId);
+							Log::debug($modId);
 
 							if ('text' != $modType){
-								Log::info($options);
-								$modificator->load(['options' => function($query) use ($options){
-									$query->whereIn('id', collect($options));
+								$modificator->load(['options' => function($query) use ($values){
+									$query->whereIn('id', collect($values));
 								}]);
 							} else {
-								$modificator->value = $options;
+								$modificator->value = $values;
 							}
 
 							$modificators->push($modificator);
@@ -66,7 +67,11 @@ class CartController extends Controller
     		$cart = new Collection();
 	    }
 
+		$total = $products->map(function ($product){
+			$total = $product->price + $product->cart_modificators->pluck('options')->collapse()->sum('rise');
 
-	    return view('cart', compact('products','cart'));
+			return $total;
+		})->sum();
+	    return view('cart', compact('products','cart', 'total'));
     }
 }

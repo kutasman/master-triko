@@ -26,17 +26,7 @@ class Modificator extends Model
 
 	public function options()
 	{
-		if ($this->exists)
-		{
-			return $this->hasMany($this->getOptionModelName(), 'modificator_id');
-		} else {
-			throw new ModelNotFoundException('can\'t find model for unknown mod type');
-		}
+		return $this->hasMany(ModOption::class);
 	}
 
-	public function getOptionModelName()
-	{
-
-		return 'App\Models\Mod' . ucfirst($this->type) . 'Option';
-	}
 }

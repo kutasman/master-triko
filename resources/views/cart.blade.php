@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
+
 @section('content')
-{{ $cart }}
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
@@ -29,7 +29,7 @@
                         </p>
                         <p>
                             <a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a>
-                            <span class="pull-right text-success">Total: {{ $product->price }}</span>
+                            <span class="pull-right text-success">Total: {{ $product->price + $product->cart_modificators->pluck('options')->collapse()->sum('rise') }}</span>
                         </p>
                     </div>
                 </div>
@@ -41,9 +41,8 @@
                 </div>
                 <div class="panel-footer">
                     @if($products->count())
-                            <h2 class="text-right text-success">Total: {{ $products->sum('price') }}</h2>
+                            <h2 class="text-right text-success">Total: {{ $total }}</h2>
                     @endif
-
                 </div>
             </div>
 

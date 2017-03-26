@@ -34,7 +34,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 	Route::resource('factories', 'FactoriesController');
 	Route::resource('modificators', 'ModificatorsController');
 
-	Route::resource('mod-options', 'ModOptionsController', ['except' => 'store']);
+	Route::resource('mod-options', 'ModOptionsController', ['only' => 'store']);
 	Route::post('modificators/{modificator}/mod-options', 'ModOptionsController@store')->name('mod-options.store');
 
 	//Route::post('modificators/{modificator}/option', 'ModificatorsController@createOptions')->name('modificators.create_option');
