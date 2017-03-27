@@ -17,6 +17,7 @@ Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->na
 
 Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_product');
 Route::get('cart', 'CartController@show')->name('cart.show');
+Route::delete('cart/{index}', 'CartController@removeItem')->name('cart.remove_item');
 
 Auth::routes();
 

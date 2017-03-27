@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Models\Modificator;
-use Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -23,7 +22,7 @@ class CartController extends Controller
     	//$request->session()->forget('cart');
 
     	if ($request->session()->has('cart')){
-		    $cart = collect($request->session()->get('cart'));
+    		$cart = $this->getCart();
 		    $products = new Collection();
 
 		    //Iterate throw cart items
@@ -43,7 +42,6 @@ class CartController extends Controller
 
 						$modData->each(function($values, $modId) use (&$modificators, $modType){
 							$modificator = Modificator::find($modId);
-							Log::debug($modId);
 
 							if ('text' != $modType){
 								$modificator->load(['options' => function($query) use ($values){
@@ -73,5 +71,22 @@ class CartController extends Controller
 			return $total;
 		})->sum();
 	    return view('cart', compact('products','cart', 'total'));
+    }
+
+    public function removeItem(Request $request,$index){
+		$cart = $this->getCart();
+
+		$cart->splice($index,1);
+
+		//$request->session()->forget('cart');
+		$request->session()->put('cart', $cart);
+
+		return redirect()->route('cart.show');
+    }
+
+    protected function getCart()
+    {
+    	return collect(\Session::get('cart'));
+
     }
 }
