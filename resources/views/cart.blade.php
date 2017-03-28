@@ -35,8 +35,6 @@
                             {!! BootForm::open(['route' => ['cart.remove_item', $index], 'method'=> 'DELETE', 'id' => 'remove-cart-item-' . $index]) !!}
                             {!! BootForm::close() !!}
                         </p>
-
-
                     </div>
                 </div>
             </div>
