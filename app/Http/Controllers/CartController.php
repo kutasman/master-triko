@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Modificator;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -8,8 +10,11 @@ use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
-    public function addProduct(Request $request, $product_id)
+    public function addProduct(Request $request, $product_id, Cart $cart)
     {
+    	$item = new CartItem($product_id, $request->modificators);
+
+
 
     	$request->session()->push('cart', array_merge(['product_id' => $product_id], $request->only('modificators')));
 	    $request->session()->flash('status', 'Item was added to cart');

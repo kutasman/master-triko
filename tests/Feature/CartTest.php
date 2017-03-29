@@ -58,4 +58,5 @@ protected $product;
 	        ->assertSessionHas('cart', null);
     }
 
+
 }

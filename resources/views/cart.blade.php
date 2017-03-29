@@ -3,6 +3,7 @@
 
 @section('content')
 <div class="panel panel-default">
+    {{ print_r( \App\Models\Modificator::find(2)->load(['options' => function($q){$q->whereIn('id', [3]);}])->toArray()) }}
     <div class="panel-body">
         <div class="row">
         @forelse($products as $index => $product)
