@@ -40,25 +40,38 @@ class CartItem extends Model{
 
 
 	/**
-	 * @return int Total item price
+	 * Calculate Total item price
+	 *
+	 * @return int
 	 */
 	public function total()
 	{
 		$total = $this->data('price');
 
-		foreach ($this->data('user_modifications') as $mod){
-			if ('text' != $mod->type){
-				foreach ($mod->options as $option){
-					$total += $option->rise;
+		if ($this->hasMods()){
+			foreach ($this->data('user_modifications') as $mod){
+				if ('text' != $mod->type){
+					foreach ($mod->options as $option){
+						$total += $option->rise;
+					}
 				}
 			}
-
 		}
 
 		return $total;
 	}
 
 	public function imageSrc(){
-		return $this->data('images')->shift()->path;
+
+		$src = $this->data('images') ? $this->data('images')->shift()->path : '';
+
+		return $src;
+
+	}
+
+	public function hasMods() {
+
+		return !! $this->data('user_modifications')->count();
+
 	}
 }

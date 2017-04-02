@@ -16,9 +16,13 @@
                     <h3>{{ $item->data('title') }} <small>{{ $item->data('price') }}</small></h3>
                     <p>
                     <ul class="list-group">
+                        @if($item->hasMods())
+
                         @foreach( $item->data('user_modifications')->toArray() as $mod )
                             @include('cart.options._' . $mod->type)
                         @endforeach
+
+                        @endif
                     </ul>
                     </p>
                     <p>

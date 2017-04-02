@@ -26,7 +26,7 @@ class Cart extends Model {
 
 	}
 
-	public function createItem(Product $product, array $modificatorsFormData){
+	public function createItem(Product $product, $modificatorsFormData){
 
 		$cartItem = $this->items()->create(['data' => $this->retrieveFullCartItemData($product->id, $modificatorsFormData)]);
 
@@ -44,7 +44,9 @@ class Cart extends Model {
 
 	//Helpers
 
-	protected function retrieveFullCartItemData($product_id, array $mod_data){
+	protected function retrieveFullCartItemData($product_id, $mod_data){
+
+
 
 		$product = Product::findOrFail($product_id);
 

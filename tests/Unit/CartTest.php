@@ -85,6 +85,19 @@ class CartTest extends TestCase
 	}
 
 
+	public function test_create_item_without_modificators() {
+
+		$product = $this->createProductWithModificators();
+
+		$image = $product->images()->create(['path' => 'test.jpg']);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, null);
+
+		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
+	}
+
     //Helpers
 
 	protected function createProductWithModificators()

@@ -61,14 +61,18 @@ class CartItemTest extends TestCase
 
 		$cart = factory(Cart::class)->create();
 
-		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+		$cartItemWithMods    = $cart->createItem($product, $this->getModFormData($product->modificators));
+		$cartItemWithoutMods = $cart->createItem($product, null);
+
+		$expectedTotalWithMods = $product->price + $option['rise'];
+		$expectedTotalWithoutMods = $product->price;
 
 
-		$expectedTotal = $product->price + $option['rise'];
-
-		$this->assertEquals($expectedTotal, $cartItem->total());
+		$this->assertEquals($expectedTotalWithMods, $cartItemWithMods->total());
+		$this->assertEquals($expectedTotalWithoutMods, $cartItemWithoutMods->total());
 
 	}
+
 
 	public function test_item_retrieve_image(){
 
@@ -81,6 +85,22 @@ class CartItemTest extends TestCase
 		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
 
 		$this->assertEquals($image->path, $cartItem->imageSrc());
+	}
+
+
+	public function test_can_check_does_item_has_user_modifications() {
+
+		$product = $this->createProductWithModificators();
+
+		$image = $product->images()->create(['path' => 'test.jpg']);
+
+		$cart = factory(Cart::class)->create();
+
+		$itemWithoutMods = $cart->createItem($product, null);
+		$itemWithMods = $cart->createItem($product, $this->getModFormData($product->modificators));
+
+		$this->assertFalse($itemWithoutMods->hasMods());
+		$this->assertTrue($itemWithMods->hasMods());
 	}
 
 
