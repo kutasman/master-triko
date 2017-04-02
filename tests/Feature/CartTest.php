@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Cart;
 use App\Models\Modificator;
 use App\Models\Product;
 use Tests\TestCase;
@@ -19,44 +20,8 @@ protected $product;
 
 	public function testEmptyCart()
     {
+    	$cart = Cart::create(['session_id' => \Session::getId()]);
     	$this->get('/cart')
 		    ->assertSee('Cart is empty');
     }
-
-    public function testAddItemToCart()
-    {
-	    $product = factory(Product::class)->create();
-
-    	$this->post('/cart/' . $product->id, [
-    		'modificators' => [
-    			'text' => ['1'=> 'test text'],
-		        'select' => ['2' => '2', '3' => '1'],
-		    ]
-	    ])->assertSessionHas('cart', [
-	    	[
-	    		'product_id' => $product->id,
-			    'modificators' => [
-				    'text' => ['1'=> 'test text'],
-				    'select' => ['2' => '2', '3' => '1'],
-			    ]
-		    ]
-	    ]);
-    }
-
-
-    public function testRemoveItemFromCart()
-    {
-    	$this->withSession([
-    		'cart' => [
-    			'product_id' => '1',
-			    'modificators' => [
-				    'text' => ['1'=> 'test text'],
-				    'select' => ['2' => '2', '3' => '1'],
-			    ]
-		    ]
-	    ])->delete('/cart/0')
-	        ->assertSessionHas('cart', null);
-    }
-
-
 }

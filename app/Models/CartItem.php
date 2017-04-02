@@ -5,72 +5,60 @@ namespace App\Models;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
-class CartItem{
+class CartItem extends Model{
 
+	protected $casts = [
+		'data' => 'array',
+	];
 
-	protected $id;
-	protected $data = [];
+	protected $fillable = ['data'];
 
-	public function __construct($product_id, array $mod_data) {
-		$this->id = count(\Session::get('cart'));
-		$this->data = $this->retrieveFullData($product_id, $mod_data);
-	}
+	//Mutators_________
 
-	public function title()
+	public function getDataAttribute()
 	{
-		return $this->data['title'];
+		return collect(json_decode($this->attributes['data']));
 	}
 
-	public function id()
+	public function data( $key = null )
 	{
-		return $this->id;
+		if (is_null($key)){
+
+			return $this->data;
+
+		} else {
+
+			$value = $this->data->get($key);
+
+			$value = is_array($value) ? collect($value) : $value;
+
+			return $value;
+		}
 	}
 
-	protected function retrieveFullData($product_id, array $mod_data){
-		$product = Product::findOrFail($product_id);
-		$product->load(['images' => function($query){
-			$query->limit(1);
-		}]);
 
-		$modificators = new Collection();
+	/**
+	 * @return int Total item price
+	 */
+	public function total()
+	{
+		$total = $this->data('price');
 
-		//Iterate throw item modificators
-		if (!empty($mod_data)) {
-
-			foreach ( $mod_data as $modType => $modData ) {
-
-				$modData = collect( $modData );
-
-				$modData->each( function ( $values, $modId ) use ( &$modificators, $modType ) {
-					$modificator = Modificator::find( $modId );
-
-					if ( 'text' != $modType ) {
-						$modificator->load( [
-							'options' => function ( $query ) use ( $values ) {
-								$query->whereIn( 'id', collect( $values ) );
-							}
-						] );
-					} else {
-						$modificator->value = $values;
-					}
-
-					$modificators->push( $modificator );
-				} );
+		foreach ($this->data('user_modifications') as $mod){
+			if ('text' != $mod->type){
+				foreach ($mod->options as $option){
+					$total += $option->rise;
+				}
 			}
+
 		}
 
-		$product->user_modifications = $modificators->toArray();
-
-		return $product->toArray();
-
+		return $total;
 	}
 
-
-
-	public function getData()
-	{
-		return $this->data;
+	public function imageSrc(){
+		return $this->data('images')->shift()->path;
 	}
-
 }

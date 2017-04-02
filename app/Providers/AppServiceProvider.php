@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind(Cart::class, function ($app){
+        	return Cart::firstOrCreate(['session_id' => \Session::getId()]);
+        });
     }
 
     /**

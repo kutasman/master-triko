@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Factory {{ $factory->name }}</h3>
@@ -31,7 +30,7 @@
 
                             {!! BootForm::close() !!}
 
-                            {!! BootForm::open(['route' => ['cart.add_product', $product->id] ]) !!}
+                            {!! BootForm::open(['route' => ['cart.add_item', $product->id] ]) !!}
                                 <div class="well">
                                     <h3>Modificators</h3>
                                     @foreach($product->modificators as $mod)

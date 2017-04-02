@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Modificator;
 use App\Models\ModOption;
 use App\Models\Product;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -14,54 +16,89 @@ class CartItemTest extends TestCase
 {
 	use DatabaseTransactions;
 
-	public function test_it_creation()
-	{
+
+	public function test_cart_item_creation() {
+
 		$product = $this->createProductWithModificators();
-		$modificators_form_data = $this->getModFormData($product->modificators);
 
-		$cartItem = new CartItem($product->id, $modificators_form_data);
+		$cart = factory(Cart::class)->create();
 
-		$this->assertTrue($cartItem instanceof CartItem);
+		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+
+		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
 
 	}
 
+	public function test_it_extract_data_with_get_method() {
 
-	public function test_cart_item_retrieve_product_data()
+		$product = $this->createProductWithModificators();
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+
+		$this->assertEquals($product->title, $cartItem->data('title'));
+	}
+
+	public function test_it_retrieve_data_string_as_string_and_arrays_as_collections()
 	{
 		$product = $this->createProductWithModificators();
 
-		$cartItem = new CartItem($product->id, $this->getModFormData($product->modificators));
+		$cart = factory(Cart::class)->create();
 
-		$itemData = $cartItem->getData();
+		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
 
-		$this->assertEquals($product->title, $itemData['title']);
-		$this->assertEquals($product->id, $itemData['id']);
-		$this->assertEquals($product->price, $itemData['price']);
-		$this->assertEquals($product->factory_id, $itemData['factory_id']);
+		$this->assertEquals($product->title, $cartItem->data('title'));
 
-		foreach ($itemData['user_modifications'] as $mod){
-			$expectedMod = $product->modificators()->whereId($mod['id'])->first();
-			foreach ( $expectedMod->toArray() as $key => $expectedValue ) {
-				if (in_array($key, ['pivot'])){
-					continue;
-				};
-				$this->assertEquals($expectedValue, $mod[$key]);
-			};
-
-		}
+		$this->assertTrue($cartItem->data('user_modifications') instanceof Collection);
 	}
 
+	public function test_item_total_price_calculating() {
+
+		$option = ['name' => 'option for calculating', 'rise' => 222];
+
+		$product = $this->createProductWithModificators($option);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+
+
+		$expectedTotal = $product->price + $option['rise'];
+
+		$this->assertEquals($expectedTotal, $cartItem->total());
+
+	}
+
+	public function test_item_retrieve_image(){
+
+		$product = $this->createProductWithModificators();
+
+		$image = $product->images()->create(['path' => 'test.jpg']);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+
+		$this->assertEquals($image->path, $cartItem->imageSrc());
+	}
 
 
 	//Helpers____________________________________________
 
 
-	protected function createProductWithModificators()
+	/**
+	 * @param array $option Default value for option
+	 *
+	 * @return mixed
+	 */
+	protected function createProductWithModificators(array $option = [ 'name' => 'test', 'rise' =>10])
 	{
+
 		$product = factory(Product::class)->create();
 
-		$mod_select = factory(Modificator::class)->create()->each(function ($m){
-			$m->options()->create(['name' => 'test', 'rise' =>10]);
+		$mod_select = factory(Modificator::class)->create()->each(function ($m) use ($option){
+			$m->options()->create($option);
 		});
 
 		$mod_text = factory(Modificator::class)->create(['type' => 'text']);

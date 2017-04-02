@@ -15,9 +15,9 @@ Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@index');
 Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->name('factory');
 
-Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_product');
+Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_item');
 Route::get('cart', 'CartController@show')->name('cart.show');
-Route::delete('cart/{index}', 'CartController@removeItem')->name('cart.remove_item');
+Route::delete('cart/{item}', 'CartController@removeItem')->name('cart.remove_item');
 
 Auth::routes();
 

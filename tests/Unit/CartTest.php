@@ -12,21 +12,80 @@ use App\Models\CartItem;
 
 class CartTest extends TestCase
 {
-    public function testCartConsistsItems()
-    {
-    	$product = $this->createProductWithModificators();
+	use DatabaseTransactions;
+
+	public function test_cart_creation() {
+
+		$cart = Cart::create(['session_id' => \Session::getId()]);
+
+		$this->assertDatabaseHas('carts', ['session_id' => \Session::getId()]);
+	}
+
+	public function test_cart_can_create_cart_item()
+	{
+		$product = $this->createProductWithModificators();
+
+		$modFarmData = $this->getModFormData($product->modificators);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $modFarmData);
 
 
-	    $item = new CartItem($product->id,$this->getModFormData($product->modificators) );
+		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
 
-	    $cart = new Cart();
+	}
 
-	    $cart->add($item);
+	public function test_cart_can_have_items()
+	{
+		$product1 = $this->createProductWithModificators();
+		$product2 = $this->createProductWithModificators();
 
-    	$this->assertEquals(1, $cart->count());
-    	$this->assertEquals(1, count($cart->items()));
-    }
+		$modFarmData1 = $this->getModFormData($product1->modificators);
+		$modFarmData2 = $this->getModFormData($product2->modificators);
 
+		$cart = factory(Cart::class)->create();
+
+		$cart->createItem($product1, $modFarmData1);
+		$cart->createItem($product2, $modFarmData2);
+
+		$this->assertEquals(2, $cart->items->count());
+	}
+
+	public function test_cart_can_count_items()
+	{
+
+		$product = $this->createProductWithModificators();
+
+		$modFarmData = $this->getModFormData($product->modificators);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $modFarmData);
+
+		$this->assertEquals(1, $cart->count());
+
+	}
+
+	public function test_cart_can_remove_item()
+	{
+		$product = $this->createProductWithModificators();
+
+		$modFarmData = $this->getModFormData($product->modificators);
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($product, $modFarmData);
+
+		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
+
+		$cart->removeItem($cartItem);
+
+		$this->assertDatabaseMissing('cart_items', ['id' => $cartItem->id]);
+	}
+
+
+    //Helpers
 
 	protected function createProductWithModificators()
 	{
@@ -53,4 +112,5 @@ class CartTest extends TestCase
 
 		return $data;
 	}
+
 }

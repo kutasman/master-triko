@@ -25,8 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-    	$factories = Factory::all();
-    	$categories = Category::with('factories')->get();
-        return view('home', compact('factories', 'categories'));
+    	$categories = Category::with('factories.products')->get();
+
+        return view('home', compact('categories'));
     }
 }
