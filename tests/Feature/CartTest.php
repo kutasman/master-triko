@@ -15,8 +15,6 @@ class CartTest extends TestCase
 
 use DatabaseTransactions;
 
-protected $product;
-
 
 	public function testEmptyCart()
     {

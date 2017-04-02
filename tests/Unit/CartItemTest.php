@@ -17,13 +17,26 @@ class CartItemTest extends TestCase
 	use DatabaseTransactions;
 
 
+	protected $product;
+	protected $cart;
+	protected $cartItem;
+
+
+	public function setUp() {
+
+		parent::setUp();
+		
+		$this->product = $this->createProductWithModificators();
+
+		$this->cart = factory(Cart::class)->create();
+
+		$this->cartItem = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
+
+	}
+
 	public function test_cart_item_creation() {
 
-		$product = $this->createProductWithModificators();
-
-		$cart = factory(Cart::class)->create();
-
-		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+		$cartItem = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
 		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
 
@@ -31,42 +44,31 @@ class CartItemTest extends TestCase
 
 	public function test_it_extract_data_with_get_method() {
 
-		$product = $this->createProductWithModificators();
+		$cartItem = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
-		$cart = factory(Cart::class)->create();
-
-		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
-
-		$this->assertEquals($product->title, $cartItem->data('title'));
+		$this->assertEquals($this->product->title, $cartItem->data('title'));
 	}
 
 	public function test_it_retrieve_data_string_as_string_and_arrays_as_collections()
 	{
-		$product = $this->createProductWithModificators();
+		$cartItem = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
-		$cart = factory(Cart::class)->create();
-
-		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
-
-		$this->assertEquals($product->title, $cartItem->data('title'));
+		$this->assertEquals($this->product->title, $cartItem->data('title'));
 
 		$this->assertTrue($cartItem->data('user_modifications') instanceof Collection);
 	}
 
 	public function test_item_total_price_calculating() {
 
-		$option = ['name' => 'option for calculating', 'rise' => 222];
+		$mods = [ 'name' => 'test', 'rise' =>10];
+		$prodWithMods = $this->createProductWithModificators($mods);
+		$prodWithoutMods = factory(Product::class)->create();
 
-		$product = $this->createProductWithModificators($option);
+		$cartItemWithMods    = $this->cart->createItem($prodWithMods, $this->getModFormData($prodWithMods->modificators));
+		$cartItemWithoutMods = $this->cart->createItem($prodWithoutMods, null);
 
-		$cart = factory(Cart::class)->create();
-
-		$cartItemWithMods    = $cart->createItem($product, $this->getModFormData($product->modificators));
-		$cartItemWithoutMods = $cart->createItem($product, null);
-
-		$expectedTotalWithMods = $product->price + $option['rise'];
-		$expectedTotalWithoutMods = $product->price;
-
+		$expectedTotalWithMods = $prodWithMods->price + $mods['rise'];
+		$expectedTotalWithoutMods = $prodWithoutMods->price;
 
 		$this->assertEquals($expectedTotalWithMods, $cartItemWithMods->total());
 		$this->assertEquals($expectedTotalWithoutMods, $cartItemWithoutMods->total());
@@ -76,13 +78,12 @@ class CartItemTest extends TestCase
 
 	public function test_item_retrieve_image(){
 
-		$product = $this->createProductWithModificators();
 
-		$image = $product->images()->create(['path' => 'test.jpg']);
+		$image = $this->product->images()->create(['path' => 'test.jpg']);
 
 		$cart = factory(Cart::class)->create();
 
-		$cartItem = $cart->createItem($product, $this->getModFormData($product->modificators));
+		$cartItem = $cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
 		$this->assertEquals($image->path, $cartItem->imageSrc());
 	}
@@ -90,14 +91,8 @@ class CartItemTest extends TestCase
 
 	public function test_can_check_does_item_has_user_modifications() {
 
-		$product = $this->createProductWithModificators();
-
-		$image = $product->images()->create(['path' => 'test.jpg']);
-
-		$cart = factory(Cart::class)->create();
-
-		$itemWithoutMods = $cart->createItem($product, null);
-		$itemWithMods = $cart->createItem($product, $this->getModFormData($product->modificators));
+		$itemWithoutMods = $this->cart->createItem($this->product, null);
+		$itemWithMods = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
 		$this->assertFalse($itemWithoutMods->hasMods());
 		$this->assertTrue($itemWithMods->hasMods());
@@ -118,7 +113,9 @@ class CartItemTest extends TestCase
 		$product = factory(Product::class)->create();
 
 		$mod_select = factory(Modificator::class)->create()->each(function ($m) use ($option){
-			$m->options()->create($option);
+			if ( ! empty($option)){
+				$m->options()->create($option);
+			}
 		});
 
 		$mod_text = factory(Modificator::class)->create(['type' => 'text']);
