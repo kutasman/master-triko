@@ -12,7 +12,6 @@ class CartController extends Controller
 {
     public function addProduct(Request $request, Product $product, Cart $cart)
     {
-    	//$cart = Cart::firstOrCreate(['session_id' => $request->session()->getId()]);
 
     	$cart->createItem($product, $request->modificators);     	//TODO Create valifation for user modification;
 

@@ -11,12 +11,10 @@ class CheckoutController extends Controller
 
 	public function index(Request $request, Cart $cart)
 	{
+		$cart->load('items');
 
 		return view('checkout.index', compact('cart'));
 
 	}
 
-	public function getCart(Cart $cart) {
-		return $cart->load('items');
-	}
 }
