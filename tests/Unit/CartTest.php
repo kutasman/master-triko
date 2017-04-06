@@ -16,20 +16,20 @@ class CartTest extends TestCase
 
 
 	protected $product;
+	protected $cart;
 
 
 	protected function setUp() {
 		parent::setUp();
 
 		$this->product = $this->createProductWithModificators();
+		$this->cart = factory(Cart::class)->create();
 
 	}
 
 	public function test_cart_creation() {
 
-		$cart = Cart::create(['session_id' => \Session::getId()]);
-
-		$this->assertDatabaseHas('carts', ['session_id' => \Session::getId()]);
+		$this->assertDatabaseHas('carts', ['id' => $this->cart->id]);
 	}
 
 	public function test_cart_can_create_cart_item()
@@ -37,9 +37,8 @@ class CartTest extends TestCase
 
 		$modFarmData = $this->getModFormData($this->product->modificators);
 
-		$cart = factory(Cart::class)->create();
 
-		$cartItem = $cart->createItem($this->product, $modFarmData);
+		$cartItem = $this->cart->createItem($this->product, $modFarmData);
 
 
 		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
@@ -54,26 +53,22 @@ class CartTest extends TestCase
 		$modFarmData1 = $this->getModFormData($product1->modificators);
 		$modFarmData2 = $this->getModFormData($product2->modificators);
 
-		$cart = factory(Cart::class)->create();
 
-		$cart->createItem($product1, $modFarmData1);
-		$cart->createItem($product2, $modFarmData2);
+		$this->cart->createItem($product1, $modFarmData1);
+		$this->cart->createItem($product2, $modFarmData2);
 
-		$this->assertEquals(2, $cart->items->count());
+		$this->assertEquals(2, $this->cart->items->count());
 	}
 
 	public function test_cart_can_count_items()
 	{
 
+		$modFormData = $this->getModFormData($this->product->modificators);
 
 
-		$modFarmData = $this->getModFormData($this->product->modificators);
+		$cartItem = $this->cart->createItem($this->product, $modFormData);
 
-		$cart = factory(Cart::class)->create();
-
-		$cartItem = $cart->createItem($this->product, $modFarmData);
-
-		$this->assertEquals(1, $cart->count());
+		$this->assertEquals(1, $this->cart->count());
 
 	}
 
@@ -82,13 +77,12 @@ class CartTest extends TestCase
 
 		$modFarmData = $this->getModFormData($this->product->modificators);
 
-		$cart = factory(Cart::class)->create();
 
-		$cartItem = $cart->createItem($this->product, $modFarmData);
+		$cartItem = $this->cart->createItem($this->product, $modFarmData);
 
 		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
 
-		$cart->removeItem($cartItem);
+		$this->cart->removeItem($cartItem);
 
 		$this->assertDatabaseMissing('cart_items', ['id' => $cartItem->id]);
 	}
@@ -99,20 +93,50 @@ class CartTest extends TestCase
 
 		$image = $this->product->images()->create(['path' => 'test.jpg']);
 
-		$cart = factory(Cart::class)->create();
 
-		$cartItem = $cart->createItem($this->product, null);
+		$cartItem = $this->cart->createItem($this->product, null);
 
 		$this->assertDatabaseHas('cart_items', ['id' => $cartItem->id]);
 	}
 
+	public function test_can_know_full_or_empty_cart_is() {
+
+
+		$this->assertFalse($this->cart->hasItems());
+
+		$item = $this->cart->createItem($this->product, null);
+
+		$this->assertTrue($this->cart->hasItems());
+
+	}
+
+	public function test_cart_total_price_calculating(){
+
+		$this->cart->createItem($this->product, null); //price 123
+
+		$p = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators)); //price 123  + 10 rise
+
+		$this->assertEquals(256, $this->cart->total());
+
+	}
+
     //Helpers
 
-	protected function createProductWithModificators()
+	protected function createProductWithModificators(array $option = [ 'name' => 'test', 'rise' =>10])
 	{
+		$options = $option;
 		$product = factory(Product::class)->create();
 
-		$product->modificators()->saveMany(factory(Modificator::class,2)->create());
+		$mod_select = factory(Modificator::class)->create()->each(function ($m) use ($options){
+			if ( ! empty($options)){
+				$m->options()->create($options);
+			}
+		});
+
+		$mod_text = factory(Modificator::class)->create(['type' => 'text']);
+
+		$product->modificators()->attach($mod_select);
+		$product->modificators()->attach($mod_text);
 
 		return $product;
 	}
@@ -127,7 +151,7 @@ class CartTest extends TestCase
 			{
 				$data['text'] = [$mod->id => 'test text'];
 			} else {
-				$data[$mod->type] = [$mod->id => rand(1,5)];
+				$data[$mod->type] = [$mod->id => $mod->options()->first()->id];
 			}
 		}
 

@@ -22,10 +22,8 @@ class CartController extends Controller
 	    return redirect()->back();
     }
 
-    public function show(Request $request)
+    public function show(Request $request, Cart $cart)
     {
-    	$cart = Cart::firstOrNew(['session_id' => $request->session()->getId()]);
-
     	$view = $cart->count() ? 'cart.cart' : 'cart.empty';
 
     	return view($view, compact('cart'));

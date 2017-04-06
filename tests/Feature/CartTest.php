@@ -18,7 +18,10 @@ use DatabaseTransactions;
 
 	public function testEmptyCart()
     {
-    	$cart = Cart::create(['session_id' => \Session::getId()]);
+
+    	$cart = Cart::create();
+    	$this->withSession(['cart' => $cart->id]);
+
     	$this->get('/cart')
 		    ->assertSee('Cart is empty');
     }

@@ -39,6 +39,11 @@
         </div>
         @endforeach
     </div>
+    @if( $cart->hasItems())
+        <div class="panel-footer">
+            <a href="{{ route('checkout') }}" class="btn btn-lg btn-success btn-block">Checkout <span class="badge">{{ $cart->total() }}</span>грн. </a>
+        </div>
+    @endif
 </div>
 
 @endsection

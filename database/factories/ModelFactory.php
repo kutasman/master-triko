@@ -48,7 +48,5 @@ $factory->define(\App\Models\ModOption::class, function (Faker\Generator $faker)
 });
 
 $factory->define(\App\Models\Cart::class, function (Faker\Generator $faker){
-	return [
-		'session_id' => 'PHuJiCm9ynusIHkGo6PK9fQ1CLbCPqYl195EeY5X',
-	];
+	return [];
 });

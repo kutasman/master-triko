@@ -22,7 +22,13 @@ class Cart extends Model {
 	public function count()
 	{
 
-		return count($this->items);
+		return $this->items()->count();
+
+	}
+
+	public function hasItems() {
+
+		return !! $this->count();
 
 	}
 
@@ -40,6 +46,18 @@ class Cart extends Model {
 		} else {
 			CartItem::find($item)->delete();
 		}
+	}
+
+	public function total()
+	{
+		$total = 0;
+		if ($this->hasItems())
+		{
+			foreach ($this->items as $item){
+				$total += $item->total();
+			}
+		}
+		return $total;
 	}
 
 	//Helpers

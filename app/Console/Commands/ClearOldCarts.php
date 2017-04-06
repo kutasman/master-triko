@@ -14,7 +14,7 @@ class ClearOldCarts extends Command
      *
      * @var string
      */
-    protected $signature = 'shop:clean-carts';
+    protected $signature = 'shop:clean-up';
 
     /**
      * The console command description.

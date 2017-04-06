@@ -9,13 +9,16 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
+     *attribute_types
      * @return void
      */
     public function boot()
     {
         $this->app->bind(Cart::class, function ($app){
-        	return Cart::firstOrCreate(['session_id' => \Session::getId()]);
+
+        	$cart = Cart::firstOrCreate(['id' => \Session::get('cart')]);
+        	\Session::put('cart', $cart->id);
+        	return $cart;
         });
     }
 
