@@ -17,4 +17,22 @@ class CheckoutController extends Controller
 
 	}
 
+	public function getCart(Request $request)
+	{
+		$cart = Cart::whereSession($request->cart_session)->first();
+		$cart->load('items');
+
+		$cart->total = $cart->total();
+
+		$cart->items->each(function ($item){
+
+			$item->total = $item->total();
+		});
+
+
+		return \Response::json([
+			'cart' => $cart,
+		]);
+
+	}
 }

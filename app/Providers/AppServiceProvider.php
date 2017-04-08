@@ -16,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Cart::class, function ($app){
 
-        	$cart = Cart::firstOrCreate(['id' => \Session::get('cart')]);
+        	$cart = Cart::firstOrNew(['id' => \Session::get('cart')]);
+        	$cart->session = \Session::getId();
+        	$cart->save();
         	\Session::put('cart', $cart->id);
         	return $cart;
         });

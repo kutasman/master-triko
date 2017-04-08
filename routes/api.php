@@ -17,4 +17,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('checkout/cart', 'CheckoutController@getCart')->name('checkout.get_cart');
+Route::get('checkout/cart/{cart_session}', 'CheckoutController@getCart')->name('checkout.get_cart');
