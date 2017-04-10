@@ -52,3 +52,16 @@ $factory->define(\App\Models\Cart::class, function (Faker\Generator $faker){
 		'session' => 'asdasgdhfgaksdhgfkajhgdskfhasdk'
 	];
 });
+
+$factory->define(\App\Models\ShippingType::class, function (){
+
+	return [
+		'name' => 'Poshta',
+		'description' => 'test',
+		'slug' => 'pushta',
+		'meta' => [
+			'apiKey' => 'vhdkjfhvkjhrlgjhdfkjlgkljfh',
+		],
+	];
+
+});
