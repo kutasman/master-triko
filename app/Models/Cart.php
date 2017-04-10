@@ -19,6 +19,13 @@ class Cart extends Model {
 
 	}
 
+	public function order()
+	{
+		return $this->hasOne(Order::class);
+	}
+
+	//Methods
+
 	public function count()
 	{
 

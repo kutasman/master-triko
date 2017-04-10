@@ -63,5 +63,16 @@ $factory->define(\App\Models\ShippingType::class, function (){
 			'apiKey' => 'vhdkjfhvkjhrlgjhdfkjlgkljfh',
 		],
 	];
+});
 
+$factory->define(\App\Models\Shipping::class, function(Faker\Generator $faker){
+
+	return [
+		'type_id' => 1,
+		'meta' => [
+			'first_name' => $faker->firstName,
+			'last_name' => $faker->lastName,
+			'address' => $faker->address,
+		]
+	];
 });

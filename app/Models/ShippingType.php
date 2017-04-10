@@ -17,4 +17,11 @@ class ShippingType extends Model
     public function getMetaAttribute(){
     	return collect(json_decode($this->attributes['meta']));
     }
+
+    //Relations_______________
+
+	public function shippings()
+	{
+		return $this->hasMany(Shipping::class,'type_id');
+	}
 }

@@ -56,7 +56,8 @@ class ShippingTypesController extends Controller
 		$this->validate($request,
 		   [   'name' => 'string',
 		       'description' => 'string',
-		       'slug' => 'string',
+		       'slug' => 'string|unique:shipping_types,slug',
+		       'meta' => 'required',
 		       'meta.*' => 'string',
 		   ]);
 

@@ -29,6 +29,7 @@ use DatabaseTransactions;
 
 	}
 
+
 	public function test_shipping_type_return_meta_as_collection()
 	{
 
