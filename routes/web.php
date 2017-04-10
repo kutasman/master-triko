@@ -42,4 +42,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	//Route::post('modificators/{modificator}/option', 'ModificatorsController@createOptions')->name('modificators.create_option');
 	Route::delete('/modificators/{modificator}/detach', 'ModificatorsController@detach')->name('modificators.detach');
+
+	Route::resource('shipping-types', 'ShippingTypesController');
+	Route::get('shipping-types/all', 'ShippingTypesController@all')->name('shipping-types.all');
 });
