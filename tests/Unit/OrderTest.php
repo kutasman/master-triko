@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Shipping;
+use App\Models\ShippingType;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -22,6 +23,8 @@ class OrderTest extends TestCase
 
     protected $shipping;
 
+    protected $shippingType;
+
     protected function setUp() {
 	    parent::setUp();
 
@@ -30,6 +33,8 @@ class OrderTest extends TestCase
 		$this->product = factory(Product::class)->create();
 
 	    $this->cartItem = $this->cart->createItem($this->product, null);
+
+	    $this->shippingType = factory(ShippingType::class)->create();
 
 	    $this->shipping = factory(Shipping::class)->create(['type_id' => 1]);
 
@@ -53,5 +58,28 @@ class OrderTest extends TestCase
     }
 
 
-    
+	public function test_add_shipping_to_order() {
+
+    	$order = factory(Order::class)->create();
+
+    	$shippingData = [
+    		'meta' => [
+				'first_name' => 'John',
+				'last_name' => 'Smith',
+				'phone' => '4683647239648',
+		        ]
+			];
+
+    	$shipping = $this->shippingType->shippings()->create($shippingData);
+
+    	$order->shipping()->save($shipping);
+
+    	$this->assertDatabaseHas('shippings', [
+    		'id'=> $shipping->id,
+		    'order_id' => $order->id,
+		    'meta' => json_encode($shippingData['meta']),
+	    ]);
+
+
+    }
 }

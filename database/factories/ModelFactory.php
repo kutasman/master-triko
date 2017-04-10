@@ -76,3 +76,16 @@ $factory->define(\App\Models\Shipping::class, function(Faker\Generator $faker){
 		]
 	];
 });
+
+$factory->define(\App\Models\Order::class, function (Faker\Generator $faker){
+
+	return $data = [
+		'cart_id' => factory(\App\Models\Cart::class)->create()->id,
+		'first_name' => $faker->firstName,
+		'last_name' => $faker->lastName,
+		'email' => $faker->email,
+		'phone' => $faker->phoneNumber,
+		'comment' => $faker->sentence(),
+	];
+
+});
