@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\ShippingType;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -29,10 +30,35 @@ class CheckoutController extends Controller
 			$item->total = $item->total();
 		});
 
+		$shippings = ShippingType::all();
+
 
 		return \Response::json([
 			'cart' => $cart,
+			'shippings' => $shippings,
 		]);
 
 	}
+
+	public function validateContacts(Request $request)
+	{
+
+
+		$this->validate($request, [
+			'first_name' => 'string|required',
+			'email' => 'email|required',
+			'phone' => 'string|required',
+		]);
+	}
+
+	public function validateShipping(Request $request) {
+
+		$this->validate($request, [
+			'type' => 'string|required|exists:shipping_types,slug',
+			'data' => 'sometimes',
+		]);
+
+		return response($request->all());
+	}
+
 }

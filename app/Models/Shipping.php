@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shipping extends Model
 {
-    protected $fillable = ['meta'];
+    protected $fillable = ['meta', 'type_id'];
 
     protected $casts = [
     	'meta' => 'array'

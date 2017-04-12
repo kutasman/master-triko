@@ -20,6 +20,8 @@ Route::get('cart', 'CartController@show')->name('cart.show');
 Route::delete('cart/{item}', 'CartController@removeItem')->name('cart.remove_item');
 
 Route::get('/checkout', 'CheckoutController@index')->name('checkout');
+Route::post('checkout/validate/contacts', 'CheckoutController@validateContacts');
+Route::post('checkout/validate/shipping', 'CheckoutController@validateShipping');
 
 Auth::routes();
 

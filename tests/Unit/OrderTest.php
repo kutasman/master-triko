@@ -63,6 +63,7 @@ class OrderTest extends TestCase
     	$order = factory(Order::class)->create();
 
     	$shippingData = [
+    		'type_id' => 1,
     		'meta' => [
 				'first_name' => 'John',
 				'last_name' => 'Smith',
@@ -70,9 +71,8 @@ class OrderTest extends TestCase
 		        ]
 			];
 
-    	$shipping = $this->shippingType->shippings()->create($shippingData);
 
-    	$order->shipping()->save($shipping);
+    	$shipping = $order->shipping()->create($shippingData);
 
     	$this->assertDatabaseHas('shippings', [
     		'id'=> $shipping->id,

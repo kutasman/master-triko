@@ -13,13 +13,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Contacts
-                                    <button @click.prevent="toContacts" v-if="!isContactsStep" class="btn btn-xs btn-warning pull-right">edit</button>
+                                    <button @click.prevent="editContacts" v-if="!isContactsStep" class="btn btn-xs btn-warning pull-right">edit</button>
                                 </h3>
                             </div>
                             <div v-if="isContactsStep" class="panel-body">
+                                <form action="checkout/validate/contacts" method="post">
                                 <div class="form-group">
                                     <label for="firstName" >First name</label>
-                                    <input v-model="customer.firstName" type="text" class="form-control" name="firstName" id="firstName" placeholder="Name..." required>
+                                    <input v-model="customer.first_name" type="text" class="form-control" name="firstName" id="firstName" placeholder="Name..." required>
                                 </div>
 
                                 <div class="form-group">
@@ -33,8 +34,9 @@
                                 </div>
 
 
-                                <button @click.prevent="toShipping" type="submit" class="btn btn-primary btn-block">Next step</button>
+                                <button @click.prevent="validateContacts" type="submit" class="btn btn-primary btn-block">Next step</button>
 
+                                </form>
 
                             </div>
                         </div>
@@ -45,26 +47,48 @@
                                 <h3 class="panel-title">Shipping</h3>
                             </div>
                             <div v-if="isShippingStep" class="panel-body">
-                                shipping
+                                <div class="list-group">
+                                    <div v-for="(shipping, index) in shippings">
+                                        <a @click.prevent="chooseShipping(shipping.slug)" href="#" class="list-group-item">
+                                            <h4 class="list-group-item-heading">{{ shipping.name }}</h4>
+                                            <p class="list-group-item-text">{{ shipping.description }}</p>
+                                        </a>
+                                    </div>
+
+                                    <div v-if="shipping.type == 'nova_poshta'">
+                                        <input v-model="shipping.data" />
+                                    </div>
+
+
+                                </div>
+
+                                <button @click.prevent="validateShipping" class="btn btn-success pull-right">Next step</button>
 
 
                             </div>
                         </div>
+
 
                         <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingThree">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Collapsible Group Item #3
-                                      </a>
-                                </h4>
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Payment</h3>
                             </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="panel-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                  </div>
+                            <div v-if="isPaymentStep" class="panel-body">
+                                <div class="list-group">
+
+                                <div v-for="(payment, index) in paymets">
+                                    <a href="#" class="list-group-item ">
+                                        <h4 class="list-group-item-heading">Item heading</h4>
+                                        <p class="list-group-item-text">Content goes here</p>
+                                    </a>
+                                </div>
+                                </div>
+
+
                             </div>
                         </div>
+
+                        
 
                     </div>
 
@@ -98,23 +122,64 @@
                 cart: {},
                 cartSession: '',
                 customer: {
-                    firstName : '',
+                    first_name : '',
                     email : '',
                     phone : '',
                 },
                 step: 'contacts',
-                shippings: [
-                    'nova_poshta'
-                ]
+                shippings: {},
+                payments: {},
+                shipping: {
+                    type: '',
+                    data: '',
+                },
+                contactsErrors: [],
+                shippingErrors: [],
 
             }
         },
         methods: {
+            validateContacts(){
+                console.log('validate contacts');
+                axios.post('checkout/validate/contacts', this.customer)
+                    .then((response) => {
+                        if (200 == response.status){
+                            console.log('ke!');
+                            this.toShipping();
+                        }
+
+                    })
+                    .catch((error) => {
+                        this.contactsErrors = error.response.data;
+                        console.log(error.response.data)
+                    });
+            },
+            validateShipping(){
+                console.log('validate shipping');
+
+                axios.post('checkout/validate/shipping', this.shipping)
+                    .then((response) => {
+                        if (200 == response.status){
+                            this.toPayment();
+                        }
+
+                        })
+                    .catch((error) => {
+                        console.log(error);
+                        });
+            },
             toShipping(){
                 this.step = 'shipping';
               console.log('go to shipping');
             },
-            toContacts(){
+            toPayment(){
+                this.step = 'payment';
+            },
+            chooseShipping(slug){
+                console.log(slug);
+                this.shipping.type = slug;
+            },
+            editContacts(){
                 this.step = 'contacts';
             }
         },
@@ -127,17 +192,26 @@
             },
             isShippingStep(){
                 return this.step == 'shipping';
+            },
+            isPaymentStep(){
+                return this.step == 'payment';
+            }
+        },
+        watch: {
+            shipping: function(){
+                console.log(this.shipping.type);
             }
         },
         mounted() {
             console.log('mounted');
             this.cartSession = $('#checkout-container').data('cart');
 
-            let self = this;
-
             axios.get('api/checkout/cart/' + this.cartSession)
-                .then(function (response) {
-                    self.cart = response.data.cart;
+                .then((response) =>  {
+                    console.log(response.data.shippings);
+                    this.cart = response.data.cart;
+                    this.shippings = response.data.shippings;
+                    this.payments = response.data.payments;
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Order;
 use App\Models\ShippingType;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
@@ -19,13 +20,15 @@ class ShippingTest extends TestCase
 		$shippingType = factory(ShippingType::class)->create();
 
 		$data = [
+			'type_id' => 1,
 			'meta' => [
 				'name' => 'John',
 				'warehouse' => 'test address',
 			],
 		];
 
-		$shipping = $shippingType->shippings()->create($data);
+		$order = factory(Order::class)->create();
+		$shipping = $order->shipping()->create($data);
 
 		$this->assertDatabaseHas('shippings', ['id' => $shipping->id, 'meta' => json_encode($data['meta'])]);
 

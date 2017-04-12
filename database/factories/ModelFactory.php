@@ -69,6 +69,7 @@ $factory->define(\App\Models\Shipping::class, function(Faker\Generator $faker){
 
 	return [
 		'type_id' => 1,
+		'order_id' => 1,
 		'meta' => [
 			'first_name' => $faker->firstName,
 			'last_name' => $faker->lastName,
