@@ -47,4 +47,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	Route::resource('shipping-types', 'ShippingTypesController');
 	Route::get('shipping-types/all', 'ShippingTypesController@all')->name('shipping-types.all');
+
+	Route::resource('payment-types', 'PaymentTypesController');
 });

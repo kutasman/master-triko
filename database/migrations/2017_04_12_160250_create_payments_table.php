@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShippingsTable extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,21 @@ class CreateShippingsTable extends Migration
      */
     public function up()
     {
-    	Schema::create('shipping_types', function (Blueprint $table){
+    	Schema::create('payment_types', function (Blueprint $table){
     		$table->increments('id');
-    		$table->string('name');
-    		$table->string('description')->default('');
-    		$table->string('slug')->index();
-    		$table->json('meta');
+    		$table->text('name');
+    		$table->text('slug');
+    		$table->text('description');
+
+    		$table->timestamps();
 	    });
 
-        Schema::create('shippings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('type_id')->unsigned();
-			$table->integer('order_id')->unsigned();
-			$table->json('meta');
 
-            $table->foreign('type_id')->references('id')->on('shipping_types');
+        Schema::create('payments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('type');
+            $table->integer('order_id')->unsigned();
+
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
         });
@@ -41,8 +41,8 @@ class CreateShippingsTable extends Migration
     public function down()
     {
     	Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('shippings');
-        Schema::dropIfExists('shipping_types');
+        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_types');
         Schema::enableForeignKeyConstraints();
     }
 }

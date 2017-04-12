@@ -15,4 +15,8 @@ class Order extends Model
 	public function shipping() {
 		return $this->hasOne(Shipping::class);
 	}
+
+	public function payment() {
+		return $this->hasOne(Payment::class);
+	}
 }

@@ -10,6 +10,7 @@ require('./bootstrap');
  */
 
 Vue.component('shipping-types', require('./components/admin/ShippingTypes.vue'));
+Vue.component('payment-types', require('./components/admin/PaymentTypes.vue'));
 
 const admin = new Vue({
     el: '#admin'
