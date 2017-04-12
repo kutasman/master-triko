@@ -1,5 +1,5 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div class="panel panel-default">
+    <div v-if="step != 'finish' " class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Checkout</h3>
         </div>
@@ -44,19 +44,21 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Shipping</h3>
+                                <h3 class="panel-title">Shipping
+                                <button @click.prevent="toShipping" v-if="!isShippingStep" class="btn btn-warning btn-xs pull-right">edit</button>
+                            </h3>
                             </div>
                             <div v-if="isShippingStep" class="panel-body">
                                 <div class="list-group">
                                     <div v-for="(shipping, index) in shippings">
-                                        <a @click.prevent="chooseShipping(shipping.slug)" href="#" class="list-group-item">
+                                        <a @click.prevent="chooseShipping(index)" href="#" :class="{active: userShipping.type == shipping.slug}" class="list-group-item">
                                             <h4 class="list-group-item-heading">{{ shipping.name }}</h4>
                                             <p class="list-group-item-text">{{ shipping.description }}</p>
                                         </a>
                                     </div>
 
-                                    <div v-if="shipping.type == 'nova_poshta'">
-                                        <input v-model="shipping.data" />
+                                    <div v-if="userShipping.type == 'nova_poshta'">
+                                        <input v-model="userShipping.meta" />
                                     </div>
 
 
@@ -71,20 +73,22 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Payment</h3>
+                                <h3 class="panel-title">Payment
+                                    <button v-if="!isPaymentStep" class="btn btn-warning btn-xs pull-right">edit</button>
+                                </h3>
                             </div>
                             <div v-if="isPaymentStep" class="panel-body">
                                 <div class="list-group">
 
-                                <div v-for="(payment, index) in paymets">
-                                    <a href="#" class="list-group-item ">
-                                        <h4 class="list-group-item-heading">Item heading</h4>
+                                <div v-for="(payment, index) in payments">
+                                    <a @click.prevent="choosePayment(payment.slug)" href="#" :class="{active: userPayment.type == payment.slug }" class="list-group-item ">
+                                        <h4 class="list-group-item-heading">{{ payment.name }}</h4>
                                         <p class="list-group-item-text">Content goes here</p>
                                     </a>
                                 </div>
                                 </div>
 
-
+                                <button v-if="userPayment.type" @click.prevent="validatePayment" class="btn btn-block btn-success">Next step</button>
                             </div>
                         </div>
 
@@ -95,19 +99,27 @@
                     <div class=" well well-sm">
                         <h3>Summary</h3>
                         <p>{{ customer }}</p>
-                        <p>
-                            <ul>
-                                <li v-for="item in cart.items">
-                                    {{ item.data.title }}, {{ item.total }}
-                                </li>
-                            </ul>
-                        </p>
+                        <ul>
+                            <li v-for="item in cart.items">
+                                {{ item.data.title }}, {{ item.total }}
+                            </li>
+                        </ul>
                         total: {{ cartTotal }}
                     </div>
+                    <button v-if="step == 'confirm'" @click.prevent="createOrder">Confirm order!</button>
                 </div>
             </div>
         </div>
 
+    </div> <!--.panel-default-->
+    <div v-else class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Success</h3>
+        </div>
+        <div class="panel-body">
+            <h1>Your order number is <strong>{{ order_id }}</strong></h1>
+
+        </div>
     </div>
 </template>
 
@@ -119,6 +131,7 @@
             return {
                 cart: {},
                 cartSession: '',
+                order_id: '',
                 customer: {
                     first_name : '',
                     email : '',
@@ -127,9 +140,13 @@
                 step: 'contacts',
                 shippings: {},
                 payments: {},
-                shipping: {
+                userShipping: {
+                    type_id: '',
                     type: '',
-                    data: '',
+                    meta: '',
+                },
+                userPayment:{
+                    type: ''
                 },
                 contactsErrors: [],
                 shippingErrors: [],
@@ -155,7 +172,7 @@
             validateShipping(){
                 console.log('validate shipping');
 
-                axios.post('checkout/validate/shipping', this.shipping)
+                axios.post('checkout/validate/shipping', this.userShipping)
                     .then((response) => {
                         if (200 == response.status){
                             this.toPayment();
@@ -166,6 +183,36 @@
                         console.log(error);
                         });
             },
+            validatePayment(){
+                axios.post('checkout/validate/payment', this.userPayment)
+                    .then((response) => {
+                        if (200 == response.status){
+                            this.toConfirm();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data);
+                    });
+            },
+            createOrder(){
+
+              axios.post('checkout/confirm-order', {
+                  cart_id: this.cart.id,
+                  first_name: this.customer.first_name,
+                  email: this.customer.email,
+                  phone: this.customer.phone,
+                  shipping: this.userShipping,
+                  payment: this.userPayment,
+              }).then((response) => {
+                    if (200 == response.status){
+                        console.log(response.data);
+                        this.order_id = response.data;
+                        this.finish();
+                    }
+              }).catch((error) => {
+                  console.log(error.response.data);
+              })
+            },
             toShipping(){
                 this.step = 'shipping';
               console.log('go to shipping');
@@ -173,12 +220,27 @@
             toPayment(){
                 this.step = 'payment';
             },
-            chooseShipping(slug){
-                console.log(slug);
-                this.shipping.type = slug;
+            toConfirm(){
+              this.step = 'confirm';
+            },
+            toSuccess()
+            {
+              this.step = 'success';
+            },
+            chooseShipping(index){
+                this.userShipping.type = this.shippings[index].slug;
+                this.userShipping.type_id = this.shippings[index].id;
+            },
+            choosePayment(slug){
+                this.userPayment.type = slug;
             },
             editContacts(){
                 this.step = 'contacts';
+            },
+            finish(){
+                console.log('ura!');
+                this.step = 'finish';
+
             }
         },
         computed: {
@@ -196,9 +258,6 @@
             }
         },
         watch: {
-            shipping: function(){
-                console.log(this.shipping.type);
-            }
         },
         mounted() {
             console.log('mounted');

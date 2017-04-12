@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
 	        $table->string('last_name')->default('');
 	        $table->string('email');
 	        $table->string('phone');
-	        $table->text('comment');
+	        $table->string('comment')->default('');
 
 	        $table->integer('cart_id')->unsigned();
 

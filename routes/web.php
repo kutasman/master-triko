@@ -22,6 +22,8 @@ Route::delete('cart/{item}', 'CartController@removeItem')->name('cart.remove_ite
 Route::get('/checkout', 'CheckoutController@index')->name('checkout');
 Route::post('checkout/validate/contacts', 'CheckoutController@validateContacts');
 Route::post('checkout/validate/shipping', 'CheckoutController@validateShipping');
+Route::post('checkout/validate/payment', 'CheckoutController@validatePayment');
+Route::post('checkout/confirm-order', 'CheckoutController@confirmOrder');
 
 Auth::routes();
 

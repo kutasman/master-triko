@@ -25,7 +25,7 @@ class CreateShippingsTable extends Migration
             $table->increments('id');
             $table->integer('type_id')->unsigned();
 			$table->integer('order_id')->unsigned();
-			$table->json('meta');
+			$table->json('meta')->nullable();
 
             $table->foreign('type_id')->references('id')->on('shipping_types');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

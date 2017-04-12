@@ -71,7 +71,7 @@
                 console.log(response);
 
                   this.payments.splice(index,1);
-                
+
               })
               .catch((error) => {
                 console.log(error.response.data);

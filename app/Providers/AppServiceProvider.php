@@ -22,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
         	\Session::put('cart', $cart->id);
         	return $cart;
         });
+
+	    // Using Closure based composers...
+	    \View::composer('common.nav', function ($view) {
+	    	$cart = $this->app->make(Cart::class);
+		    $view->with(['cart' => $cart]);
+	    });
     }
 
     /**
