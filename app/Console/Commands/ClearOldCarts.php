@@ -40,8 +40,10 @@ class ClearOldCarts extends Command
      */
     public function handle()
     {
-
-    	DB::table('carts')->where('updated_at', '<',Carbon::now()->subHour(2))->delete();
+    	DB::table('carts')
+	        ->where('updated_at', '<',Carbon::now()->subHour(2))
+		    ->where('ordered', 0)
+	        ->delete();
 
     	$this->comment('Cart cleared up');
 
