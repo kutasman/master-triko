@@ -98,15 +98,33 @@
                 <div class="col-xs-12 col-sm-4">
                     <div class=" well well-sm">
                         <h3>Summary</h3>
-                        <p>{{ customer }}</p>
-                        <ul>
-                            <li v-for="item in cart.items">
-                                {{ item.data.title }}, {{ item.total }}
-                            </li>
-                        </ul>
-                        total: {{ cartTotal }}
+
+                        <p v-if="canEdit('contacts')">
+                            <strong>Contacts:</strong>
+                            {{ customer }}
+                        </p>
+                        <p v-if="canEdit('shipping')">
+                            <strong>Shipping:</strong>
+                            {{ userShipping }}
+                        </p>
+                        <p v-if="canEdit('payment')">
+                            <strong>Payment:</strong>
+                            {{ userPayment }}
+                        </p>
+                        <p>
+                            <strong>Products:</strong>
+                            <ul>
+                                <li v-for="item in cart.items">
+                                    {{ item.data.title }}, {{ item.total }}
+                                </li>
+                            </ul>
+                        </p>
+
+                        <p>
+                            total: {{ cartTotal }}
+                        </p>
                     </div>
-                    <button v-if="step == 'confirm'" @click.prevent="createOrder">Confirm order!</button>
+                    <button v-if="isStep('confirm')" @click.prevent="createOrder" class="btn btn-block btn-lg btn-success">Confirm order! <span class="badge">{{ cartTotal }} грн.</span></button>
                 </div>
             </div>
         </div>
@@ -141,6 +159,7 @@
                 steps: [
                     'contacts', 'shipping', 'payment', 'confirm', 'success'
                 ],
+                validated: [],
                 shippings: {},
                 payments: {},
                 userShipping: {
@@ -222,9 +241,6 @@
             canEdit(step){
                 console.log(this.steps.indexOf(step) < this.steps.indexOf(this.step) );
                 return this.steps.indexOf(step) < this.steps.indexOf(this.step);
-                /*return this.steps.indexOf(step) < this.steps.indexOf(this.step);
-                console.log(this.steps.indexOf(step) < this.steps.indexOf(this.step));*/
-
             },
             toContacts(){
               this.step = 'contacts';
