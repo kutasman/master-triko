@@ -58,6 +58,14 @@ class CartItemTest extends TestCase
 		$this->assertTrue($cartItem->data('user_modifications') instanceof Collection);
 	}
 
+	public function test_if_hasnt_data_key_return_null() {
+
+		$cartItem = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators));
+
+		$this->assertTrue(is_null($cartItem->data('fake_key')));
+
+	}
+
 	public function test_item_total_price_calculating() {
 
 		$mods = [ 'name' => 'test', 'rise' =>10];
@@ -86,6 +94,16 @@ class CartItemTest extends TestCase
 		$cartItem = $cart->createItem($this->product, $this->getModFormData($this->product->modificators));
 
 		$this->assertEquals($image->path, $cartItem->imageSrc());
+	}
+
+	public function test_retrive_image_when_there_no_images() {
+
+		$cart = factory(Cart::class)->create();
+
+		$cartItem = $cart->createItem($this->product, $this->getModFormData($this->product->modificators));
+
+		$this->assertEquals('', $cartItem->imageSrc());
+
 	}
 
 

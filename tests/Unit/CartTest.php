@@ -112,11 +112,11 @@ class CartTest extends TestCase
 
 	public function test_cart_total_price_calculating(){
 
-		$this->cart->createItem($this->product, null); //price 123
 
-		$p = $this->cart->createItem($this->product, $this->getModFormData($this->product->modificators)); //price 123  + 10 rise
+		$this->cart->createItem($this->product, null);
+		$this->cart->createItem($this->product, $this->getModFormData($this->product->modificators)); // + 10 modificator rise
 
-		$this->assertEquals(256, $this->cart->total());
+		$this->assertEquals($this->product->price*2+10 , $this->cart->total());
 
 	}
 

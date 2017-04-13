@@ -13,10 +13,10 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Contacts
-                                    <button @click.prevent="editContacts" v-if="!isContactsStep" class="btn btn-xs btn-warning pull-right">edit</button>
+                                    <button @click.prevent="toContacts" v-if="canEdit('contacts')" class="btn btn-xs btn-warning pull-right">edit</button>
                                 </h3>
                             </div>
-                            <div v-if="isContactsStep" class="panel-body">
+                            <div v-if="isStep('contacts')" class="panel-body">
                                 <form action="checkout/validate/contacts" method="post">
                                 <div class="form-group">
                                     <label for="firstName" >First name</label>
@@ -45,10 +45,10 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Shipping
-                                <button @click.prevent="toShipping" v-if="!isShippingStep" class="btn btn-warning btn-xs pull-right">edit</button>
+                                <button @click.prevent="toShipping" v-if="canEdit('shipping')" class="btn btn-warning btn-xs pull-right">edit</button>
                             </h3>
                             </div>
-                            <div v-if="isShippingStep" class="panel-body">
+                            <div v-if="isStep('shipping')" class="panel-body">
                                 <div class="list-group">
                                     <div v-for="(shipping, index) in shippings">
                                         <a @click.prevent="chooseShipping(index)" href="#" :class="{active: userShipping.type == shipping.slug}" class="list-group-item">
@@ -74,10 +74,10 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Payment
-                                    <button v-if="!isPaymentStep" class="btn btn-warning btn-xs pull-right">edit</button>
+                                    <button v-if="canEdit('payment')" @click.prevent="toPayment" class="btn btn-warning btn-xs pull-right">edit</button>
                                 </h3>
                             </div>
-                            <div v-if="isPaymentStep" class="panel-body">
+                            <div v-if="isStep('payment')" class="panel-body">
                                 <div class="list-group">
 
                                 <div v-for="(payment, index) in payments">
@@ -138,6 +138,9 @@
                     phone : '',
                 },
                 step: 'contacts',
+                steps: [
+                    'contacts', 'shipping', 'payment', 'confirm', 'success'
+                ],
                 shippings: {},
                 payments: {},
                 userShipping: {
@@ -213,6 +216,19 @@
                   console.log(error.response.data);
               })
             },
+            isStep(step){
+                return step == this.step;
+            },
+            canEdit(step){
+                console.log(this.steps.indexOf(step) < this.steps.indexOf(this.step) );
+                return this.steps.indexOf(step) < this.steps.indexOf(this.step);
+                /*return this.steps.indexOf(step) < this.steps.indexOf(this.step);
+                console.log(this.steps.indexOf(step) < this.steps.indexOf(this.step));*/
+
+            },
+            toContacts(){
+              this.step = 'contacts';
+            },
             toShipping(){
                 this.step = 'shipping';
               console.log('go to shipping');
@@ -233,9 +249,6 @@
             },
             choosePayment(slug){
                 this.userPayment.type = slug;
-            },
-            editContacts(){
-                this.step = 'contacts';
             },
             finish(){
                 console.log('ura!');
@@ -262,7 +275,7 @@
         mounted() {
             console.log('mounted');
             this.cartSession = $('#checkout-container').data('cart');
-
+            console.log(this.canEdit('payment'));
             axios.get('api/checkout/cart/' + this.cartSession)
                 .then((response) =>  {
                     console.log(response.data.shippings);

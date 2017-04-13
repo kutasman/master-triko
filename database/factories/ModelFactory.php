@@ -23,10 +23,25 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(\App\Models\Product::class, function (){
+$factory->define(\App\Models\Factory::class, function(Faker\Generator $faker){
 	return [
-		'title' => 'Test Title',
-		'price' => 123,
+		'name' => $faker->sentence(1),
+		'slug' => snake_case($faker->name),
+	];
+});
+
+$factory->define(\App\Models\Category::class, function (Faker\Generator $faker){
+	return [
+		'name' => $faker->sentence(1),
+		'description' => $faker->sentence('6'),
+
+	];
+});
+
+$factory->define(\App\Models\Product::class, function (Faker\Generator $faker){
+	return [
+		'title' => $faker->sentence(2),
+		'price' => $faker->randomFloat(2, 100, 1000),
 		'factory_id' => 1,
 	];
 });

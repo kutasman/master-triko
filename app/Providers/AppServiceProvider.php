@@ -16,10 +16,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Cart::class, function ($app){
 
-        	$cart = Cart::firstOrNew(['id' => \Session::get('cart')]);
+        	$cart = Cart::firstOrNew(['session' => \Session::get('cart.session'),'id' => \Session::get('cart.id') ]);
         	$cart->session = \Session::getId();
         	$cart->save();
-        	\Session::put('cart', $cart->id);
+        	\Session::put('cart.session', $cart->session);
+        	\Session::put('cart.id', $cart->id);
         	return $cart;
         });
 

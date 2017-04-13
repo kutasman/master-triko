@@ -30,9 +30,12 @@ class CartItem extends Model{
 
 		} else {
 
-			$value = $this->data->get($key);
+			$value = $this->data->get($key, null);
+
+
 
 			$value = is_array($value) ? collect($value) : $value;
+
 
 			return $value;
 		}
@@ -63,7 +66,7 @@ class CartItem extends Model{
 
 	public function imageSrc(){
 
-		$src = $this->data('images') ? $this->data('images')->shift()->path : '';
+		$src = $this->data('images')->count() ? $this->data('images')->shift()->path : '';
 
 		return $src;
 
