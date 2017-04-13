@@ -101,8 +101,9 @@ class CheckoutController extends Controller
 
 		$order->shipping()->create($request->shipping);
 
-		$request->session()->forget('cart');
+		$order->markCartAsOrdered();
 
+		$request->session()->forget('cart');
 
 		return response($order->id);
 
