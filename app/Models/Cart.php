@@ -11,6 +11,10 @@ class Cart extends Model {
 
 	protected $fillable = [ 'session_id' ];
 
+	protected $casts = [
+		'ordered' => 'boolean',
+	];
+
 	//Relations_____
 
 	public function items() {

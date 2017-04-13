@@ -19,4 +19,10 @@ class Order extends Model
 	public function payment() {
 		return $this->hasOne(Payment::class);
 	}
+
+	public function markCartAsOrdered() {
+		if ($this->exists){
+			Cart::whereId($this->cart_id)->update(['ordered' => 1]);
+		}
+	}
 }

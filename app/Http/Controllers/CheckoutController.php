@@ -83,8 +83,8 @@ class CheckoutController extends Controller
 	public function confirmOrder( Request $request ) {
 
 		$this->validate($request, [
+			'cart_id' => 'required|numeric|exists:carts,id',
 			'first_name' => 'string|required',
-			'last_name' => 'sometimes|string',
 			'email' => 'email|required',
 			'phone' => 'string|required',
 			'payment' => 'required',

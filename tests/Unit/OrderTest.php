@@ -79,7 +79,19 @@ class OrderTest extends TestCase
 		    'order_id' => $order->id,
 		    'meta' => json_encode($shippingData['meta']),
 	    ]);
+    }
 
+	public function test_order_can_mark_cart_as_ordered() {
+
+		$cart = factory(Cart::class)->create();
+
+    	$order = factory(Order::class)->create(['cart_id' => $cart->id]);
+
+    	$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 0]);
+
+    	$order->markCartAsOrdered();
+
+		$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 1]);
 
     }
 }
