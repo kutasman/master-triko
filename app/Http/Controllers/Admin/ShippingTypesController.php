@@ -57,8 +57,7 @@ class ShippingTypesController extends Controller
 		   [   'name' => 'string',
 		       'description' => 'string',
 		       'slug' => 'string|unique:shipping_types,slug',
-		       'meta' => 'required',
-		       'meta.*' => 'string',
+		       'meta' => 'sometimes',
 		   ]);
 
 		$shippingType =  ShippingType::create($request->all());
