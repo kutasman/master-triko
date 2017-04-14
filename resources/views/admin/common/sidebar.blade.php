@@ -5,5 +5,6 @@
     <li class="{{ Request::segment(2) == 'modificators' ? 'active' : '' }}"><a href="{{ route('modificators.index') }}">Modificators</a> </li>
     <li class="{{ Request::segment(2) == 'shipping-types' ? 'active' : '' }}"><a href="{{ route('shipping-types.index') }}">Shipping types</a> </li>
     <li class="{{ Request::segment(2) == 'payment-types' ? 'active' : '' }}"><a href="{{ route('payment-types.index') }}">Payment types</a> </li>
+    <li class="{{ Request::segment(2) == 'order-statuses' ? 'active' : '' }}"><a href="{{ route('order-statuses.index') }}">Order statuses</a> </li>
 
 </ul>

@@ -12,7 +12,7 @@ class OrderStatus extends Model
 
 	public function setSlugAttribute( $value ) {
 
-		$this->attributes['slug'] = camel_case($value);
+		$this->attributes['slug'] = snake_case($value);
 
 	}
 }
