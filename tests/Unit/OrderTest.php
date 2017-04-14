@@ -4,9 +4,11 @@ namespace Tests\Unit;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\Shipping;
 use App\Models\ShippingType;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -50,6 +52,7 @@ class OrderTest extends TestCase
 		    'email' => 'customer@email.com',
 		    'phone' => '380654568988',
 		    'comment' => 'some texts',
+		    'status_id' => 1,
 	    ];
 
 		$order = $this->cart->order()->create($data);
@@ -94,4 +97,73 @@ class OrderTest extends TestCase
 		$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 1]);
 
     }
+
+	public function test_set_order_status_by_id() {
+
+		$status = factory(OrderStatus::class)->create();
+		$confirmedStatus = factory(OrderStatus::class)->create(['slug' => 'confirmed']);
+
+
+		$order = factory(Order::class)->create(['status_id' => $status->id]);
+
+		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+
+		$order->setStatusById($confirmedStatus->id)->save();
+
+		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+
+    }
+
+	public function test_set_order_status_by_slug() {
+
+		$status = factory(OrderStatus::class)->create();
+		$confirmedStatus = factory(OrderStatus::class)->create(['slug' => 'confirmed']);
+
+
+
+		$order = factory(Order::class)->create(['status_id' => $status->id]);
+
+		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+
+		$order->setStatusBySlug('confirmed')->save();
+
+		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+
+    }
+
+	public function test_set_order_status() {
+
+    	$status = factory(OrderStatus::class)->create();
+    	$confirmedStatus = factory(OrderStatus::class)->create(['slug' => 'confirmed']);
+
+
+    	$order = factory(Order::class)->create(['status_id' => $status->id]);
+
+    	$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+
+    	$order->setStatus('confirmed')->save();
+
+    	$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+
+    }
+
+	public function test_retrieve_status_slug() {
+
+		$status = factory(OrderStatus::class)->create(['slug' => 'test']);
+
+		$order = factory(Order::class)->create(['status_id' => $status->id]);
+
+		$this->assertEquals($status->slug, $order->getStatusSlug());
+
+	}
+
+	public function test_set_wrong_status() {
+
+		$order = factory(Order::class)->create();
+
+		$this->expectException(ModelNotFoundException::class);
+
+		$order->setStatus('wrong')->save();
+
+	}
 }

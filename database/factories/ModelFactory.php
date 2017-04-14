@@ -102,6 +102,15 @@ $factory->define(\App\Models\Order::class, function (Faker\Generator $faker){
 		'email' => $faker->email,
 		'phone' => $faker->phoneNumber,
 		'comment' => $faker->sentence(),
+		'status_id' => 1,
 	];
 
+});
+
+$factory->define(\App\Models\OrderStatus::class, function(){
+	return [
+		'name' => 'New',
+		'description' => 'New Order',
+		'slug' => 'new',
+	];
 });

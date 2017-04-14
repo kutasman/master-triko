@@ -103,6 +103,8 @@ class CheckoutController extends Controller
 
 		$order->markCartAsOrdered();
 
+		$order->setStatus('new')->save();
+
 		$request->session()->forget('cart');
 
 		return response($order->id);
