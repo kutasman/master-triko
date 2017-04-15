@@ -8,11 +8,9 @@ class OrderStatus extends Model
 {
     protected $fillable = ['name', 'description', 'slug'];
 
-    //Mutators___________
+	public function orders() {
 
-	public function setSlugAttribute( $value ) {
-
-		$this->attributes['slug'] = snake_case($value);
+		return $this->belongsToMany(Order::class, 'status_id', 'order_id');
 
 	}
 }

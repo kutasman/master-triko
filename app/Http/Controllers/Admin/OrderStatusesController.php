@@ -89,7 +89,18 @@ class OrderStatusesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+        	'name' => 'string|required',
+	        'description' => 'sometimes|string',
+	        'slug' => "string|required|unique:order_statuses,slug,$id",
+        ]);
+
+        OrderStatus::find($id)->update($request->all());
+        if ($request->ajax()){
+        	return response('', 200);
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -98,7 +109,7 @@ class OrderStatusesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         OrderStatus::find($id)->delete();
         if ($request->ajax()){

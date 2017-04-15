@@ -52,7 +52,6 @@ class OrderTest extends TestCase
 		    'email' => 'customer@email.com',
 		    'phone' => '380654568988',
 		    'comment' => 'some texts',
-		    'status_id' => 1,
 	    ];
 
 		$order = $this->cart->order()->create($data);
@@ -104,13 +103,13 @@ class OrderTest extends TestCase
 		$confirmedStatus = factory(OrderStatus::class)->create(['slug' => 'confirmed']);
 
 
-		$order = factory(Order::class)->create(['status_id' => $status->id]);
+		$order = factory(Order::class)->create();
 
-		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+		$this->assertDatabaseHas('orders', ['id' => $order->id]);
 
 		$order->setStatusById($confirmedStatus->id)->save();
 
-		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+		$this->assertDatabaseHas('order_status', ['order_id' => $order->id, 'status_id' => $confirmedStatus->id]);
 
     }
 
@@ -121,13 +120,11 @@ class OrderTest extends TestCase
 
 
 
-		$order = factory(Order::class)->create(['status_id' => $status->id]);
-
-		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+		$order = factory(Order::class)->create();
 
 		$order->setStatusBySlug('confirmed')->save();
 
-		$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+		$this->assertDatabaseHas('order_status', ['order_id' => $order->id, 'status_id' => $confirmedStatus->id]);
 
     }
 
@@ -137,21 +134,25 @@ class OrderTest extends TestCase
     	$confirmedStatus = factory(OrderStatus::class)->create(['slug' => 'confirmed']);
 
 
-    	$order = factory(Order::class)->create(['status_id' => $status->id]);
-
-    	$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $status->id]);
+    	$order = factory(Order::class)->create();
 
     	$order->setStatus('confirmed')->save();
 
-    	$this->assertDatabaseHas('orders', ['id' => $order->id, 'status_id' => $confirmedStatus->id]);
+    	$this->assertDatabaseHas('order_status', ['order_id' => $order->id, 'status_id' => $confirmedStatus->id]);
 
-    }
+    	$order->setStatus($status->id)->save();
+
+		$this->assertDatabaseHas('order_status', ['order_id' => $order->id, 'status_id' => $status->id]);
+
+	}
 
 	public function test_retrieve_status_slug() {
 
 		$status = factory(OrderStatus::class)->create(['slug' => 'test']);
 
-		$order = factory(Order::class)->create(['status_id' => $status->id]);
+		$order = factory(Order::class)->create();
+
+		$order->setStatus($status->id)->save();
 
 		$this->assertEquals($status->slug, $order->getStatusSlug());
 

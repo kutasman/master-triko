@@ -27,9 +27,9 @@ class Order extends Model
 		}
 	}
 
-	public function status()
+	public function statuses()
 	{
-		return $this->hasOne(OrderStatus::class, 'id');
+		return $this->belongsToMany(OrderStatus::class, 'order_status', 'order_id', 'status_id');
 	}
 
 	public function setStatus( $status ){
@@ -50,7 +50,7 @@ class Order extends Model
 	public function setStatusById($id){
 
 		if ($status = OrderStatus::find($id)){
-			$this->status_id = $status->id;
+			$this->statuses()->sync([$status->id]);
 		} else {
 			throw new ModelNotFoundException('No such order status');
 		}
@@ -61,7 +61,7 @@ class Order extends Model
 	public function setStatusBySlug( $slug ) {
 
 		if ($status = OrderStatus::whereSlug($slug)->first()){
-			$this->status_id = $status->id;
+			$this->statuses()->sync([$status->id]);
 		} else {
 			throw new ModelNotFoundException('No such order status');
 		}
@@ -71,7 +71,7 @@ class Order extends Model
 
 	public function getStatusSlug(){
 
-		return $this->status->slug;
+		return $this->statuses()->first()->slug;
 
 	}
 }

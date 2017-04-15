@@ -22,6 +22,11 @@ class CreateOrdersTable extends Migration
 
     		$table->timestamps();
 	    });
+
+    	Schema::create('order_status', function(Blueprint $table){
+    		$table->integer('order_id')->unsigned();
+    		$table->integer('status_id')->unsigned();
+	    });
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
 
@@ -30,12 +35,8 @@ class CreateOrdersTable extends Migration
 	        $table->string('email');
 	        $table->string('phone');
 	        $table->string('comment')->default('');
-	        $table->integer('status_id')->unsigned()->default();
 
 	        $table->integer('cart_id')->unsigned();
-
-	        $table->foreign('status_id')->references('id')->on('order_statuses');
-
 
 	        $table->timestamps();
         });
@@ -51,6 +52,7 @@ class CreateOrdersTable extends Migration
     	Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('orders');
         Schema::dropIfExists('order_statuses');
+        Schema::dropIfExists('order_status');
         Schema::enableForeignKeyConstraints();
     }
 }

@@ -17,7 +17,7 @@ class FactoriesController extends Controller
     public function index()
     {
     	$factories = Factory::all();
-    	$factories->load('categories');
+    	$factories->load('categories', 'modificators');
         return view('admin.factories.index', compact('factories'));
     }
 

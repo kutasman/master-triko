@@ -102,7 +102,6 @@ $factory->define(\App\Models\Order::class, function (Faker\Generator $faker){
 		'email' => $faker->email,
 		'phone' => $faker->phoneNumber,
 		'comment' => $faker->sentence(),
-		'status_id' => 1,
 	];
 
 });
