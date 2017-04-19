@@ -52,4 +52,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	Route::resource('payment-types', 'PaymentTypesController');
 	Route::resource('order-statuses', 'OrderStatusesController');
+	Route::resource('orders', 'OrdersController');
 });

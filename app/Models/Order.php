@@ -21,14 +21,21 @@ class Order extends Model
 		return $this->hasOne(Payment::class);
 	}
 
-	public function markCartAsOrdered() {
-
-		Cart::findOrFail($this->cart_id)->markAsOrdered()->save();
+	public function cart(){
+		return $this->belongsTo(Cart::class);
 	}
 
 	public function statuses()
 	{
 		return $this->belongsToMany(OrderStatus::class, 'order_status', 'order_id', 'status_id');
+	}
+
+	//Methods
+
+
+	public function markCartAsOrdered() {
+
+		Cart::findOrFail($this->cart_id)->markAsOrdered()->save();
 	}
 
 	public function setStatus( $status ){
