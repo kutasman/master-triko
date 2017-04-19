@@ -71,6 +71,18 @@ class Cart extends Model {
 		return $total;
 	}
 
+	/**
+	 * Set cart status to Ordered
+	 *
+	 * @return $this
+	 */
+	public function markAsOrdered() {
+
+		$this->ordered = 1;
+
+		return $this;
+	}
+
 	//Helpers
 
 	protected function retrieveFullCartItemData($product_id, $mod_data){

@@ -22,9 +22,8 @@ class Order extends Model
 	}
 
 	public function markCartAsOrdered() {
-		if ($this->exists){
-			Cart::whereId($this->cart_id)->update(['ordered' => 1]);
-		}
+
+		Cart::findOrFail($this->cart_id)->markAsOrdered()->save();
 	}
 
 	public function statuses()

@@ -120,6 +120,18 @@ class CartTest extends TestCase
 
 	}
 
+	public function test_can_mark_cart_as_ordered(){
+
+		$cart = factory(Cart::class)->create();
+		$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 0]);
+
+		$cart->markAsOrdered()->save();
+
+		$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 1]);
+
+	}
+
+
     //Helpers
 
 	protected function createProductWithModificators(array $option = [ 'name' => 'test', 'rise' =>10])
@@ -157,5 +169,7 @@ class CartTest extends TestCase
 
 		return $data;
 	}
+
+
 
 }
