@@ -6,8 +6,8 @@
  */
 
 require('./bootstrap');
-//require('./_checkout');
-
+require('../../../node_modules/select2/dist/js/select2.min');
+require('../../../node_modules/chosen-js/chosen.jquery');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

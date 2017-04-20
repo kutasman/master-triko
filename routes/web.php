@@ -24,6 +24,9 @@ Route::post('checkout/validate/contacts', 'CheckoutController@validateContacts')
 Route::post('checkout/validate/shipping', 'CheckoutController@validateShipping');
 Route::post('checkout/validate/payment', 'CheckoutController@validatePayment');
 Route::post('checkout/confirm-order', 'CheckoutController@confirmOrder');
+Route::get('nova-poshta-cities', 'CheckoutController@getNPCities');
+Route::put('nova-poshta-cities', 'CheckoutController@updateNPCities');
+
 
 Auth::routes();
 
