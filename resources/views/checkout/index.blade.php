@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="checkout" id="checkout-container" data-cart="{{ $cart->session }}">
-    <checkout></checkout>
+    <checkout :payments="{{ $paymentTypes }}" :shippings="{{ $shippingTypes }}" :cart="{{ $cart }}"></checkout>
     </div>
 @endsection

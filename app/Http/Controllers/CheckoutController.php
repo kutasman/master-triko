@@ -16,13 +16,19 @@ class CheckoutController extends Controller
 	public function index(Request $request, Cart $cart)
 	{
 		$cart->load('items', 'order');
+		$cart->items->each(function ($item){
+		    $item->total = $item->total();
+        });
+
+		$shippingTypes = ShippingType::all();
+		$paymentTypes = PaymentType::all();
 
 		if ($cart->order()->count() || !$cart->count()){
 
 			return redirect()->route('home');
 		}
 
-		return view('checkout.index', compact('cart'));
+		return view('checkout.index', compact('cart', 'shippingTypes', 'paymentTypes'));
 
 	}
 

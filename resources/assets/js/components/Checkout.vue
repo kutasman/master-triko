@@ -146,9 +146,9 @@
 
 <script>
     export default {
+        props: ['shippings', 'payments', 'cart'],
         data(){
             return {
-                cart: {},
                 cartSession: '',
                 order_id: '',
                 customer: {
@@ -161,8 +161,6 @@
                     'contacts', 'shipping', 'payment', 'confirm', 'success'
                 ],
                 validated: [],
-                shippings: {},
-                payments: {},
                 userShipping: {
                     type_id: '',
                     type: '',
@@ -183,7 +181,7 @@
             validateContacts(){
                 axios.post('checkout/validate/contacts', this.customer)
                     .then((response) => {
-                        if (200 == response.status){
+                        if (200 === response.status){
                             this.toShipping();
                         }
 
@@ -299,17 +297,6 @@
         watch: {
         },
         mounted() {
-            console.log('mounted');
-            this.cartSession = $('#checkout-container').data('cart');
-            axios.get('api/checkout/cart/' + this.cartSession)
-                .then((response) =>  {
-                    this.cart = response.data.cart;
-                    this.shippings = response.data.shippings;
-                    this.payments = response.data.payments;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
         },
         components: {
             nova_poshta: require('./shippings/NovaPoshta.vue'),
