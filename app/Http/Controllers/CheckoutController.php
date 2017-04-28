@@ -6,8 +6,9 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\PaymentType;
 use App\Models\ShippingType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Cache;
 class CheckoutController extends Controller
 {
 
@@ -108,6 +109,21 @@ class CheckoutController extends Controller
 		$request->session()->forget('cart');
 
 		return response($order->id);
+
+	}
+
+	public function getNPCities(){
+		$cities = Cache::get('np_cities');
+		if (!$cities){
+			return response('No Content', 204);
+		}
+		return response($cities);
+	}
+
+	public function updateNPCities(Request $request){
+
+		Cache::put('np_cities', $request->np_cities, Carbon::now()->addDay());
+		return response(Cache::get('np_cities'));
 
 	}
 

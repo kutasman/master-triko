@@ -42,6 +42,8 @@
                         </div>
 
 
+
+
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Shipping
@@ -57,9 +59,7 @@
                                         </a>
                                     </div>
 
-                                    <div v-if="userShipping.type == 'nova_poshta'">
-                                        <input v-model="userShipping.meta" />
-                                    </div>
+                                    <component :is="userShipping.type" :meta="userShipping.meta" :shipping="shipping" @shipping-ready="shippingReadyEvent"></component>
 
 
                                 </div>
@@ -105,7 +105,8 @@
                         </p>
                         <p v-if="canEdit('shipping')">
                             <strong>Shipping:</strong>
-                            {{ userShipping }}
+                            {{ userShipping.type }}
+                                {{ userShipping.meta.city.DescriptionRu }} {{ userShipping.meta.warehouse.DescriptionRu }}
                         </p>
                         <p v-if="canEdit('payment')">
                             <strong>Payment:</strong>
@@ -165,7 +166,10 @@
                 userShipping: {
                     type_id: '',
                     type: '',
-                    meta: '',
+                    meta: {
+                        city:{},
+                        warehouse:{}
+                    },
                 },
                 userPayment:{
                     type: ''
@@ -177,11 +181,9 @@
         },
         methods: {
             validateContacts(){
-                console.log('validate contacts');
                 axios.post('checkout/validate/contacts', this.customer)
                     .then((response) => {
                         if (200 == response.status){
-                            console.log('ke!');
                             this.toShipping();
                         }
 
@@ -192,7 +194,6 @@
                     });
             },
             validateShipping(){
-                console.log('validate shipping');
 
                 axios.post('checkout/validate/shipping', this.userShipping)
                     .then((response) => {
@@ -227,7 +228,6 @@
                   payment: this.userPayment,
               }).then((response) => {
                     if (200 == response.status){
-                        console.log(response.data);
                         this.order_id = response.data;
                         this.finish();
                     }
@@ -239,7 +239,6 @@
                 return step == this.step;
             },
             canEdit(step){
-                console.log(this.steps.indexOf(step) < this.steps.indexOf(this.step) );
                 return this.steps.indexOf(step) < this.steps.indexOf(this.step);
             },
             toContacts(){
@@ -247,7 +246,6 @@
             },
             toShipping(){
                 this.step = 'shipping';
-              console.log('go to shipping');
             },
             toPayment(){
                 this.step = 'payment';
@@ -270,6 +268,12 @@
                 console.log('ura!');
                 this.step = 'finish';
 
+            },
+            shippingReadyEvent(){
+                console.log('shipping ready');
+            },
+            userShippingIs(type){
+                return type == this.userShipping.type;
             }
         },
         computed: {
@@ -284,17 +288,21 @@
             },
             isPaymentStep(){
                 return this.step == 'payment';
-            }
+            },
+            shipping(){
+                return this.shippings.find(function(shipping){
+                    return this == shipping.slug;
+                }, this.userShipping.type );
+            },
+
         },
         watch: {
         },
         mounted() {
             console.log('mounted');
             this.cartSession = $('#checkout-container').data('cart');
-            console.log(this.canEdit('payment'));
             axios.get('api/checkout/cart/' + this.cartSession)
                 .then((response) =>  {
-                    console.log(response.data.shippings);
                     this.cart = response.data.cart;
                     this.shippings = response.data.shippings;
                     this.payments = response.data.payments;
@@ -302,7 +310,9 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-
+        },
+        components: {
+            nova_poshta: require('./shippings/NovaPoshta.vue'),
         }
     }
 </script>
