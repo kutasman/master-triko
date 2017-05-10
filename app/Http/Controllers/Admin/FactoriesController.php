@@ -126,4 +126,11 @@ class FactoriesController extends Controller
 
     	return redirect()->back();
     }
+
+
+    public function getFactoryModificators(Factory $factory){
+
+        return response($factory->modificators);
+
+    }
 }

@@ -37,12 +37,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	Route::resource('products', 'ProductController');
 	Route::post('products/{product}/add-image', 'ProductController@addImage')->name('products.add_image');
 	Route::delete('/products/{product}/delete-image/{image}', 'ProductController@removeImage')->name('products.delete-image');
-	Route::put('products/{product}/modificator', 'ProductController@addModificator')->name('products.add_modificator');
+	Route::post('products/{product}/modificators', 'ProductController@syncModificators')->name('products.sync_modificators');
 
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
 	Route::resource('factories', 'FactoriesController');
 	Route::resource('modificators', 'ModificatorsController');
+
+	Route::get('factories/{factory}/modificators', 'FactoriesController@getFactoryModificators')->name('factories.get_modificators');
 
 	Route::resource('mod-options', 'ModOptionsController', ['only' => 'store']);
 	Route::post('modificators/{modificator}/mod-options', 'ModOptionsController@store')->name('mod-options.store');

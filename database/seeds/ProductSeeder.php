@@ -13,11 +13,11 @@ class ProductSeeder extends Seeder
     {
 		$this->truncateTables();
 
-		$categories = factory(\App\Models\Category::class, 12)->create();
+		$categories = factory(\App\Models\Category::class, 1)->create();
 		foreach ($categories as $category){
-			$category->factories()->attach($factories = factory(\App\Models\Factory::class, 2)->create());
+			$category->factories()->attach($factories = factory(\App\Models\Factory::class, 1)->create());
 			foreach ($factories as $factory){
-				$factory->products()->saveMany( factory(\App\Models\Product::class, 2)->create());
+				$factory->products()->saveMany( factory(\App\Models\Product::class, 1)->create());
 			}
 		}
 
