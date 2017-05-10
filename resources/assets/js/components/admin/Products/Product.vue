@@ -9,39 +9,22 @@
             </ul>
         </div>
 
+        <component :is="tab" :product="product" :factories="factories">
+            <div class="field">
+                <label></label>
+                <div class="control">
+                    <div :class="{'is-loading' : busy}" @click="updateProduct" class="button is-primary">update</div>
+                </div>
+
+            </div>
+        </component>
+
         <div v-show="isTab('general')">
-            <div class="field">
-                <label class="label">Title</label>
-                <div class="control">
-                    <input  @change="updateProduct(product)" @chan type="text" class="input" v-model="product.title" placeholder="title"/>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">Price</label>
-                <div class="control">
-                    <input @change="updateProduct(product)"  type="number" class="input" v-model="product.price" placeholder="price"/>
-                </div>
-            </div>
 
-            <div class="field">
-                <label class="label">Factory</label>
-                <p class="control">
-                    <span class="select">
-                      <select @change="updateProduct(product)" v-model="product.factory_id">
-                        <option v-for="factory in factories" :value="factory.id" v-text="factory.name"></option>
-                      </select>
-                    </span>
-                </p>
-            </div>
-
-            <div class="field">
-                <label class="label">Active</label>
-                <div  class="control">
-                    <div @click="updateProduct(product)" class="button" :class="{'is-success' : product.active}">Active</div>
-                </div>
-            </div>
 
         </div> <!--tab general-->
+
+
 
     </div>
 </template>
@@ -50,12 +33,14 @@
 
 <script>
 
+    import General from './tabs/general.vue';
     export default {
-        props: ['product', 'factories'],
+        props: ['productInit', 'factories'],
         data(){
             return {
                 tab:'general',
-                busy: false
+                busy: false,
+                product: {},
 
             }
         },
@@ -66,27 +51,36 @@
             setTab(name){
                 this.tab = name;
             },
-            updateProduct: _.debounce((product) => {
-                axios.put('/admin/products/' + product.id, product)
+            toggleActive(){
+                this.product.active = !this.product.active ;
+            },
+            updateProduct(){
+                this.busy = true;
+                axios.put('/admin/products/' + this.product.id, this.product)
                     .then(response => {
-
+                        this.busy = false;
                     })
                     .catch(error => {
                         console.log(error.response.data);
+                        this.busy = false;
+
                     })
 
-            }, 500),
+            },
 
 
         },
         watch:{
             product(){
-                this.updateProduct();
+                this.updateProduct(this.product);
             }
         },
         computed: {},
         mounted() {
+            this.product = this.productInit;
         },
-        components: {}
+        components: {
+            General
+        }
     }
 </script>

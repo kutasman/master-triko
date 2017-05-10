@@ -3,6 +3,6 @@
 
 @section('content')
 
-    <product :product="{{ $product }}" :factories="{{ $factories }}"></product>
+    <product :product-init="{{ $product }}" :factories="{{ $factories }}"></product>
 
 @endsection
