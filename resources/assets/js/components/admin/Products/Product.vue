@@ -64,7 +64,7 @@
                             });
                         break;
                     case 'modificators':
-                        axios.post(this.product.id + '/modificators', {modificators:this.productModIds})
+                        axios.post('webmodificators', {modificators:this.productModIds})
                             .then(response => {
                                 this.busy = false;
                                 console.log(response.data);

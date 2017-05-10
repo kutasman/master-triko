@@ -48,7 +48,7 @@
 
         },
         mounted() {
-            axios.get('../factories/'+ this.product.factory_id+'/modificators')
+            axios.get('../../factories/'+ this.product.factory_id+'/modificators')
                 .then(response => {
                     this.factoryMods = response.data;
                 })
