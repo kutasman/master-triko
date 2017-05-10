@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('title', 60);
             $table->float('price')->unsigned()->default(0.00);
             $table->integer('factory_id')->unsigned();
+            $table->boolean('active')->default(0);
 
 
 	        $table->timestamps();

@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-    	'title','price', 'factory_id'
+    	'title','price', 'factory_id', 'active'
+    ];
+
+    protected $casts = [
+        'active' => 'boolean'
     ];
 
     //Relations

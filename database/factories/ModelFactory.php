@@ -43,6 +43,7 @@ $factory->define(\App\Models\Product::class, function (Faker\Generator $faker){
 		'title' => $faker->sentence(2),
 		'price' => $faker->randomFloat(2, 100, 1000),
 		'factory_id' => 1,
+        'active' => true,
 	];
 });
 

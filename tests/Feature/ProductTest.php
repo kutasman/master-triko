@@ -15,27 +15,39 @@ class ProductTest extends TestCase
     use DatabaseTransactions;
     use WithoutMiddleware;
 
+    protected $product;
+
     protected function setUp()
     {
         parent::setUp();
+
+        $this->product = factory(Product::class)->create(['active' => false]);
 
     }
 
     public function test_http_product_title_updating()
     {
 
-        $product = factory(Product::class)->create();
 
-        $this->assertDatabaseHas('products', ['title' => $product->title]);
+        $this->assertDatabaseHas('products', ['title' => $this->product->title]);
 
         $newData = [
             'title' => 'new title',
         ];
-        $response = $this->json('PUT', $this->url("products/{$product->id}"), $newData);
+        $response = $this->json('PUT', $this->url("products/{$this->product->id}"), $newData);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('products', ['title' => 'new title']);
+
+    }
+
+    public function test_json_product_active_update()
+    {
+        $response = $this->json('PUT', $this->url("products/{$this->product->id}"), ['active' => true]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('products', ['active' => 1, 'id' => $this->product->id]);
 
     }
 
