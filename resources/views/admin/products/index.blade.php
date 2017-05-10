@@ -2,14 +2,11 @@
 
 @section('page-title', 'Products')
 
-@section('toolbar')
-    {{ HTML::link( route('products.create'), 'Create Product', ['class' => 'btn btn-success pull-right']) }}
-
-@endsection
-
 @section('content')
 
-    <div class="list-group">
+    <products :products="{{ $products }}"></products>
+
+   {{-- <div class="list-group">
         @foreach($products as $product)
         <a href="{{ route('products.edit', ['id' => $product->id]) }}" class="list-group-item">
             <div class="row">
@@ -27,5 +24,5 @@
         </a>
         @endforeach
     </div>
-
+--}}
 @endsection

@@ -69,7 +69,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        $product->with(['images']);
+        $factories = Factory::all();
+
+        return view('admin.products.show', compact('product', 'factories'));
     }
 
     /**
@@ -82,6 +85,7 @@ class ProductController extends Controller
     {
     	$product->with(['images']);
     	$factories = Factory::all();
+
 	    return view('admin.products.edit', compact('product', 'factories'));
     }
 
@@ -92,17 +96,17 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $product)
     {
-	    $this->validate($request,[
-		    'title' => 'string|required',
-		    'price' => 'required|numeric|min:0',
+        $product = Product::find($product);
+        $this->validate($request,[
+		    'title' => 'sometimes|string',
+		    'price' => 'sometimes|numeric|min:0',
 	    ]);
 
-	    $product->update($request->all());
+        $product->update($request->all());
 
-
-	    return redirect()->route('products.edit', $product->id);
+        return response($product);
     }
 
 

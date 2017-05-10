@@ -14,6 +14,9 @@ Vue.component('payment-types', require('./components/admin/PaymentTypes.vue'));
 Vue.component('order-statuses', require('./components/admin/OrderStatuses.vue'));
 Vue.component('orders', require('./components/admin/Orders.vue'));
 
+Vue.component('products', require('./components/admin/Products/Products.vue'));
+Vue.component('product', require('./components/admin/Products/Product.vue'));
+
 const admin = new Vue({
     el: '#admin'
 });

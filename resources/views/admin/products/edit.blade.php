@@ -1,12 +1,11 @@
 @extends('admin.layouts.admin')
 
-@section('page-title', $product->title)
-
-@section('page-title-subtext', $product->code)
 
 @section('content')
 
-<!-- TAB NAVIGATION -->
+
+<product :product="{{ $product }}" :factories="{{ $factories }}"></product>
+{{--<!-- TAB NAVIGATION -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#general" role="tab" data-toggle="tab">General</a></li>
     <li><a href="#images" role="tab" data-toggle="tab">Images</a></li>
@@ -117,7 +116,7 @@
     </div>
 
 
-</div>
+</div>--}}
 
 
 

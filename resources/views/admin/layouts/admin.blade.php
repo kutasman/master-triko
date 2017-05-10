@@ -30,53 +30,52 @@
 
 <body>
 <div id="admin">
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">{{config('app.name')}}</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
-        </div>
-    </div>
-</nav>
-
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            @include('admin.common.sidebar')
-        </div>
-
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-            <div class="page-header">
-                <h2>@yield('page-title')
-                    <small>@yield('page-title-subtext')</small>
-                    @yield('toolbar')
-                </h2>
+    <div class="container is-fluid">
+        <nav class="nav has-shadow">
+            <div class="container">
+                <div class="nav-left">
+                    <a class="nav-item">
+                        {{ config('app.name') }}
+                    </a>
+                    <a class="nav-item is-tab is-hidden-mobile is-active">Home</a>
+                    <a class="nav-item is-tab is-hidden-mobile">Features</a>
+                    <a class="nav-item is-tab is-hidden-mobile">Pricing</a>
+                    <a class="nav-item is-tab is-hidden-mobile">About</a>
+                </div>
+                <span class="nav-toggle">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </span>
+                <div class="nav-right nav-menu">
+                    <a class="nav-item is-tab is-hidden-tablet is-active">Home</a>
+                    <a class="nav-item is-tab is-hidden-tablet">Features</a>
+                    <a class="nav-item is-tab is-hidden-tablet">Pricing</a>
+                    <a class="nav-item is-tab is-hidden-tablet">About</a>
+                    <a class="nav-item is-tab">
+                        <figure class="image is-16x16" style="margin-right: 8px;">
+                            <img src="http://bulma.io/images/jgthms.png">
+                        </figure>
+                        Profile
+                    </a>
+                    <a class="nav-item is-tab">Log out</a>
+                </div>
             </div>
+        </nav>
 
-            @yield('content')
+        <div class="columns">
+            <div class="column is-2">
+                @include('admin.common.sidebar')
+            </div>
+            <div class="column is-10">
 
+                @yield('content')
+
+            </div>
         </div>
 
     </div>
-</div>
+
 </div> {{--#admin--}}
 
 <!-- Bootstrap core JavaScript
