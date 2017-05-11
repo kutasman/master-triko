@@ -12,7 +12,7 @@
                     <div v-for="mod in factoryMods" class="field">
                         <p class="control">
                             <label class="checkbox">
-                                <input @change="syncMods" :id="'mod-' + mod.id" v-model="product.modificators" :value="mod" type="checkbox">
+                                <input :id="'mod-' + mod.id" v-model="product.modificators" :value="mod" type="checkbox">
                                 {{ mod.name }}
                             </label>
                         </p>
@@ -40,9 +40,7 @@
             }
         },
         methods: {
-            syncMods(){
 
-            }
         },
         computed: {
 

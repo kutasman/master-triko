@@ -64,7 +64,7 @@
                             });
                         break;
                     case 'modificators':
-                        axios.post('webmodificators', {modificators:this.productModIds})
+                        axios.post('modificators', {modificators:this.productModIds})
                             .then(response => {
                                 this.busy = false;
                                 console.log(response.data);
@@ -83,8 +83,6 @@
 
         },
         watch:{
-            product(){
-            }
         },
         computed: {
             productModIds(){

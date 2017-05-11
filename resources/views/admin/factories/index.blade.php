@@ -1,35 +1,8 @@
 @extends('admin.layouts.admin')
-@section('page-title', 'Factories')
-@section('toolbar')
-    {{ HTML::link(route('factories.create'), 'Create factory', ['class' => 'pull-right btn btn-success']) }}
-@endsection
+
 @section('content')
-    <ul class="list-group">
-
-    @foreach($factories as $factory)
-
-        <li  class="list-group-item">
-            {{ HTML::link(route('factories.show', $factory->id), $factory->name ) }}
-            <small class="text-muted">Categories:
-                @foreach($factory->categories as $category)
-                    {{ $category->name }}
-                @endforeach
-            </small>
-            <small class="text-muted">Modificators:
-                @foreach($factory->modificators as $modificator)
-                    {{ $modificator->name }}, type: {{ $modificator->type }}
-                @endforeach
-            </small>
 
 
-
-            <a href="#" onclick="event.preventDefault();document.getElementById('factory-delete-{{ $factory->id }}').submit();" class="text-danger pull-right">delete</a href="#">
-            {!! BootForm::open(['route' => ['factories.destroy', $factory->id], 'method' => 'DELETE', 'id' => 'factory-delete-' . $factory->id ]) !!}
-            {!! BootForm::close() !!}
-        </li>
-
-    @endforeach
-    </ul>
-
+<factories :factories-init="{{ $factories }}"></factories>
 
 @endsection
