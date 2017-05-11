@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Modificator;
+use App\Models\ModOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -40,8 +41,9 @@ class ModOptionsController extends Controller
         	'name' => 'string|required',
 	        'rise' => 'numeric|required',
         ]);
-		$modificator->options()->create($request->all());
-		return redirect()->back();
+		$options = $modificator->options()->create($request->all());
+		return response($options);
+
     }
 
     /**
@@ -84,8 +86,9 @@ class ModOptionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( $modOption)
     {
-        //
+        ModOption::destroy($modOption);
+
     }
 }

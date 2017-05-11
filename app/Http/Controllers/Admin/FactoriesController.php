@@ -122,8 +122,16 @@ class FactoriesController extends Controller
 
     public function createModificator(Request $request, Factory $factory)
     {
-    	$factory->modificators()->create($request->all());
+    	$modificator = $factory->modificators()->create($request->all());
 
-    	return redirect()->back();
+    	return response($modificator);
+
+    }
+
+
+    public function getFactoryModificators(Factory $factory){
+
+        return response($factory->modificators);
+
     }
 }

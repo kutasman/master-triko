@@ -101,7 +101,6 @@ class ModificatorsController extends Controller
     {
 		$modificator->delete();
 
-		return redirect()->back();
     }
 
     public function createOptions(Request $request, Modificator $modificator)
@@ -129,6 +128,10 @@ class ModificatorsController extends Controller
 	    }
 
 	    return redirect()->back();
+    }
+
+    public function options(Modificator $modificator){
+        return $modificator->options;
     }
 
     protected function getOptionValidationRules(Modificator $modificator)

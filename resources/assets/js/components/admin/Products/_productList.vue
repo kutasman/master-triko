@@ -6,7 +6,7 @@
             </div>
             <div class="media-content">
                 <p>
-                    <strong>{{ product.title }}</strong>
+                    <strong><a @click="editProduct(product)" >{{ product.title }}</a></strong>
 
                 </p>
             </div>
@@ -31,7 +31,7 @@
         },
         methods: {
             editProduct(product){
-                window.location.href = 'products/'+product.id;
+                window.location.href = 'products/'+product.id + '/edit';
             }
         },
         computed: {},

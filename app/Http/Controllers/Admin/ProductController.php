@@ -8,6 +8,7 @@ use App\Models\AttributeType;
 use App\Models\Category;
 use App\Models\Factory;
 use App\Models\Image;
+use App\Models\Modificator;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
@@ -69,8 +70,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->with(['images']);
-        $factories = Factory::all();
+        $product->load(['images', 'modificators']);
+        $factories = Factory::all();;
 
         return view('admin.products.show', compact('product', 'factories'));
     }
@@ -83,7 +84,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->with(['images']);
+    	$product->load(['images', 'modificators']);
     	$factories = Factory::all();
 
 	    return view('admin.products.edit', compact('product', 'factories'));
@@ -169,5 +170,18 @@ class ProductController extends Controller
 		$product->modificators()->syncWithoutDetaching($request->modificators);
 
 		return redirect()->route('products.edit', $product->id);
+    }
+
+
+    public function syncModificators(Request $request, Product $product){
+
+	    $this->validate($request, [
+	        'modificators.*' => 'numeric',
+        ]);
+
+	    if (count($request->modificators)){
+
+            $product->modificators()->sync($request->modificators);
+        }
     }
 }
