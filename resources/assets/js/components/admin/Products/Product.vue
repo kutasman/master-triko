@@ -29,7 +29,7 @@
 <script>
 
     import General from './tabs/general.vue';
-    import Modificators from './tabs/modificators.vue';
+    import Modificators from './../Modifcators/Modificators.vue';
     export default {
         props: ['productInit', 'factories'],
         data(){

@@ -173,6 +173,27 @@ class ProductController extends Controller
     }
 
 
+    public function createModificator(Request $request, Product $product)
+    {
+        $this->validate($request, [
+            'name' => 'string|required',
+            'type' => 'string|required',
+        ]);
+
+        $modificator = $product->modificators()->create($request->all());
+
+        return response($modificator);
+    }
+
+    public function detachModificator(Request $request, Product $product)
+    {
+        $this->validate($request, [
+           'modificator' => 'numeric',
+        ]);
+        $product->modificators()->detach([$request->modificator]);
+    }
+
+
     public function syncModificators(Request $request, Product $product){
 
 	    $this->validate($request, [

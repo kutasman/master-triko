@@ -1,19 +1,17 @@
 <template>
-    <div class="columns">
-        <div class="column is-6">
-            <div class="media" v-for="factory in factories">
-                <div class="media-content">
-                    <strong><a @click="editFactory(factory)">{{ factory.name }}</a></strong>
-                </div>
-                <div class="media-right">
-                    <div @click="deleteFactory(factory)" class="delete"></div>
+    <div class="container is-fluid">
+        <div class="columns">
+            <div class="column">
+                <div class="media" v-for="factory in factories">
+                    <div class="media-content">
+                        <strong><a @click="editFactory(factory)">{{ factory.name }}</a></strong>
+                    </div>
+                    <div class="media-right">
+                        <div @click="deleteFactory(factory)" class="delete"></div>
+                    </div>
                 </div>
             </div>
-
-
-        </div>
-        <div class="column is-6">
-            <div class="columns">
+            <div class="column">
                 <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
@@ -33,8 +31,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
     </div>

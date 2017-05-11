@@ -40,21 +40,23 @@ class ModificatorsController extends Controller
     {
     	$this->validate($request, [
     		'name' => 'string|required',
-		    'type' => 'string|required',
+		    'type' => 'string|required',/*
 		    'modificable_id' => 'numeric|min:0',
-		    'modificable_type' => 'string|required',
+		    'modificable_type' => 'string|required',*/
 	    ]);
 
-		$class_name = $request->modificable_type;
+		/*$class_name = $request->modificable_type;
 
     	if (class_exists($class_name)){
     		$model = $class_name::findOrFail($request->modificable_id);
     		$model->modificators()->create($request->only('name', 'type'));
 	    } else {
     		throw new \Exception('no such model');
-	    }
+	    }*/
 
-	    return redirect()->back();
+		$modificator = Modificator::create($request->all());
+
+	    return response($modificator);
     }
 
     /**

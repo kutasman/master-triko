@@ -34,10 +34,13 @@ Auth::routes();
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function (){
 	Route::get('/', 'AdminController@index');
 
+	//Products
 	Route::resource('products', 'ProductController', ['except' => ['show']]);
 	Route::post('products/{product}/add-image', 'ProductController@addImage')->name('products.add_image');
 	Route::delete('/products/{product}/delete-image/{image}', 'ProductController@removeImage')->name('products.delete-image');
-	Route::post('products/{product}/modificators', 'ProductController@syncModificators')->name('products.sync_modificators');
+	Route::post('products/{product}/create-modificator', 'ProductController@createModificator')->name('products.create_modificator');
+	Route::post('products/{product}/sync-modificators', 'ProductController@syncModificators')->name('products.sync_modificators');
+	Route::delete('products/{product}/detach-modificator', 'ProductController@detachModificator')->name('products.detach_modificator');
 
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);

@@ -2,9 +2,7 @@
     <div class="container is-fluid">
         <div class="columns">
             <div class="column is-7">
-                <div v-for="mod in product.modificators">
-                    {{ mod }}
-                </div>
+                <modificator v-for="mod in product.modificators" :modificator="mod"></modificator>
             </div>
             <div class="column is-5">
                 <div class="box">
@@ -31,6 +29,7 @@
 
 <script>
 
+    import Modificator from '../../Modifcators/Modificator.vue';
     export default {
         props: ['product'],
         data(){
@@ -54,6 +53,8 @@
                     console.log(error.response.data);
                 })
         },
-        components: {}
+        components: {
+            Modificator
+        }
     }
 </script>

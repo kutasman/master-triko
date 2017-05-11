@@ -20,6 +20,8 @@ Vue.component('products', require('./components/admin/Products/Products.vue'));
 Vue.component('factory', require('./components/admin/Factories/Factory.vue'));
 Vue.component('factories', require('./components/admin/Factories/Factories.vue'));
 
+Vue.component('modificators', require('./components/admin/Modifcators/Modificators.vue'));
+
 const admin = new Vue({
     el: '#admin'
 });

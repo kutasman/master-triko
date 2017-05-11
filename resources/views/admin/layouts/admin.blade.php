@@ -31,7 +31,7 @@
 <body>
 <div id="admin">
         <nav class="nav has-shadow main-nav">
-            <div class="container">
+            <div class="container is-fluid">
                 <div class="nav-left">
                     <a class="nav-item">
                         {{ config('app.name') }}
