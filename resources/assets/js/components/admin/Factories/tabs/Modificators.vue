@@ -70,7 +70,8 @@
                         if (200 === response.status){
                             this.mods = this.mods.filter(modificator => {
                                 return modificator.id !== mod.id;
-                            })
+                            });
+                            this.editedMod = {};
                         }
                     })
                     .catch(error => {

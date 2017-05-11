@@ -43,9 +43,7 @@ class FactoriesController extends Controller
     {
         $this->validate($request, [
         	'name' => 'string|required',
-	        'slug' => 'string|required|unique:factories,slug',
-	        'categories.*' => 'numeric',
-	        'categories' => 'nullable'
+	        'slug' => 'string|required|unique:factories,slug'
         ]);
 
         $factory = new Factory();
@@ -53,9 +51,8 @@ class FactoriesController extends Controller
         $factory->slug = str_slug($request->slug);
         $factory->save();
 
-        $factory->categories()->sync($request->categories);
 
-        return redirect()->route('factories.index');
+        return response($factory);
 
     }
 
@@ -117,7 +114,7 @@ class FactoriesController extends Controller
     public function destroy(Factory $factory)
     {
         $factory->delete();
-        return redirect()->route('factories.index');
+
     }
 
     public function createModificator(Request $request, Factory $factory)

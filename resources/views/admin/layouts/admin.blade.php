@@ -30,8 +30,7 @@
 
 <body>
 <div id="admin">
-    <div class="container is-fluid">
-        <nav class="nav has-shadow">
+        <nav class="nav has-shadow main-nav">
             <div class="container">
                 <div class="nav-left">
                     <a class="nav-item">
@@ -63,18 +62,20 @@
             </div>
         </nav>
 
-        <div class="columns">
-            <div class="column is-2">
-                @include('admin.common.sidebar')
-            </div>
-            <div class="column is-10">
+        <div class="container is-fluid">
+            <div class="columns">
+                <div class="column is-2">
+                    @include('admin.common.sidebar')
+                </div>
+                <div class="column is-10">
 
-                @yield('content')
+                    @yield('content')
 
+                </div>
             </div>
         </div>
 
-    </div>
+
 
 </div> {{--#admin--}}
 
