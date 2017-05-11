@@ -8,22 +8,38 @@
 
                 <modificator-edit :modificator="editedModificator" v-if="editMode"></modificator-edit>
 
-                <div v-else class="field has-addons has-addons-centered">
-                    <p class="control">
-                        <input name="modificator_name" v-model="newMod.name" class="input" type="text" placeholder="Modificator name">
-                    </p>
-                    <p class="control">
-                <span class="select">
-                  <select v-model="newMod.type">
-                    <option v-for="type in types" v-text="type"></option>
-                  </select>
-                </span>
-                    </p>
-                    <p class="control">
-                        <a @click="createModificator" class="button is-primary">
-                            Create
-                        </a>
-                    </p>
+                <div v-else>
+                    <div class="field has-addons has-addons-centered">
+
+                        <p class="control">
+                            <input name="modificator_name" v-model="newMod.name" class="input" type="text" placeholder="Modificator name">
+                        </p>
+                        <p class="control">
+                        <span class="select">
+                          <select v-model="newMod.type">
+                            <option v-for="type in types" v-text="type"></option>
+                          </select>
+                        </span>
+                        </p>
+                        <p class="control">
+                            <a @click="createModificator" class="button is-primary">
+                                Create
+                            </a>
+                        </p>
+                    </div>
+
+                    
+                    <div class="field" v-if="'products' === modificableType">
+                        <div v-for="mod in relations.factoryMods" class="control">
+
+                            <label class="label">
+                                <input @change="toggleModificator(mod)" type="checkbox" class="checkbox" :id="'factory-mod-' + mod.id" v-model="modificators" :value="mod" />
+                                {{ mod.name }}
+                            </label>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -39,6 +55,10 @@
         props: ['modificatorsInit', 'product', 'factory'],
         data(){
             return {
+                relations:{
+                    factoryMods:[],
+
+                },
                 modificableType: '',
                 modificable: {},
                 modificators: [],
@@ -116,7 +136,7 @@
                             });
                         break;
                     case 'products':
-                        axios.delete('/admin/products/' + this.modificable.id + '/detach-modificator', {modificator: deletedMod.id})
+                        axios.delete('/admin/products/' + this.modificable.id + '/modificator/'+ deletedMod.id)
                             .then(response => {
                                 if (200 === response.status){
                                     this.removeModFromMods(deletedMod.id);
@@ -138,7 +158,18 @@
                             })
                 }
 
+            },
+            toggleModificator(mod){
+                axios.post('/admin/products/' + this.modificable.id + '/modificator/' + mod.id + '/toggle')
+                    .then(response => {
+
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                    });
+                console.log(mod);
             }
+
         },
         computed: {
             editMode(){
@@ -161,6 +192,14 @@
                 this.modificators = this.product.modificators;
                 this.modificableType = 'products';
                 this.modificable = this.product;
+
+                axios.get('/admin/factories/' + this.product.factory_id + '/modificators')
+                    .then(response => {
+                        this.relations.factoryMods = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                    })
 
             } else if (!_.isUndefined(this.factory)){
 

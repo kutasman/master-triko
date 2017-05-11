@@ -185,15 +185,16 @@ class ProductController extends Controller
         return response($modificator);
     }
 
-    public function detachModificator(Request $request, Product $product)
+    public function detachModificator(Request $request, Product $product, Modificator $modificator)
     {
-        $this->validate($request, [
-           'modificator' => 'numeric',
-        ]);
-        $product->modificators()->detach([$request->modificator]);
+        $product->modificators()->detach($modificator);
     }
 
 
+    public function toggleModificator(Request $request, Product $product, Modificator $modificator)
+    {
+        $product->modificators()->toggle($modificator);
+    }
     public function syncModificators(Request $request, Product $product){
 
 	    $this->validate($request, [

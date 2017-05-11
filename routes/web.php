@@ -40,7 +40,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	Route::delete('/products/{product}/delete-image/{image}', 'ProductController@removeImage')->name('products.delete-image');
 	Route::post('products/{product}/create-modificator', 'ProductController@createModificator')->name('products.create_modificator');
 	Route::post('products/{product}/sync-modificators', 'ProductController@syncModificators')->name('products.sync_modificators');
-	Route::delete('products/{product}/detach-modificator', 'ProductController@detachModificator')->name('products.detach_modificator');
+	Route::delete('products/{product}/modificator/{modificator}', 'ProductController@detachModificator')->name('products.detach_modificator');
+	Route::post('products/{product}/modificator/{modificator}/toggle', 'ProductController@toggleModificator')->name('products.toggle_modificator');
 
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);

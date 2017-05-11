@@ -16,8 +16,9 @@
                 <div class="control">
                     <div :class="{'is-loading' : busy}" @click="updateProduct(tab)" class="button is-primary">update</div>
                 </div>
-
             </div>
+
+
         </component>
 
 
@@ -37,6 +38,7 @@
                 tab:'general',
                 busy: false,
                 product: {},
+                factoryMods:[]
             }
         },
         methods: {
@@ -83,6 +85,11 @@
 
         },
         watch:{
+            tab(){
+                if ('modificators' === this.tab){
+
+                }
+            }
         },
         computed: {
             productModIds(){
