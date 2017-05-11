@@ -6,9 +6,8 @@
             </div>
             <div class="column">
 
-                <!--<modificator-form :modificator="editedModificator"></modificator-form>-->
                 <modificator-edit :modificator="editedModificator" v-if="editMode"></modificator-edit>
-                <!--<modificator-create @create-modificator="createModificator" v-else></modificator-create>-->
+
                 <div v-else class="field has-addons has-addons-centered">
                     <p class="control">
                         <input name="modificator_name" v-model="newMod.name" class="input" type="text" placeholder="Modificator name">
@@ -35,12 +34,9 @@
 
 <script>
     import Modificator from './Modificator.vue';
-    import ModificatorForm from './ModificatorForm.vue';
     import ModificatorEdit from './ModificatorEdit.vue';
-
-    import ModificatorCreate from './ModificatorCreate.vue';
     export default {
-        props: ['modificatorsInit', 'product'],
+        props: ['modificatorsInit', 'product', 'factory'],
         data(){
             return {
                 modificableType: '',
@@ -65,7 +61,7 @@
             },
             createModificator(){
                 switch (this.modificableType){
-                    case '':
+                    case 'global':
                         axios.post('/admin/modificators', this.newMod)
                             .then(response => {
                                 if (200 === response.status){
@@ -87,6 +83,18 @@
                                 console.log(error.response.data);
                             });
                         break;
+                    case 'factories':
+                        axios.post('/admin/factories/' +this.modificable.id +'/modificator', this.newMod)
+                            .then(response => {
+                                if (200 === response.status){
+                                    this.modificators.push(response.data);
+
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error.response.data);
+                            });
+                        break;
                 }
 
             },
@@ -99,7 +107,7 @@
             },
             deleteMod(deletedMod){
                 switch (this.modificableType){
-                    case '':
+                    case 'global':
                         axios.delete('/admin/modificators/' + deletedMod.id)
                             .then(response => {
                                 if (200 === response.status){
@@ -118,6 +126,16 @@
                                 console.log(error.response.data);
                             });
                         break;
+                    case 'factories':
+                        axios.delete('/admin/factories/' + this.modificable.id + '/modificator/' + deletedMod.id)
+                            .then(response => {
+                                if (200 === response.status){
+                                    this.removeModFromMods(deletedMod.id);
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error.response.data);
+                            })
                 }
 
             }
@@ -133,22 +151,27 @@
             }
         },
         mounted() {
-            if (!_.isEmpty(this.modificatorsInit)){
+            if (!_.isUndefined(this.modificatorsInit)){
 
                 this.modificators = this.modificatorsInit;
+                this.modificableType = 'global';
 
-            } else if (!_.isEmpty(this.product)){
+            } else if (!_.isUndefined(this.product)){
 
                 this.modificators = this.product.modificators;
                 this.modificableType = 'products';
                 this.modificable = this.product;
 
+            } else if (!_.isUndefined(this.factory)){
+
+                this.modificators = this.factory.modificators;
+                this.modificableType = 'factories';
+                this.modificable = this.factory;
+
             }
         },
         components: {
             Modificator,
-            ModificatorForm,
-            ModificatorCreate,
             ModificatorEdit,
         }
     }

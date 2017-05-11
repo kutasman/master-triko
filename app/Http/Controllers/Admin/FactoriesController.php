@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use App\Models\Factory;
+use App\Models\Modificator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -77,6 +78,7 @@ class FactoriesController extends Controller
     public function edit(Factory $factory)
     {
     	$categories = Category::all();
+    	$factory->load('modificators');
 
     	return view('admin.factories.edit', compact('factory', 'categories'));
     }
@@ -119,10 +121,19 @@ class FactoriesController extends Controller
 
     public function createModificator(Request $request, Factory $factory)
     {
+        $this->validate($request, [
+           'name' => 'string|required',
+           'type' => 'string|required',
+        ]);
     	$modificator = $factory->modificators()->create($request->all());
 
     	return response($modificator);
 
+    }
+
+    public function detachModificator(Request $request, Factory $factory, $modificator_id)
+    {
+        $factory->modificators()->detach([$modificator_id]);
     }
 
 

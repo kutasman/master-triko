@@ -44,15 +44,17 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
-	Route::resource('factories', 'FactoriesController');
 
 
-	//Modificators
-	Route::resource('modificators', 'ModificatorsController');
+    //Modificators
+    Route::resource('modificators', 'ModificatorsController');
     Route::get('modificators/{modificator}/options', 'ModificatorsController@options')->name('modificators.options');
 
+    //Factories
+    Route::resource('factories', 'FactoriesController');
     Route::get('factories/{factory}/modificators', 'FactoriesController@getFactoryModificators')->name('factories.get_modificators');
     Route::post('factories/{factory}/modificator', 'FactoriesController@createModificator')->name('factories.create_modificator');
+    Route::delete('factories/{factory}/modificator/{modificator}', 'FactoriesController@detachModificator')->name('factories.detach_modificator');
 
     //ModOptions
     Route::resource('mod-options', 'ModOptionsController', ['only' => ['destroy', 'update']]);

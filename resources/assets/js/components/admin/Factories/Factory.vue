@@ -10,6 +10,7 @@
 
         <component :is="tab" :factory="factory"></component>
 
+
     </div>
 </template>
 
@@ -18,7 +19,7 @@
 <script>
 
     import General from './tabs/General.vue';
-    import Modificators from './tabs/Modificators.vue';
+    import Modificators from '../Modifcators/Modificators.vue';
 
     export default {
         props: ['factoryInit'],
