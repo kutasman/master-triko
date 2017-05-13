@@ -17,7 +17,10 @@
             </div>
         </div>
         <div class="media-right">
-            <span class="delete" @click="deleteOption"></span>
+            <div class="block">
+                <span :class="{'is-loading' : busy}" @click="update" class="button is-small">update</span>
+                <span class="delete" @click="deleteOption"></span>
+            </div>
         </div>
     </div>
 </template>
@@ -27,14 +30,28 @@
 <script>
 
     export default {
-        props: ["option"],
+        props: ['option'],
         data(){
-            return {}
+            return {
+                busy: false,
+            }
         },
         methods: {
             deleteOption(){
                 this.$emit('delete-option')
-            }
+            },
+            update(){
+                this.busy = true;
+
+                axios.put('/admin/mod-options/' + this.option.id, this.option)
+                    .then(response =>{
+                        console.log(response.data);
+                        this.busy = false;
+
+                    });
+            },
+
+
         },
         computed: {},
         mounted() {

@@ -75,9 +75,14 @@ class ModOptionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $modOption)
     {
-        //
+        $this->validate($request, [
+            'name' => 'string|required',
+            'rise' => 'numeric|sometimes'
+        ]);
+
+        ModOption::find($modOption)->update($request->all());
     }
 
     /**
