@@ -18,8 +18,8 @@
         </div>
         <div class="media-right">
             <div class="block">
-                <span :class="{'is-loading' : busy}" @click="update" class="button is-small">update</span>
-                <span class="delete" @click="deleteOption"></span>
+                <span :class="{'is-loading' : busy}" @click="update" class="button">update</span>
+                <span class="delete is-centered" @click="deleteOption"></span>
             </div>
         </div>
     </div>

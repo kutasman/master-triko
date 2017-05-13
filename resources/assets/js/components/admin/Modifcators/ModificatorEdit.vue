@@ -1,22 +1,31 @@
 <template>
     <div>
-        <div class="columns">
-            <div class="field column">
-                <label class="label">Name</label>
-                <div class="control">
-                    <input type="text" class="input" v-model="modificator.name"/>
+        <div class="box">
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control">
+                            <input type="text" class="input" v-model="modificator.name"/>
+                        </div>
+                    </div>
+                    <div class="field" >
+                        <label class="label">Type</label>
+                        <div class="control">
+                            <input class="input" v-model="modificator.type" disabled/>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="field column">
-                <label class="label">Type</label>
+
+            <div class="field ">
                 <div class="control">
-                    <input class="input" v-model="modificator.type" disabled/>
+                    <span @click="updateModificator" class="button">update</span>
                 </div>
             </div>
         </div>
-
-
-        <div class="options" v-show="modificator.type !== 'text'">
+        
+        <div class="box" v-show="modificator.type !== 'text'">
             <div class="field is-horizontal">
                 <div class="field-label"><label class="label">New option</label></div>
                 <div class="field-body">
@@ -63,8 +72,10 @@
             }
         },
         methods: {
+            updateModificator(){
+                axios.put('/admin/modificators/' + this.modificator.id, this.modificator);
+            },
             getOptions(){
-                console.log('load options');
                 if ('text' !== this.modificator.type){
                     axios.get('/admin/modificators/' + this.modificator.id + '/options')
                         .then(response => {
