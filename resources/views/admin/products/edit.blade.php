@@ -4,7 +4,7 @@
 @section('content')
 
 
-<product :product-init="{{ $product }}" :factories="{{ $factories }}"></product>
+<product-edit :product-init="{{ $product }}" :factories="{{ $factories }}"></product-edit>
 {{--<!-- TAB NAVIGATION -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#general" role="tab" data-toggle="tab">General</a></li>

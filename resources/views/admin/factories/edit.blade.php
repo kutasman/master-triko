@@ -1,5 +1,5 @@
 @extends('admin.layouts.admin')
 @section('page-title', 'Edit factory')
 @section('content')
-    <factory :factory-init="{{ $factory }}"></factory>
+    <factory-edit :factory-init="{{ $factory }}"></factory-edit>
 @endsection

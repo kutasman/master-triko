@@ -26,8 +26,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('images')->get();
+        $factories = Factory::all( 'name', 'id');
 
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('products', 'factories'));
     }
 
     /**
@@ -52,13 +53,13 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 	    $this->validate($request,[
-        	'title' => 'string|required',
-		    'price' => 'required|numeric|min:0',
+        	'title' => 'string|sometimes',
+            'factory_id' => 'required|numeric|min:0',
         ]);
 
+        $product = Product::create($request->all());
 
-	    $product = Product::create($request->all());
-	    return redirect()->route('products.edit', $product->id);
+	    return response($product);
 
     }
 
@@ -121,7 +122,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
     }
 
 	/**
