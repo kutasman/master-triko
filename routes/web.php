@@ -13,7 +13,10 @@
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index');
-Route::match(['get', 'post'],'factory/{factory}', 'FactoryController@index')->name('factory');
+
+//Factories
+Route::get('factory/{factory}', 'FactoryController@show')->name('factory');
+
 
 Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_item');
 Route::get('cart', 'CartController@show')->name('cart.show');

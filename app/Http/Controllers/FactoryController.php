@@ -26,4 +26,12 @@ class FactoryController extends Controller
 
 
     }
+
+    public function show(Factory $factory)
+    {
+        $factory->load('products');
+
+
+        return view('factory.show', compact('factory'));
+    }
 }

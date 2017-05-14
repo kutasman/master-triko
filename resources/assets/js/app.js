@@ -16,6 +16,7 @@ require('../../../node_modules/chosen-js/chosen.jquery');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('checkout', require('./components/Checkout.vue'));
+Vue.component('factory', require('./components/Factory/Factory.vue'));
 
 const app = new Vue({
     el: '#app'
