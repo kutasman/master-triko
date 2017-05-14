@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/semantic.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -19,6 +20,7 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
 </head>
 <body>
     <div id="app">
@@ -35,5 +37,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+
+
 </body>
 </html>

@@ -19,7 +19,7 @@
     "bulma": "^0.4.1"
   },
   "dependencies": {
+    "semantic-ui": "^2.2.10",
     "vue-search-select": "^2.3.6"
-
   }
 }
