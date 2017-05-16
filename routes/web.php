@@ -11,7 +11,9 @@
 |
 */
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function(){
+    return redirect('/');
+})->name('home');
 Route::get('/', 'HomeController@index');
 
 //Factories

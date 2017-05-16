@@ -12,7 +12,6 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/semantic.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>

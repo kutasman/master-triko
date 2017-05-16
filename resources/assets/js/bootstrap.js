@@ -9,7 +9,6 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 
-require('bootstrap-sass');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -45,4 +44,4 @@ window.axios.defaults.headers.common = {
 //     key: 'your-pusher-key'
 // });
 
-require('../semantic/dist/semantic.min');
+

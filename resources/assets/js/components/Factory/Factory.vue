@@ -1,51 +1,64 @@
 <template>
-    <div class="ui container">
-        <h2 class="ui header">  {{ factory.name }}</h2>
-        <div class="ui grid">
-            <div class="four wide column">
-                IMAGE
-            </div>
-            <div class="nine wide column">
-
-                <div class="ui form">
-
-                    <div class="field">
-                        <label>Product</label>
-                        <select class="ui fluid dropdown" id="product">
-                            <option v-for="product in factory.products" :value="product" v-text="product.title"></option>
-                        </select>
+    <div class="container is-fluid">
+        <h2 class="title is-2">{{ factory.name }}</h2>
+        <div class="box">
+            <div class="container is-fluid">
+                <div class="columns">
+                    <div class="column is-one-quarter">
+                        IMAGES
                     </div>
+                    <div class="column is-three-quarters">
 
+                        <select-product></select-product>
 
+                        <modificators></modificators>
 
+                        <add-to-cart></add-to-cart>
+
+                    </div>
                 </div>
-
             </div>
-
         </div>
     </div>
+
+
 </template>
 
 <style></style>
 
 <script>
 
+    import SelectProduct from './Modificators/SelectProduct.vue';
+    import Modificators from './Modificators/Modificators.vue';
+    import AddToCart from './AddToCart.vue';
     export default {
         props: ['factory'],
         data(){
             return {
-                product: {}
             }
         },
-        methods: {},
-        computed: {},
+        methods: {
+
+        },
+        computed: {
+            products(){
+                return this.factory.products;
+            },
+            product(){
+                return this.$store.state.f.product;
+            }
+        },
         watch:{
         },
         mounted() {
-            this.product = _.first(this.factory.products);
 
-            $('.ui.dropdown').dropdown();
+            this.$store.commit('setFactory', this.factory);
+
         },
-        components: {}
+        components: {
+            Modificators,
+            SelectProduct,
+            AddToCart
+        }
     }
 </script>
