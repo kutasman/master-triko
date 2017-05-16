@@ -22,7 +22,7 @@
         },
         methods: {
             addToCart(){
-                console.log('add to cart');
+                console.log(this.$store.state.f);
             }
         },
         computed: {},

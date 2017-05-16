@@ -27,6 +27,7 @@ const factory = {
     state: {
         product: {},
         factory: {},
+        modificators:[]
     },
     mutations: {
         setProduct(state, p){
@@ -35,6 +36,14 @@ const factory = {
         setFactory(state, factory){
             state.factory = factory;
             state.product = _.first(factory.products);
+        },
+        syncModificator(state, mod){
+            let index = _.findIndex(state.modificators, {id:mod.id});
+            if ( index >= 0){
+                state.modificators.splice(index, 1, mod);
+            } else {
+                state.modificators.push(mod);
+            }
         }
     },
     actions: {  },

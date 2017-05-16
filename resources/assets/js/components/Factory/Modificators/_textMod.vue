@@ -21,6 +21,14 @@
         },
         methods: {},
         computed: {},
+        watch:{
+            value(){
+                this.$store.commit('syncModificator', {
+                    id: this.mod.id,
+                    value: this.value
+                });
+            }
+        },
         mounted() {
         },
         components: {
