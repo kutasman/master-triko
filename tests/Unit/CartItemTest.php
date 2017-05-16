@@ -8,6 +8,7 @@ use App\Models\Modificator;
 use App\Models\ModOption;
 use App\Models\Product;
 use Illuminate\Support\Collection;
+use Tests\Helpers\Traits\CartHelpers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -15,7 +16,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class CartItemTest extends TestCase
 {
 	use DatabaseTransactions;
-
+    use CartHelpers;
 
 	protected $product;
 	protected $cart;
@@ -116,50 +117,5 @@ class CartItemTest extends TestCase
 		$this->assertTrue($itemWithMods->hasMods());
 	}
 
-
-	//Helpers____________________________________________
-
-
-	/**
-	 * @param array $option Default value for option
-	 *
-	 * @return mixed
-	 */
-	protected function createProductWithModificators(array $option = [ 'name' => 'test', 'rise' =>10])
-	{
-
-		$product = factory(Product::class)->create();
-
-		$mod_select = factory(Modificator::class)->create()->each(function ($m) use ($option){
-			if ( ! empty($option)){
-				$m->options()->create($option);
-			}
-		});
-
-		$mod_text = factory(Modificator::class)->create(['type' => 'text']);
-
-		$product->modificators()->attach($mod_select);
-		$product->modificators()->attach($mod_text);
-
-		return $product;
-	}
-
-
-	protected function getModFormData($modificators)
-	{
-		$data = [];
-
-		foreach ($modificators as $mod){
-
-			if ('text' == $mod->type)
-			{
-				$data['text'] = [$mod->id => 'test text'];
-			} else {
-				$data[$mod->type] = [$mod->id => $mod->options()->first()->id];
-			}
-		}
-
-		return $data;
-	}
 
 }

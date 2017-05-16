@@ -98,9 +98,8 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $product)
+    public function update(Request $request, Product $product)
     {
-        $product = Product::find($product);
         $this->validate($request,[
 		    'title' => 'sometimes|string',
 		    'price' => 'sometimes|numeric|min:0',
@@ -110,9 +109,6 @@ class ProductController extends Controller
 
         return response($product);
     }
-
-
-
 
     /**
      * Remove the specified resource from storage.

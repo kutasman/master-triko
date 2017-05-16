@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Modificator;
 use App\Models\Product;
+use Tests\Helpers\Traits\CartHelpers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -13,7 +14,7 @@ use App\Models\CartItem;
 class CartTest extends TestCase
 {
 	use DatabaseTransactions;
-
+    use CartHelpers;
 
 	protected $product;
 	protected $cart;
@@ -130,46 +131,5 @@ class CartTest extends TestCase
 		$this->assertDatabaseHas('carts', ['id' => $cart->id, 'ordered' => 1]);
 
 	}
-
-
-    //Helpers
-
-	protected function createProductWithModificators(array $option = [ 'name' => 'test', 'rise' =>10])
-	{
-		$options = $option;
-		$product = factory(Product::class)->create();
-
-		$mod_select = factory(Modificator::class)->create()->each(function ($m) use ($options){
-			if ( ! empty($options)){
-				$m->options()->create($options);
-			}
-		});
-
-		$mod_text = factory(Modificator::class)->create(['type' => 'text']);
-
-		$product->modificators()->attach($mod_select);
-		$product->modificators()->attach($mod_text);
-
-		return $product;
-	}
-
-	protected function getModFormData($modificators)
-	{
-		$data = [];
-
-		foreach ($modificators as $mod){
-
-			if ('text' == $mod->type)
-			{
-				$data['text'] = [$mod->id => 'test text'];
-			} else {
-				$data[$mod->type] = [$mod->id => $mod->options()->first()->id];
-			}
-		}
-
-		return $data;
-	}
-
-
 
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\User;
+use Tests\Helpers\Traits\UrlCreator;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -13,13 +14,17 @@ class ProductTest extends TestCase
 {
 
     use DatabaseTransactions;
-    use WithoutMiddleware;
+    //use WithoutMiddleware;
+    use UrlCreator;
 
     protected $product;
+
+    protected $baseUrl = 'admin/';
 
     protected function setUp()
     {
         parent::setUp();
+        $this->actingAs(factory(User::class)->create(['email' => 'evgenij.kutas@gmail.com']));
 
         $this->product = factory(Product::class)->create(['active' => false]);
 
@@ -51,7 +56,12 @@ class ProductTest extends TestCase
 
     }
 
-    protected function url($action){
-        return 'admin/' . $action;
+    public function test_product_http_destroying()
+    {
+
+        $response = $this->json('DELETE', $this->url('products/' . $this->product->id));
+
+        $this->assertDatabaseMissing('products', ['id' => $this->product->id]);
     }
+
 }
