@@ -4,10 +4,10 @@
         <div class="box">
             <div class="container is-fluid">
                 <div class="columns">
-                    <div class="column is-one-quarter">
+                    <div class="column is-5">
                         IMAGES
                     </div>
-                    <div class="column is-three-quarters">
+                    <div class="column is-7">
 
                         <select-product></select-product>
 
@@ -17,6 +17,15 @@
 
                     </div>
                 </div>
+            </div>
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        <tabs></tabs>
+                    </div>
+                    <div class="column"></div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -31,6 +40,7 @@
     import SelectProduct from './Modificators/SelectProduct.vue';
     import Modificators from './Modificators/Modificators.vue';
     import AddToCart from './AddToCart.vue';
+    import Tabs from './Tabs/Tabs.vue';
     export default {
         props: ['factory'],
         data(){
@@ -58,7 +68,8 @@
         components: {
             Modificators,
             SelectProduct,
-            AddToCart
+            AddToCart,
+            Tabs
         }
     }
 </script>
