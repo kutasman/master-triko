@@ -14,17 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(Cart::class, function ($app){
 
-        	$cart = Cart::firstOrNew(['session' => \Session::get('cart.session'),'id' => \Session::get('cart.id') ]);
-        	$cart->session = \Session::getId();
-        	$cart->save();
-        	\Session::put('cart.session', $cart->session);
-        	\Session::put('cart.id', $cart->id);
-        	return $cart;
-        });
-
-	    // Using Closure based composers...
 	    \View::composer('common.nav', function ($view) {
 	    	$cart = $this->app->make(Cart::class);
 		    $view->with(['cart' => $cart]);
