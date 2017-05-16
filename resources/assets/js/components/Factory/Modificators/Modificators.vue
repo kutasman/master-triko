@@ -9,6 +9,7 @@
 <script>
     import TextModificator from './_textMod.vue'
     import SelectModificator from './_selectMod.vue';
+    import RadioModificator from './_radioMod.vue';
     export default {
         props: [],
         data(){
@@ -25,6 +26,7 @@
         components: {
             'textMod': TextModificator,
             'selectMod': SelectModificator,
+            'radioMod': RadioModificator,
         }
     }
 </script>

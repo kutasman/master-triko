@@ -63,7 +63,7 @@
                 modificable: {},
                 modificators: [],
                 editedModificator:{},
-                types: ['text', 'select'],
+                types: ['text', 'select', 'radio'],
                 newMod:{
                     name:'',
                     type: 'text',
