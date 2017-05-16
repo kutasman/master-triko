@@ -5,7 +5,7 @@
             <div class="container is-fluid">
                 <div class="columns">
                     <div class="column is-5">
-                        IMAGES
+                        <showcase></showcase>
                     </div>
                     <div class="column is-7">
 
@@ -23,7 +23,9 @@
                     <div class="column">
                         <tabs></tabs>
                     </div>
-                    <div class="column"></div>
+                    <div class="column">
+                        TESTIMONIALS
+                    </div>
                 </div>
 
             </div>
@@ -38,6 +40,7 @@
 <script>
 
     import SelectProduct from './Modificators/SelectProduct.vue';
+    import Showcase from './Showcase.vue';
     import Modificators from './Modificators/Modificators.vue';
     import AddToCart from './AddToCart.vue';
     import Tabs from './Tabs/Tabs.vue';
@@ -69,7 +72,8 @@
             Modificators,
             SelectProduct,
             AddToCart,
-            Tabs
+            Tabs,
+            Showcase
         }
     }
 </script>
