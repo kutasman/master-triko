@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="box" v-show="modificator.type !== 'text'">
             <div class="field is-horizontal">
                 <div class="field-label"><label class="label">New option</label></div>

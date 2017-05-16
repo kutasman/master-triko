@@ -24,6 +24,13 @@ class FactoryController extends Controller
 
 	    return view('factory.index', compact('factory', 'product'));
 
+    }
 
+    public function show(Factory $factory)
+    {
+        $factory->load('products.modificators.options');
+
+
+        return view('factory.show', compact('factory'));
     }
 }

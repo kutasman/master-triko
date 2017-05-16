@@ -1,60 +1,35 @@
-<nav class="navbar navbar-default navbar-static-top">
+
+<nav class="nav has-shadow">
     <div class="container">
-        <div class="navbar-header">
-
-            <!-- Collapsed Hamburger -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                <span class="sr-only">Toggle Navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+        <div class="nav-left">
+            <a href="{{ route('home') }}" class="nav-item">
+                <h2>{{ config('app.name') }}</h2>
             </a>
         </div>
+        <div class="nav-right nav-menu">
+            @if($cart->count())
 
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav">
-                &nbsp;
-            </ul>
-
-            <!-- Right Side Of Navbar -->
-            <ul class="nav navbar-nav navbar-right">
-                @if($cart->count())
-                <li>
                     <a href="{{ route('cart.show') }}" class="navbar-link">Cart: <span class="badge">{{ $cart->count() }}</span> </a>
-                </li>
-                @endif
-                <!-- Authentication Links -->
+
+            @endif
+            <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                    <li><a href="{{ route('register') }}">Register</a></li>
+                    <a class="nav-item is-tab" href="{{ route('login') }}">Login</a>
+                    <a class="nav-item is-tab" href="{{ route('register') }}">Register</a>
                 @else
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
-
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
+                    <a class="nav-item is-tab">
+                        <figure class="image is-16x16" style="margin-right: 8px;">
+                            <img src="http://bulma.io/images/jgthms.png">
+                        </figure>
+                        {{ Auth::user()->name }}
+                    </a>
+                    <a class="nav-item is-tab" onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">Log out</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
                 @endif
-            </ul>
+
         </div>
     </div>
 </nav>
