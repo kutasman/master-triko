@@ -22,8 +22,8 @@ class CreateModRulesTable extends Migration
             $table->string('action');
 
             $table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');
-            $table->foreign('option_id')->references('id')->on('mod_options')->onDelete('cascade');
-            $table->foreign('target_id')->references('id')->on('modificators')->onDelete('cascade');
+            $table->foreign('option_id')->references('id')->on('mod_options');
+            $table->foreign('target_id')->references('id')->on('modificators');
 
             $table->timestamps();
         });

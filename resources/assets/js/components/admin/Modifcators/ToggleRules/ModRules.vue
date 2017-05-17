@@ -42,14 +42,14 @@
             </div>
         </div>
 
-        <!--<toggle-rule v-for="rule in rules" :relation="relation"></toggle-rule>-->
+        <mod-rule @remove-rule="removeRule" v-for="rule in rules" :rule="rule"></mod-rule>
     </div>
 </template>
 
 <style></style>
 
 <script>
-    import ToggleRule from './_toggleRule.vue';
+    import ModRule from './_modRule.vue';
 
     export default {
         props: ['modificator', 'modificators'],
@@ -85,6 +85,14 @@
                         });
                 }
             },
+            getRules(){
+                axios.get('/admin/modificators/' + this.modificator.id + '/rules')
+                    .then(response => {
+                        if (200 === response.status){
+                            this.rules = response.data;
+                        }
+                    })
+            },
             createRule(){
                 axios.post('/admin/modificators/' + this.modificator.id + '/mod-rules', this.newRule)
                     .then(response => {
@@ -97,6 +105,19 @@
                         console.log(error.response.data);
 
                     });
+            },
+            removeRule(ruleToRemove){
+                axios.delete('/admin/modificators/'+ this.modificator.id +'/mod-rules/' + ruleToRemove.id)
+                    .then(response => {
+                        if (200 === response.status){
+                            this.rules = this.rules.filter(rule => {
+                                return rule.id !== ruleToRemove.id;
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                    })
             }
         },
         computed: {
@@ -104,9 +125,10 @@
         },
         mounted() {
             this.getOptions(this.modificator, 'self');
+            this.getRules();
         },
         components: {
-            ToggleRule
+            ModRule
 
         }
     }

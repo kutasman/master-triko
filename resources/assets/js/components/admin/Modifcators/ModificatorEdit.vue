@@ -39,7 +39,7 @@
         <mod-options v-if="modificator.type !== 'text' && tab ==='options'" :modificator="modificator"></mod-options>
 
 
-        <toggle-rules v-if="modificator.type === 'radio' && tab === 'rules'" :modificator="modificator" :modificators="modificators"></toggle-rules>
+        <mod-rules v-if="modificator.type === 'radio' && tab === 'rules'" :modificator="modificator" :modificators="modificators"></mod-rules>
 
 
     </div>
@@ -49,7 +49,7 @@
 
 <script>
 
-    import ToggleRules from './ToggleRules/ToggleRules.vue';
+    import ModRules from './ToggleRules/ModRules.vue';
     import ModOptions from './Options/ModOptions.vue';
     export default {
         props: ['modificator', 'modificators'],
@@ -77,7 +77,7 @@
         },
         components: {
             ModOptions,
-            ToggleRules,
+            ModRules,
         }
     }
 </script>

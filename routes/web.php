@@ -55,9 +55,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
     //Modificators
     Route::resource('modificators', 'ModificatorsController');
     Route::get('modificators/{modificator}/options', 'ModificatorsController@options')->name('modificators.options');
+    Route::get('modificators/{modificator}/rules', 'ModificatorsController@rules')->name('modificators.rules');
 
     //ModRules
-    Route::post('modificators/{modificator}/mod-rules', 'ModRulesController@store')->name('mod_rules.store');
+    Route::post('modificators/{modificator}/mod-rules', 'ModRulesController@store')->name('mod-rules.store');
+    Route::delete('modificators/{modificator}/mod-rules/{mod_rule}', 'ModRulesController@destroy')->name('mod-rules.destroy');
 
     //Factories
     Route::resource('factories', 'FactoriesController');

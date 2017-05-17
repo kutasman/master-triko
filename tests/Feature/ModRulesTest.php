@@ -53,4 +53,25 @@ class ModRulesTest extends TestCase
 
     }
 
+    public function test_http_destroy_rule()
+    {
+        $data = [
+            'target_id' => $this->targetModificator->id,
+            'option_id' => 1,
+            'action' => 'disable',
+        ];
+
+        $rule = $this->modificator->createRule($data);
+
+        $this->assertDatabaseHas('mod_rules', $data);
+
+        $response = $this->json('DELETE', $this->url("modificators/{$this->modificator->id}/mod-rules/{$rule->id}"));
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseMissing('mod_rules', ['id' => $rule->id]);
+        $this->assertFalse(Modificator::find($this->modificator->id)->toggle);
+
+    }
+
 }

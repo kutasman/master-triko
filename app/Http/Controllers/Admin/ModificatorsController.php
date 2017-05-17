@@ -137,7 +137,16 @@ class ModificatorsController extends Controller
     }
 
     public function options(Modificator $modificator){
+
         return $modificator->options;
+
+    }
+
+
+    public function rules(Modificator $modificator){
+
+        return $modificator->rules;
+
     }
 
     //Helpers

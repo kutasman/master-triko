@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Modificator;
+use App\Models\ModRule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -84,11 +85,16 @@ class ModRulesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $modificator
+     * @param  int  $modRule
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Modificator $modificator, ModRule $modRule)
     {
-        //
+        $modificator->rules()->delete($modRule);
+        if ( !$modificator->rules->count()){
+
+           $modificator->update(['toggle' => false]);
+        }
     }
 }
