@@ -52,6 +52,7 @@ $factory->define(\App\Models\Modificator::class, function (Faker\Generator $fake
 	return [
 		'name' => $faker->name,
 		'type' => 'select',
+        'toggle' => 0,
 	];
 });
 

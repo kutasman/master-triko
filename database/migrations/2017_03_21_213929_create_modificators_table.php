@@ -15,8 +15,11 @@ class CreateModificatorsTable extends Migration
     {
         Schema::create('modificators', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('name');
             $table->string('type');
+            $table->boolean('toggle')->default(false);
+
             $table->timestamps();
         });
 

@@ -5,7 +5,7 @@
             <div class="field-body">
                 <div class="field">
                     <div class="control">
-                        <span class="select">
+                        <span class="select is-small">
                           <select v-model="newRule.option">
                                 <option  value="">select option</option>
                                 <option v-for="option in selfOptions" v-text="option.name" :value="option.id"></option>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <span class="select">
+                        <span class="select is-small">
                           <select v-model="newRule.target">
                                 <option  value="">select target</option>
                                 <option v-for="target in modificators" v-text="target.name" :value="target.id"></option>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <span class="select">
+                        <span class="select is-small">
                           <select v-model="newRule.status">
                                 <option  value="">select status</option>
                                 <option v-for="status in statuses" v-text="status" :value="status"></option>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <span @click="createRule" class="button">add</span>
+                        <span @click="createRule" class="button is-small">add</span>
                     </div>
                 </div>
 
