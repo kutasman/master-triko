@@ -100,6 +100,7 @@
         },
         mounted() {
             this.product = this.productInit;
+            this.$store.commit('setProduct', this.productInit);
         },
         components: {
             General,
