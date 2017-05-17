@@ -4,8 +4,8 @@
         <div class="tabs">
             <ul>
                 <li @click="tab = 'general'" :class="{'is-active': tab === 'general'}"><a>General</a></li>
-                <li @click="tab = 'options'" :class="{'is-active': tab === 'options'}"><a>Modificators</a></li>
-                <li @click="tab = 'rules'" :class="{'is-active': tab === 'rules'}"><a>Rules</a></li>
+                <li @click="tab = 'options'" :class="{'is-active': tab === 'options'}"><a>Options</a></li>
+                <li @click="tab = 'rules'" v-show="modificator.type === 'radio'" :class="{'is-active': tab === 'rules'}"><a>Rules</a></li>
             </ul>
         </div>
 

@@ -140,6 +140,7 @@ class ModificatorsController extends Controller
         return $modificator->options;
     }
 
+    //Helpers
     protected function getOptionValidationRules(Modificator $modificator)
     {
     	$type = $modificator->type;
@@ -152,4 +153,6 @@ class ModificatorsController extends Controller
     		throw new \Exception('undefined modificator type');
 	    }
     }
+
+
 }

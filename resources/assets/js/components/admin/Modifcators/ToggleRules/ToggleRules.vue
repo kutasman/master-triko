@@ -6,7 +6,7 @@
                 <div class="field">
                     <div class="control">
                         <span class="select is-small">
-                          <select v-model="newRule.option">
+                          <select v-model="newRule.option_id">
                                 <option  value="">select option</option>
                                 <option v-for="option in selfOptions" v-text="option.name" :value="option.id"></option>
                           </select>
@@ -16,7 +16,7 @@
                 <div class="field">
                     <div class="control">
                         <span class="select is-small">
-                          <select v-model="newRule.target">
+                          <select v-model="newRule.target_id">
                                 <option  value="">select target</option>
                                 <option v-for="target in modificators" v-text="target.name" :value="target.id"></option>
                           </select>
@@ -26,7 +26,7 @@
                 <div class="field">
                     <div class="control">
                         <span class="select is-small">
-                          <select v-model="newRule.status">
+                          <select v-model="newRule.action">
                                 <option  value="">select status</option>
                                 <option v-for="status in statuses" v-text="status" :value="status"></option>
                           </select>
@@ -59,15 +59,10 @@
                 selfOptions: [],
                 statuses: ['disabled', 'hide'],
                 newRule: {
-                    mod: this.modificator.id,
-                    option: '',
-                    target: '',
-                    status: '',
+                    option_id: '',
+                    target_id: '',
+                    action: '',
                 }
-
-                // if enabled => {
-                //      return !_.includes(getDisabled, this.id)
-                // }
 
             }
         },
@@ -91,7 +86,17 @@
                 }
             },
             createRule(){
-                console.log(this.newRule);
+                axios.post('/admin/modificators/' + this.modificator.id + '/mod-rules', this.newRule)
+                    .then(response => {
+                        if (200 === response.status){
+                            this.rules.push(response.data);
+                        }
+                    })
+                    .catch(error => {
+
+                        console.log(error.response.data);
+
+                    });
             }
         },
         computed: {

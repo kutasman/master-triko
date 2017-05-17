@@ -28,6 +28,7 @@ class ModificatorTest extends TestCase
         $this->modificator->update(['toggle' => true]);
 
         $this->assertTrue($this->modificator->toggle);
-
     }
+
+
 }
