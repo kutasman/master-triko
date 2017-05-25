@@ -6,6 +6,7 @@
             <ul>
                 <li @click="setTab('general')" :class="{'is-active': isTab('general')}"><a>General</a></li>
                 <li @click="setTab('modificators')" :class="{'is-active': isTab('modificators')}"><a>Modificators</a></li>
+                <li @click="setTab('mod-rules')" :class="{'is-active': isTab('mod-rules')}"><a>Modificators Rules</a></li>
 
             </ul>
         </div>
@@ -31,6 +32,8 @@
 
     import General from './tabs/general.vue';
     import Modificators from './../Modifcators/Modificators.vue';
+    import ModRules from '../ModRules/ModRules.vue';
+
     export default {
         props: ['productInit', 'factories'],
         data(){
@@ -105,6 +108,7 @@
         components: {
             General,
             Modificators,
+            ModRules,
         }
     }
 </script>

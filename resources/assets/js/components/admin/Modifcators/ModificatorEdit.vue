@@ -5,7 +5,6 @@
             <ul>
                 <li @click="tab = 'general'" :class="{'is-active': tab === 'general'}"><a>General</a></li>
                 <li @click="tab = 'options'" :class="{'is-active': tab === 'options'}"><a>Options</a></li>
-                <li @click="tab = 'rules'" v-show="modificator.type === 'radio'" :class="{'is-active': tab === 'rules'}"><a>Rules</a></li>
             </ul>
         </div>
 
@@ -38,10 +37,6 @@
 
         <mod-options v-if="modificator.type !== 'text' && tab ==='options'" :modificator="modificator"></mod-options>
 
-
-        <mod-rules v-if="modificator.type === 'radio' && tab === 'rules'" :modificator="modificator" :modificators="modificators"></mod-rules>
-
-
     </div>
 </template>
 
@@ -49,8 +44,8 @@
 
 <script>
 
-    import ModRules from './ToggleRules/ModRules.vue';
     import ModOptions from './Options/ModOptions.vue';
+
     export default {
         props: ['modificator', 'modificators'],
         data(){
@@ -77,7 +72,6 @@
         },
         components: {
             ModOptions,
-            ModRules,
         }
     }
 </script>

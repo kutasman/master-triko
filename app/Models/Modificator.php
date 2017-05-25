@@ -40,17 +40,4 @@ class Modificator extends Model
 
 	//Methods
 
-    public function createRule(array $data){
-
-	    $rule =  $this->rules()->create([
-	        'option_id' => $data['option_id'],
-            'target_id' => $data['target_id'],
-            'action' => $data['action'],
-        ]);
-
-	    $this->update(['toggle' => true]);
-
-	    return $rule;
-    }
-
 }

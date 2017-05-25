@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ModRule extends Model
 {
     protected $fillable = [
-        'option_id', 'target_id', 'action'
+        'toggle_id', 'toggle_option_id', 'target_id', 'action'
     ];
 
 }

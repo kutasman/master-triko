@@ -46,4 +46,30 @@ class Product extends Model
 		return $this->morphToMany(Modificator::class, 'modificable');
 	}
 
+    public function mod_rules()
+    {
+        return $this->hasMany(ModRule::class);
+	}
+
+	//Methods
+
+    public function createRule(array $data){
+
+        $rule =  $this->mod_rules()->create([
+            'toggle_id' => $data['toggle_id'],
+            'toggle_option_id' => $data['toggle_option_id'],
+            'target_id' => $data['target_id'],
+            'action' => $data['action'],
+        ]);
+
+        return $rule;
+    }
+
+    //Helper
+    public function hasRules(){
+
+        return !! $this->mod_rules->count();
+
+    }
+
 }

@@ -18,7 +18,6 @@ class CreateModificatorsTable extends Migration
 
             $table->string('name');
             $table->string('type');
-            $table->boolean('toggle')->default(false);
 
             $table->timestamps();
         });

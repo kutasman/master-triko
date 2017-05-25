@@ -51,6 +51,7 @@
 <script>
     import Modificator from './Modificator.vue';
     import ModificatorEdit from './ModificatorEdit.vue';
+
     export default {
         props: ['modificatorsInit', 'product', 'factory'],
         data(){

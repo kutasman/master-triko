@@ -14,16 +14,26 @@ class CreateModRulesTable extends Migration
     public function up()
     {
         Schema::create('mod_rules', function (Blueprint $table) {
+
             $table->increments('id');
 
-            $table->integer('modificator_id')->unsigned();
-            $table->integer('option_id')->unsigned();
+            $table->integer('product_id')->unsigned();
+
+            $table->integer('toggle_id')->unsigned();
+
+            $table->integer('toggle_option_id')->unsigned();
+
             $table->integer('target_id')->unsigned();
+
             $table->string('action');
 
-            $table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');
-            $table->foreign('option_id')->references('id')->on('mod_options');
-            $table->foreign('target_id')->references('id')->on('modificators');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+            $table->foreign('toggle_id')->references('id')->on('modificators')->onDelete('cascade');
+
+            $table->foreign('toggle_option_id')->references('id')->on('mod_options')->onDelete('cascade');
+
+            $table->foreign('target_id')->references('id')->on('modificators')->onDelete('cascade');
 
             $table->timestamps();
         });

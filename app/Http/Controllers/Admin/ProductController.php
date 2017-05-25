@@ -85,7 +85,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-    	$product->load(['images', 'modificators']);
+    	$product->load(['images', 'modificators', 'mod_rules']);
     	$factories = Factory::all();
 
 	    return view('admin.products.edit', compact('product', 'factories'));

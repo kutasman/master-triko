@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Modificator;
+use App\Models\ModRule;
+use App\Models\Product;
 use App\Models\User;
 use Tests\Helpers\Traits\UrlCreator;
 use Tests\TestCase;
@@ -19,14 +21,18 @@ class ModRulesTest extends TestCase
     protected $baseUrl = 'admin/';
     protected $modificator;
     protected $targetModificator;
+    protected $product;
 
 
     protected function setUp()
     {
         parent::setUp();
 
+        $this->product = factory(Product::class)->create();
         $this->modificator = factory(Modificator::class)->create(['type' => 'radio']);
         $this->targetModificator = factory(Modificator::class)->create(['type' => 'radio']);
+
+        $this->product->modificators()->attach([$this->modificator->id,$this->targetModificator->id]);
 
         $this->modificator->options()->create([
             'name' => 'no',
@@ -40,12 +46,13 @@ class ModRulesTest extends TestCase
     public function test_http_mod_rule_creation()
     {
         $data = [
+            'toggle_id' => $this->modificator->id,
+            'toggle_option_id' => $this->modificator->options->first()->id,
             'target_id' => $this->targetModificator->id,
-            'option_id' => 1,
             'action' => 'disable',
         ];
 
-        $response = $this->json('POST', $this->url("modificators/{$this->modificator->id}/mod-rules"), $data);
+        $response = $this->json('POST', $this->url("products/{$this->product->id}/mod-rules"), $data);
 
         $response->assertStatus(200);
         $response->assertJson($data);
@@ -56,21 +63,20 @@ class ModRulesTest extends TestCase
     public function test_http_destroy_rule()
     {
         $data = [
+            'toggle_id' => $this->modificator->id,
+            'toggle_option_id' => $this->modificator->options->first()->id,
             'target_id' => $this->targetModificator->id,
-            'option_id' => 1,
             'action' => 'disable',
         ];
 
-        $rule = $this->modificator->createRule($data);
+        $modRule = factory(ModRule::class)->create($data);
 
-        $this->assertDatabaseHas('mod_rules', $data);
 
-        $response = $this->json('DELETE', $this->url("modificators/{$this->modificator->id}/mod-rules/{$rule->id}"));
+        $response = $this->json('DELETE', $this->url("mod-rules/{$modRule->id}"));
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('mod_rules', ['id' => $rule->id]);
-        $this->assertFalse(Modificator::find($this->modificator->id)->toggle);
+        $this->assertDatabaseMissing('mod_rules', ['id' => $modRule->id]);
 
     }
 

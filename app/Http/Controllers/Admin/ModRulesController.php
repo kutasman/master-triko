@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Modificator;
 use App\Models\ModRule;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -35,15 +36,16 @@ class ModRulesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Modificator $modificator)
+    public function store(Request $request, Product $product)
     {
         $this->validate($request, [
+            'toggle_id' => 'numeric|required|min:0',
+            'toggle_option_id' => 'numeric|required|min:0',
             'target_id' => 'numeric|required|min:0',
-            'option_id' => 'numeric|required|min:0',
             'action' => 'string|required',
         ]);
 
-        $rule = $modificator->createRule($request->all());
+        $rule = $product->createRule($request->all());
 
         return response($rule);
     }
@@ -89,12 +91,8 @@ class ModRulesController extends Controller
      * @param  int  $modRule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Modificator $modificator, ModRule $modRule)
+    public function destroy( $modRule)
     {
-        $modificator->rules()->delete($modRule);
-        if ( !$modificator->rules->count()){
-
-           $modificator->update(['toggle' => false]);
-        }
+        ModRule::destroy($modRule);
     }
 }
