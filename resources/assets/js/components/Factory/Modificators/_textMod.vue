@@ -2,7 +2,7 @@
     <div class="field">
         <label class="label" v-text="mod.name"></label>
         <div class="control">
-            <input type="text" class="input" v-model="value"/>
+            <input type="text" class="input" v-model="value" :disabled="disabled"/>
         </div>
     </div>
 </template>
@@ -16,11 +16,24 @@
         props: ['mod'],
         data(){
             return {
-                value:''
+                value:'',
             }
         },
-        methods: {},
-        computed: {},
+        methods: {
+
+        },
+        computed: {
+            rules(){
+                return this.$store.state.f.product.mod_rules;
+            },
+            modificators(){
+                return this.$store.state.f.modificators;
+            },
+            disabled(){
+                return this.$store.getters.isDisabled(this.mod.id);
+            }
+
+        },
         watch:{
             value(){
                 this.$store.commit('syncModificator', {

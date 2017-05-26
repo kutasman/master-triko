@@ -66,6 +66,9 @@
         mounted() {
 
             this.$store.commit('setFactory', this.factory);
+            this.$store.commit('setProduct', _.first(this.factory.products));
+            this.$store.commit('setReferee', _.first(this.factory.products).mod_rules);
+
 
         },
         components: {

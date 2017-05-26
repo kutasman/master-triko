@@ -28,7 +28,7 @@ class FactoryController extends Controller
 
     public function show(Factory $factory)
     {
-        $factory->load('products.modificators.options', 'products.modificators.rules');
+        $factory->load('products.modificators.options', 'products.mod_rules');
 
 
         return view('factory.show', compact('factory'));

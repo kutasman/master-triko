@@ -1,14 +1,12 @@
 <template>
     <div class="field">
+        <label class="label" v-text="mod.name"></label>
         <p class="control">
-            <label class="radio">
-                <input type="radio" name="question">
-                Yes
+            <label v-for="option in mod.options" class="radio">
+                <input type="radio" :name="mod.name" :value="option.id" v-model="value" :disabled="disabled">
+                {{ option.name }}
             </label>
-            <label class="radio">
-                <input type="radio" name="question">
-                No
-            </label>
+
         </p>
     </div>
 </template>
@@ -20,10 +18,24 @@
     export default {
         props: ['mod'],
         data(){
-            return {}
+            return {
+                value: ''
+            }
         },
         methods: {},
-        computed: {},
+        watch: {
+            value(){
+                this.$store.commit('syncModificator', {
+                    id: this.mod.id,
+                    value: this.value
+                });
+            }
+        },
+        computed: {
+            disabled(){
+                return this.$store.getters.isDisabled(this.mod.id);
+            }
+        },
         mounted() {
         },
         components: {}

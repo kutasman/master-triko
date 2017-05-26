@@ -7,18 +7,25 @@
 <style></style>
 
 <script>
+
+
+
     import TextModificator from './_textMod.vue'
     import SelectModificator from './_selectMod.vue';
     import RadioModificator from './_radioMod.vue';
     export default {
         props: [],
         data(){
-            return {}
+            return {
+            }
         },
         methods: {},
         computed: {
             modificators(){
                 return this.$store.state.f.product.modificators;
+            },
+            rules(){
+                return this.$store.state.f.product.mod_rules;
             }
         },
         mounted() {

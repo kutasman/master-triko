@@ -2,6 +2,9 @@
     <div class="box">
 
         <div class="field is-horizontal">
+            <div class="field-label">
+                <label class="label">New rule</label>
+            </div>
             <div class="field-body">
 
                 <div class="field">
