@@ -1,6 +1,8 @@
 <template>
     <div>
-        <component v-for="mod in modificators" :is="mod.type + 'Mod'" :mod="mod"></component>
+
+
+        <modificator v-for="mod in modificators" :mod="mod"></modificator>
     </div>
 </template>
 
@@ -8,11 +10,8 @@
 
 <script>
 
+    import Modificator from './Modificator.vue';
 
-
-    import TextModificator from './_textMod.vue'
-    import SelectModificator from './_selectMod.vue';
-    import RadioModificator from './_radioMod.vue';
     export default {
         props: [],
         data(){
@@ -31,9 +30,8 @@
         mounted() {
         },
         components: {
-            'textMod': TextModificator,
-            'selectMod': SelectModificator,
-            'radioMod': RadioModificator,
+
+            Modificator,
         }
     }
 </script>
