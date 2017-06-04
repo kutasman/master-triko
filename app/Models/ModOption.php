@@ -16,11 +16,4 @@ class ModOption extends Model
 	public function modificator(){
 		return $this->belongsTo(Modificator::class);
 	}
-
-	//Mutators
-	public function getNameAttribute($name)
-	{
-		return $name .=  ($this->attributes['rise']) ? ' (+' . $this->attributes['rise'] . ' грн.)' : '';
-	}
-
 }
