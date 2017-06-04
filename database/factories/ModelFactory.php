@@ -60,6 +60,8 @@ $factory->define(\App\Models\ModOption::class, function (Faker\Generator $faker)
 	return [
 		'name' => $faker->title,
 		'rise' => $faker->numberBetween(20,300),
+        'modificator_id' => factory(\App\Models\Modificator::class)->create()->id,
+        'default' => 0,
 	];
 });
 
@@ -113,4 +115,17 @@ $factory->define(\App\Models\OrderStatus::class, function(){
 		'description' => 'New Order',
 		'slug' => 'new',
 	];
+});
+
+$factory->define(\App\Models\ModRule::class, function(){
+
+    $toggle = factory(\App\Models\Modificator::class)->create();
+
+    return [
+        'product_id' => factory(\App\Models\Product::class)->create()->id,
+        'target_id' => factory(\App\Models\Modificator::class)->create()->id,
+        'toggle_id' => $toggle->id,
+        'toggle_option_id' => factory(\App\Models\ModOption::class)->create(['modificator_id' => $toggle->id]),
+        'action' => 'disable',
+    ];
 });

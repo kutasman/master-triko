@@ -2,11 +2,11 @@
     <div>
         <div class="columns">
             <div class="column">
-                <modificator @edit-modificator="toggleEditMod(mod)" @delete-mod="deleteMod(mod)" v-for="mod in modificators" :modificator="mod"></modificator>
+                <modificator @edit-modificator="toggleEditMod(mod)" @delete-mod="deleteMod(mod)" v-for="mod in modificators" :modificator="mod" :modificators="modificators"></modificator>
             </div>
             <div class="column">
 
-                <modificator-edit :modificator="editedModificator" v-if="editMode"></modificator-edit>
+                <modificator-edit :modificator="editedModificator" :modificators="modificators" v-if="editMode"></modificator-edit>
 
                 <div v-else>
                     <div class="field has-addons has-addons-centered">
@@ -51,6 +51,7 @@
 <script>
     import Modificator from './Modificator.vue';
     import ModificatorEdit from './ModificatorEdit.vue';
+
     export default {
         props: ['modificatorsInit', 'product', 'factory'],
         data(){
@@ -181,15 +182,15 @@
             }
         },
         mounted() {
-            if (!_.isUndefined(this.modificatorsInit)){
+            if (!_.isUndefined(this.modificatorsInit)){ // if  global
 
-                this.modificators = this.modificatorsInit;
                 this.modificableType = 'global';
+                this.modificators = this.modificatorsInit;
 
-            } else if (!_.isUndefined(this.product)){
+            } else if (!_.isUndefined(this.product)){ //if  product
 
-                this.modificators = this.product.modificators;
                 this.modificableType = 'products';
+                this.modificators = this.product.modificators;
                 this.modificable = this.product;
 
                 axios.get('/admin/factories/' + this.product.factory_id + '/modificators')
@@ -200,10 +201,10 @@
                         console.log(error.response.data);
                     })
 
-            } else if (!_.isUndefined(this.factory)){
+            } else if (!_.isUndefined(this.factory)){ // if factory
 
-                this.modificators = this.factory.modificators;
                 this.modificableType = 'factories';
+                this.modificators = this.factory.modificators;
                 this.modificable = this.factory;
 
             }

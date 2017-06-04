@@ -1,6 +1,16 @@
 <template>
     <div>
-        <div class="box">
+
+        <div class="tabs">
+            <ul>
+                <li @click="tab = 'general'" :class="{'is-active': tab === 'general'}"><a>General</a></li>
+                <li @click="tab = 'options'" :class="{'is-active': tab === 'options'}"><a>Options</a></li>
+            </ul>
+        </div>
+
+
+
+        <div v-if="tab === 'general'" class="box">
             <div class="field is-horizontal">
                 <div class="field-body">
                     <div class="field">
@@ -25,7 +35,7 @@
             </div>
         </div>
 
-        <mod-options v-show="modificator.type !== 'text'" :modificator="modificator"></mod-options>
+        <mod-options v-if="modificator.type !== 'text' && tab ==='options'" :modificator="modificator"></mod-options>
 
     </div>
 </template>
@@ -35,10 +45,12 @@
 <script>
 
     import ModOptions from './Options/ModOptions.vue';
+
     export default {
-        props: ['modificator'],
+        props: ['modificator', 'modificators'],
         data(){
             return {
+                tab: 'general',
                 options: [],
                 newOption: {
                     name: '',
@@ -54,7 +66,6 @@
         },
         computed: {},
         watch:{
-
         },
         mounted() {
 

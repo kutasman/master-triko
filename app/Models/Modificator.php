@@ -9,7 +9,11 @@ class Modificator extends Model
 {
 
 
-	protected $fillable = ['name', 'type'];
+	protected $fillable = ['name', 'type', 'toggle'];
+
+	protected $casts = [
+	    'toggle' => 'boolean'
+    ];
 
 
     //Relations______________
@@ -28,5 +32,12 @@ class Modificator extends Model
 	{
 		return $this->hasMany(ModOption::class);
 	}
+
+    public function rules()
+    {
+        return $this->hasMany(ModRule::class);
+	}
+
+	//Methods
 
 }

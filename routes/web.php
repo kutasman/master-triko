@@ -48,6 +48,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	Route::delete('products/{product}/modificator/{modificator}', 'ProductController@detachModificator')->name('products.detach_modificator');
 	Route::post('products/{product}/modificator/{modificator}/toggle', 'ProductController@toggleModificator')->name('products.toggle_modificator');
 
+
 	Route::resource('images', 'ImagesController', ['except' => ['show']]);
 	Route::resource('categories', 'CategoriesController', ['except' => 'show']);
 
@@ -55,6 +56,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
     //Modificators
     Route::resource('modificators', 'ModificatorsController');
     Route::get('modificators/{modificator}/options', 'ModificatorsController@options')->name('modificators.options');
+    Route::get('modificators/{modificator}/rules', 'ModificatorsController@rules')->name('modificators.rules');
+
+    //ModRules
+    Route::post('products/{product}/mod-rules', 'ModRulesController@store')->name('mod-rules.store');
+        Route::delete('mod-rules/{mod_rule}', 'ModRulesController@destroy')->name('mod-rules.destroy');
 
     //Factories
     Route::resource('factories', 'FactoriesController');

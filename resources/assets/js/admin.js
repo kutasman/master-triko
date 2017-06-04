@@ -22,6 +22,38 @@ Vue.component('factories', require('./components/admin/Factories/Factories.vue')
 
 Vue.component('modificators', require('./components/admin/Modifcators/Modificators.vue'));
 
+
+
+//Vuex
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+const product = {
+    state: {
+        product: {}
+    },
+    mutations: {
+        setProduct(state, product){
+            state.product = product;
+        }
+    },
+    actions: {  },
+    getters: {
+
+    }
+};
+
+
+const store = new Vuex.Store({
+    modules: {
+        p: product,
+    }
+});
+
+
+
 const admin = new Vue({
-    el: '#admin'
+    el: '#admin',
+    store
 });
