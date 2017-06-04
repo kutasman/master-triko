@@ -21,14 +21,6 @@ class ModificatorTest extends TestCase
         $this->modificator = factory(Modificator::class)->create();
     }
 
-    public function test_check_is_mod_toggle()
-    {
-        $this->assertFalse($this->modificator->toggle);
-
-        $this->modificator->update(['toggle' => true]);
-
-        $this->assertTrue($this->modificator->toggle);
-    }
 
 
 }

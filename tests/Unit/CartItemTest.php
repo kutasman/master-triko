@@ -79,6 +79,7 @@ class CartItemTest extends TestCase
 		$expectedTotalWithMods = $prodWithMods->price + $mods['rise'];
 		$expectedTotalWithoutMods = $prodWithoutMods->price;
 
+
 		$this->assertEquals($expectedTotalWithMods, $cartItemWithMods->total());
 		$this->assertEquals($expectedTotalWithoutMods, $cartItemWithoutMods->total());
 

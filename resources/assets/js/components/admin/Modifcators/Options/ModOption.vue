@@ -14,6 +14,15 @@
                         <input type="number" v-model="option.rise" class="input" placeholder="rise"/>
                     </div>
                 </div>
+
+                <div class="field">
+                    <p class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" v-model="option.default" @change="update">
+                            Is default
+                        </label>
+                    </p>
+                </div>
             </div>
         </div>
         <div class="media-right">

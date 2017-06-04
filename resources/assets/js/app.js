@@ -51,12 +51,8 @@ class Referee {
                 }
             });
 
-            //results = this.getAccordance(modificators)
-
-
         }
 
-        console.log(results);
         return results.includes(true);
 
     }

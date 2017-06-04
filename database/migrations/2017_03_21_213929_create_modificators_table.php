@@ -33,6 +33,7 @@ class CreateModificatorsTable extends Migration
 			$table->integer('modificator_id')->unsigned();
 			$table->string('name');
 	        $table->float('rise');
+	        $table->boolean('default')->default(false);
 	        $table->timestamps();
 
 	        $table->foreign('modificator_id')->references('id')->on('modificators')->onDelete('cascade');

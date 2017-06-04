@@ -20,10 +20,21 @@
         props: ['mod'],
         data(){
             return {
-                value:''
+                value: undefined
             }
         },
-        methods: {},
+        methods: {
+            setDefaultValue(){
+                let defaultOptions = this.mod.options.filter(option => {
+                    return option.default === true;
+
+                });
+
+                if ( !_.isEmpty(defaultOptions)){
+                    this.value = _.first(defaultOptions).id;
+                }
+            }
+        },
         computed: {
 
             disabled(){
@@ -39,6 +50,7 @@
             }
         },
         mounted() {
+            this.setDefaultValue();
         },
         components: {}
     }

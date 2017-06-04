@@ -52,7 +52,6 @@ $factory->define(\App\Models\Modificator::class, function (Faker\Generator $fake
 	return [
 		'name' => $faker->name,
 		'type' => 'select',
-        'toggle' => 0,
 	];
 });
 
@@ -62,6 +61,7 @@ $factory->define(\App\Models\ModOption::class, function (Faker\Generator $faker)
 		'name' => $faker->title,
 		'rise' => $faker->numberBetween(20,300),
         'modificator_id' => factory(\App\Models\Modificator::class)->create()->id,
+        'default' => 0,
 	];
 });
 
