@@ -22,7 +22,13 @@
         },
         methods: {
             addToCart(){
-                console.log(this.$store.state.f);
+                axios.put('/cart', this.$store.state.f)
+                    .then(res => {
+                        console.log(res.data);
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                    });
             }
         },
         computed: {},

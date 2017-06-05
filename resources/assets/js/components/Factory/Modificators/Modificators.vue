@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <modificator v-for="mod in modificators" :mod="mod"></modificator>
     </div>
 </template>

@@ -7,11 +7,9 @@
             </a>
         </div>
         <div class="nav-right nav-menu">
-            @if($cart->count())
 
-                    <a href="{{ route('cart.show') }}" class="navbar-link">Cart: <span class="badge">{{ $cart->count() }}</span> </a>
+                <a href="{{ route('cart.show') }}" class="navbar-link">Cart: <span class="badge">0</span> </a>
 
-            @endif
             <!-- Authentication Links -->
                 @if (Auth::guest())
                     <a class="nav-item is-tab" href="{{ route('login') }}">Login</a>

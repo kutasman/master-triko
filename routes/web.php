@@ -20,7 +20,7 @@ Route::get('/', 'HomeController@index');
 Route::get('factory/{factory}', 'FactoryController@show')->name('factory');
 
 
-Route::post('cart/{product}', 'CartController@addProduct')->name('cart.add_item');
+Route::put('cart', 'CartController@addProduct')->name('cart.add_item');
 Route::get('cart', 'CartController@show')->name('cart.show');
 Route::delete('cart/{item}', 'CartController@removeItem')->name('cart.remove_item');
 

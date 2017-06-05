@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Contracts\CartInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,11 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-	    \View::composer('common.nav', function ($view) {
-	    	$cart = $this->app->make(Cart::class);
-		    $view->with(['cart' => $cart]);
-	    });
+        //
     }
 
     /**
@@ -28,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            CartInterface::class,
+            Cart::class
+        );
     }
 }

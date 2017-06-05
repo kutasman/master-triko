@@ -41,14 +41,16 @@
         },
         methods: {
             setDefaultValue(){
-                let defaultOptions = this.mod.options.filter(option => {
-                    return option.default === true;
-
-                })  ;
+                let defaultOptions =  this.getDefaultOption();
 
                 if ( !_.isEmpty(defaultOptions)){
-                    this.value = _.first(defaultOptions).id;
+                    this.value = defaultOptions.id;
                 }
+            },
+            getDefaultOption(){
+                return _.first(this.mod.options.filter(option => {
+                    return option.default === true;
+                }));
             }
         },
         computed: {
@@ -65,7 +67,7 @@
         watch: {
             value(){
                 this.$store.commit('syncModificator', {
-                    id: this.mod.id,
+                    mod: this.mod,
                     value: this.value
                 });
             }

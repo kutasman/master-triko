@@ -3,13 +3,22 @@
 
 @section('content')
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title"><span class="badge">{{ $cart->count() }}</span> items</h3>
-    </div>
-    <div class="panel-body">
-        @foreach($cart->items as $item)
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+<div class="box">
+
+    <h3 class="title is-3"><span class="badge">{{ $cart->countItems() }}</span> items</h3>
+
+    <div class="container is-fluid">
+        @foreach($cart->getAll() as $item)
+
+            <div class="media">
+                <div class="media-content">
+
+                    {{ $item['product']['title'] }}
+                </div>
+
+            </div>
+
+        {{--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <div class="thumbnail">
                 <img data-src="3"  src="{{ asset('storage/' . $item->imageSrc()) }}" alt="">
                 <div class="caption">
@@ -36,12 +45,12 @@
                     </p>
                 </div>
             </div>
-        </div>
+        </div>--}}
         @endforeach
     </div>
     @if( $cart->hasItems())
-        <div class="panel-footer">
-            <a href="{{ route('checkout') }}" class="btn btn-lg btn-success btn-block">Checkout <span class="badge">{{ $cart->total() }}</span>грн. </a>
+        <div class="container is-fluid has-text-centered">
+            <a href="{{ route('checkout') }}" class="button is-large is-success">Checkout <span class="tag">{{ 'total' }}</span>грн. </a>
         </div>
     @endif
 </div>

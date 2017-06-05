@@ -35,9 +35,9 @@ class Referee {
 
     isModDisabled(mod_id, modificators){
 
-        let rules = this.getRelevantRules(mod_id, 'disabled');
-
         let results = [];
+
+        let rules = this.getRelevantRules(mod_id, 'disabled');
 
         if (rules.length && modificators.length){
 
@@ -75,7 +75,7 @@ class Referee {
 
     getModificator(mod_id, modificators){
 
-        return _.find(modificators, mod => {return mod.id === mod_id});
+        return _.find(modificators, mod => { return mod.mod.id === mod_id});
 
     }
 
@@ -110,16 +110,18 @@ const factory = {
 
         syncModificator(state, mod){
 
-            let index = _.findIndex(state.modificators, {id:mod.id});
+
+            let index = _.findIndex(state.modificators, (m) =>{
+                return m.mod.id === mod.mod.id;
+
+            });
+
+            console.log(index);
 
             if ( index >= 0){
-
                 state.modificators.splice(index, 1, mod);
-
             } else {
-
                 state.modificators.push(mod);
-
             }
         }
     },

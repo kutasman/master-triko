@@ -3,138 +3,61 @@
 namespace App\Models;
 
 
+use App\Models\Contracts\CartInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Session;
+use Cache;
 
-class Cart extends Model {
+class Cart implements CartInterface {
 
-	protected $fillable = [ 'session_id' ];
+    const CART_PREFIX = 'cart_';
+    protected $id;
+    protected $items;
 
-	protected $casts = [
-		'ordered' => 'boolean',
-	];
+    public function __construct()
+    {
+        $this->id = Session::getId();
 
-	//Relations_____
+        $this->items = Session::get($this->id());
 
-	public function items() {
+    }
 
-		return $this->hasMany(CartItem::class);
+    public function addItem($data)
+    {
+        Session::push($this->id(), $data);
 
-	}
+    }
 
-	public function order()
-	{
-		return $this->hasOne(Order::class);
-	}
+    public function removeItem($id)
+    {
+        // TODO: Implement removeItem() method.
+    }
 
-	//Methods
+    public function countItems(): int
+    {
+        return count(Session::get($this->id()));
+    }
 
-	public function count()
-	{
+    public function removeAll()
+    {
+        // TODO: Implement removeAll() method.
+    }
 
-		return $this->items()->count();
+    public function getAll(): array 
+    {
+        return $this->items;
+    }
 
-	}
-
-	public function hasItems() {
-
-		return !! $this->count();
-
-	}
-
-	public function createItem(Product $product, $modificatorsFormData){
-
-		$cartItem = $this->items()->create(['data' => $this->retrieveFullCartItemData($product->id, $modificatorsFormData)]);
-
-		return $cartItem;
-
-	}
-
-	public function removeItem($item){
-		if ($item instanceof CartItem){
-			$item->delete();
-		} else {
-			CartItem::find($item)->delete();
-		}
-	}
-
-	public function total()
-	{
-		$total = 0;
-		if ($this->hasItems())
-		{
-			foreach ($this->items as $item){
-				$total += $item->total();
-			}
-		}
-		return $total;
-	}
-
-	/**
-	 * Set cart status to Ordered
-	 *
-	 * @return $this
-	 */
-	public function markAsOrdered() {
-
-		$this->ordered = 1;
-
-		return $this;
-	}
-
-	//Helpers
-
-	protected function retrieveFullCartItemData($product_id, $mod_data){
+    public function hasItems(): bool
+    {
+        return !! $this->countItems();
+    }
 
 
+    protected function id(){
+        return self::CART_PREFIX . $this->id;
+    }
 
-		$product = Product::findOrFail($product_id);
-
-		$product->load(['images' => function($query){
-
-			$query->limit(1);
-
-		}]);
-
-		$modificators = new Collection();
-
-		//Iterate throw item modificators
-
-		if (!empty($mod_data)) {
-
-			foreach ( $mod_data as $modType => $modData ) {
-
-				$modData = collect( $modData );
-
-				$modData->each( function ( $values, $modId ) use ( &$modificators, $modType ) {
-
-					$modificator = Modificator::find( $modId );
-
-					if ( 'text' != $modType ) {
-
-						$modificator->load( [
-							'options' => function ( $query ) use ( $values ) {
-								$query->whereIn( 'id', collect( $values ) );
-							}
-						] );
-
-					} else {
-
-						$modificator->value = $values;
-
-					}
-
-					$modificators->push( $modificator );
-
-				} );
-			}
-		}
-
-		$product->user_modifications = $modificators->toArray();
-
-		return $product->toArray();
-
-	}
 
 }
