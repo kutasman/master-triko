@@ -6,10 +6,10 @@
  * Time: 11:18 PM
  */
 
-namespace App\Models\Contracts;
+namespace App\Contracts\Shop;
 
 
-interface CartInterface
+interface Cart
 {
 
     public function addItem( $data);
@@ -19,6 +19,8 @@ interface CartInterface
     public function countItems(): int;
 
     public function removeAll();
+
+    public function hasItems(): bool;
 
     public function getAll():array;
 

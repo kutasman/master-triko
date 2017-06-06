@@ -3,29 +3,23 @@
 namespace App\Models;
 
 
-use App\Models\Contracts\CartInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Session;
-use Cache;
+use App\Contracts\Shop\Cart as CartInterface;
+use App\Contracts\Shop\CartItemsRepository;
 
 class Cart implements CartInterface {
 
-    const CART_PREFIX = 'cart_';
-    protected $id;
-    protected $items;
+    protected $itemsRepository;
 
-    public function __construct()
+    public function __construct(CartItemsRepository $cartItemsRepository)
     {
-        $this->id = Session::getId();
 
-        $this->items = Session::get($this->id());
+        $this->itemsRepository = $cartItemsRepository;
 
     }
 
     public function addItem($data)
     {
-        Session::push($this->id(), $data);
+        $this->itemsRepository->addItem($data);
 
     }
 
@@ -36,7 +30,7 @@ class Cart implements CartInterface {
 
     public function countItems(): int
     {
-        return count(Session::get($this->id()));
+        return $this->itemsRepository->countItems();
     }
 
     public function removeAll()
@@ -44,20 +38,14 @@ class Cart implements CartInterface {
         // TODO: Implement removeAll() method.
     }
 
-    public function getAll(): array 
+    public function getAll(): array
     {
-        return $this->items;
+        return $this->itemsRepository->getAll();
     }
 
     public function hasItems(): bool
     {
-        return !! $this->countItems();
+        return !! $this->itemsRepository->countItems();
     }
-
-
-    protected function id(){
-        return self::CART_PREFIX . $this->id;
-    }
-
 
 }

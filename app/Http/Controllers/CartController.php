@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Contracts\Shop\CartItemsRepository;
 use App\Models\Cart;
+use App\Contracts\Shop\Cart as CartInterface;
 use App\Models\CartItem;
-use App\Models\Contracts\CartInterface;
 use App\Models\Modificator;
 use App\Models\Product;
 use Illuminate\Http\Request;
