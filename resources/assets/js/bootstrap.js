@@ -44,4 +44,8 @@ window.axios.defaults.headers.common = {
 //     key: 'your-pusher-key'
 // });
 
+require('../../../node_modules/select2/dist/js/select2.min');
+require('../../../node_modules/chosen-js/chosen.jquery');
+
+
 
