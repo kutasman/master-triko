@@ -9,24 +9,21 @@ use App\Models\ShippingType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Cache;
+use App\Contracts\Shop\Cart as CartInterface;
 class CheckoutController extends Controller
 {
-
-
-	public function index(Request $request, Cart $cart)
+	public function index(Request $request, CartInterface $cart)
 	{
-		$cart->load('items', 'order');
-		$cart->items->each(function ($item){
-		    $item->total = $item->total();
-        });
+
+	    if ( ! $cart->hasItems()){
+
+	        return redirect()->route('home');
+
+        }
 
 		$shippingTypes = ShippingType::all();
 		$paymentTypes = PaymentType::all();
 
-		if ($cart->order()->count() || !$cart->count()){
-
-			return redirect()->route('home');
-		}
 
 		return view('checkout.index', compact('cart', 'shippingTypes', 'paymentTypes'));
 

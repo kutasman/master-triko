@@ -1,101 +1,18 @@
 <template>
-    <div v-if="step != 'finish' " class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Checkout</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-12 col-sm-8">
+    <div v-if="! steps.is('finish')">
+        <h3 class="title is-3">Checkout</h3>
 
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="columns">
+            <div class="column is-8">
 
+                <contacts :checkout="checkout"></contacts>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Contacts
-                                    <button @click.prevent="toContacts" v-if="canEdit('contacts')" class="btn btn-xs btn-warning pull-right">edit</button>
-                                </h3>
-                            </div>
-                            <div v-if="isStep('contacts')" class="panel-body">
-                                <form action="checkout/validate/contacts" method="post">
-                                <div class="form-group">
-                                    <label for="firstName" >First name</label>
-                                    <input v-model="customer.first_name" type="text" class="form-control" name="firstName" id="firstName" placeholder="Name..." required>
-                                </div>
+                <shipping></shipping>
 
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input v-model="customer.email" type="text" class="form-control" name="email" id="email" placeholder="Email..." required>
-                                </div>
+                <payment></payment>
 
-                                <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input v-model="customer.phone" type="tel" class="form-control" name="email" id="phone" placeholder="Phone..." required>
-                                </div>
-
-
-                                <button @click.prevent="validateContacts" type="submit" class="btn btn-primary btn-block">Next step</button>
-
-                                </form>
-
-                            </div>
-                        </div>
-
-
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Shipping
-                                <button @click.prevent="toShipping" v-if="canEdit('shipping')" class="btn btn-warning btn-xs pull-right">edit</button>
-                            </h3>
-                            </div>
-                            <div v-if="isStep('shipping')" class="panel-body">
-                                <div class="list-group">
-                                    <div v-for="(shipping, index) in shippings">
-                                        <a @click.prevent="chooseShipping(index)" href="#" :class="{active: userShipping.type == shipping.slug}" class="list-group-item">
-                                            <h4 class="list-group-item-heading">{{ shipping.name }}</h4>
-                                            <p class="list-group-item-text">{{ shipping.description }}</p>
-                                        </a>
-                                    </div>
-
-                                    <component :is="userShipping.type" :meta="userShipping.meta" :shipping="shipping" @shipping-ready="shippingReadyEvent"></component>
-
-
-                                </div>
-
-                                <button @click.prevent="validateShipping" class="btn btn-success pull-right">Next step</button>
-
-
-                            </div>
-                        </div>
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Payment
-                                    <button v-if="canEdit('payment')" @click.prevent="toPayment" class="btn btn-warning btn-xs pull-right">edit</button>
-                                </h3>
-                            </div>
-                            <div v-if="isStep('payment')" class="panel-body">
-                                <div class="list-group">
-
-                                <div v-for="(payment, index) in payments">
-                                    <a @click.prevent="choosePayment(payment.slug)" href="#" :class="{active: userPayment.type == payment.slug }" class="list-group-item ">
-                                        <h4 class="list-group-item-heading">{{ payment.name }}</h4>
-                                        <p class="list-group-item-text">Content goes here</p>
-                                    </a>
-                                </div>
-                                </div>
-
-                                <button v-if="userPayment.type" @click.prevent="validatePayment" class="btn btn-block btn-success">Next step</button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="col-xs-12 col-sm-4">
+            </div>
+            <div class="column is-4">
                     <div class=" well well-sm">
                         <h3>Summary</h3>
 
@@ -125,9 +42,8 @@
                             total: {{ cartTotal }}
                         </p>
                     </div>
-                    <button v-if="isStep('confirm')" @click.prevent="createOrder" class="btn btn-block btn-lg btn-success">Confirm order! <span class="badge">{{ cartTotal }} грн.</span></button>
+                    <button v-if="steps.is('confirm')" @click.prevent="createOrder" class="btn btn-block btn-lg btn-success">Confirm order! <span class="badge">{{ cartTotal }} грн.</span></button>
                 </div>
-            </div>
         </div>
 
     </div> <!--.panel-default-->
@@ -145,10 +61,23 @@
 <style></style>
 
 <script>
+
+    import Checkout from '../../helpers/Checkout';
+
+    import Contacts from './steps/Contacts.vue';
+    import Shipping from './steps/Shipping.vue';
+    import Payment from './steps/Payment.vue';
+
     export default {
         props: ['shippings', 'payments', 'cart'],
         data(){
             return {
+                checkout: new Checkout({
+                    steps: {
+                        names: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
+                        default_step: 'contacts'
+                    }
+                }),
                 cartSession: '',
                 order_id: '',
                 customer: {
@@ -157,9 +86,9 @@
                     phone : '',
                 },
                 step: 'contacts',
-                steps: [
+                /*steps: [
                     'contacts', 'shipping', 'payment', 'confirm', 'success'
-                ],
+                ],*/
                 validated: [],
                 userShipping: {
                     type_id: '',
@@ -237,7 +166,7 @@
                 return step == this.step;
             },
             canEdit(step){
-                return this.steps.indexOf(step) < this.steps.indexOf(this.step);
+                return  true; //this.steps.indexOf(step) < this.steps.indexOf(this.step);
             },
             toContacts(){
               this.step = 'contacts';
@@ -275,6 +204,9 @@
             }
         },
         computed: {
+            steps(){
+                return this.checkout.steps;
+            },
             cartTotal(){
                 return this.cart.total;
             },
@@ -299,6 +231,9 @@
         mounted() {
         },
         components: {
+            Contacts,
+            Shipping,
+            Payment,
             nova_poshta: require('./shippings/NovaPoshta.vue'),
         }
     }
