@@ -55,8 +55,6 @@ class CheckoutController extends Controller
 
 	public function validateContacts(Request $request)
 	{
-
-
 		$this->validate($request, [
 			'first_name' => 'string|required',
 			'email' => 'email|required',

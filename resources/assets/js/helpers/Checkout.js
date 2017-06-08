@@ -8,17 +8,32 @@ export default class Checkout {
     constructor (config){
         this.steps = new Steps(config.steps.names, config.steps.default_step);
 
-        this.customer = {
+        this.contacts = {
             first_name:'',
             email: '',
             phone: ''
         };
+
+        this.validator = config['validator'];
     }
 
-    nextStep(step){
+    validate(){
 
-        
-        console.log('verification');
-        console.log('switch step to ' + step);
+        this.validator.validate( this.steps.current, this.getObjectForValidation( this.steps.current ) )
+            .then(status => {
+                console.log(status);
+                this.steps.nextStep()
+            })
+            .catch(errors => {
+                console.log(errors);
+            });
+
+        /*return new Promise((resolve, reject) => {
+            reject(['errors'])
+        });*/
+    }
+
+    getObjectForValidation(step){
+        return this[step];
     }
 }

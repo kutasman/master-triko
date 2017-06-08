@@ -5,31 +5,35 @@
         <div class="field">
             <label class="label">First Name</label>
             <div class="control">
-                <input class="input" title="First Name" type="text" name="first_name" v-model="checkout.customer.first_name"/>
+                <input :class="{'is-danger': validator.hasError('first_name')}"  class="input" title="First Name" type="text" name="first_name" v-model="checkout.contacts.first_name"/>
+                <span class="help is-danger" v-show="validator.hasError('first_name')" >{{ validator.showError('first_name') }}</span>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Email</label>
             <div class="control">
-                <input class="input" title="Email" type="email" name="email" v-model="checkout.customer.email"/>
+                <input :class="{'is-danger': validator.hasError('email')}"  class="input" title="Email" type="email" name="email" v-model="checkout.contacts.email"/>
+                <span class="help is-danger" v-show="validator.hasError('email')" >{{ validator.showError('email') }}</span>
+
             </div>
         </div>
 
         <div class="field">
             <label class="label">Phone</label>
             <div class="control">
-                <input type="text" title="Phone" class="input" name="phone" v-model="checkout.customer.phone"/>
+                <input :class="{'is-danger': validator.hasError('phone')}"  type="text" title="Phone" class="input" name="phone" v-model="checkout.contacts.phone"/>
+                <span class="help is-danger" v-show="validator.hasError('phone')" >{{ validator.showError('phone') }}</span>
+
             </div>
         </div>
 
         <div class="field">
             <label class="label"></label>
             <div class="control">
-                <div class="button is-success" @click="checkout.nextStep('shipping')">Next</div>
+                <div class="button is-success" @click="checkout.validate()">Next</div>
             </div>
         </div>
-
 
     </div>
 </template>
@@ -43,8 +47,13 @@
         data(){
             return {}
         },
-        methods: {},
-        computed: {},
+        methods: {
+        },
+        computed: {
+            validator(){
+                return this.checkout.validator;
+            }
+        },
         mounted() {
         },
         components: {}

@@ -63,6 +63,7 @@
 <script>
 
     import Checkout from '../../helpers/Checkout';
+    import Validator from '../../helpers/Validator';
 
     import Contacts from './steps/Contacts.vue';
     import Shipping from './steps/Shipping.vue';
@@ -76,7 +77,8 @@
                     steps: {
                         names: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
                         default_step: 'contacts'
-                    }
+                    },
+                    validator: new Validator('checkout/validate/'),
                 }),
                 cartSession: '',
                 order_id: '',
