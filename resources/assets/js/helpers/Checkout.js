@@ -14,6 +14,8 @@ export default class Checkout {
             phone: ''
         };
 
+        this.shippings = config['shippings'];
+
         this.validator = config['validator'];
     }
 

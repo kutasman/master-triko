@@ -1,8 +1,5 @@
 <template>
-    <div>
-
-
-
+    <div>   
         <div  class="form-group">
             <label for="city" class="col-sm-2 control-label">City</label>
             <div  class="col-sm-10">

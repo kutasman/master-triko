@@ -7,7 +7,7 @@
 
                 <contacts :checkout="checkout"></contacts>
 
-                <shipping></shipping>
+                <shipping :checkout="checkout"></shipping>
 
                 <payment></payment>
 
@@ -78,6 +78,7 @@
                         names: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
                         default_step: 'contacts'
                     },
+                    shippings: this.shippings,
                     validator: new Validator('checkout/validate/'),
                 }),
                 cartSession: '',

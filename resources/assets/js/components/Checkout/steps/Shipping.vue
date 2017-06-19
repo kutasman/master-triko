@@ -2,7 +2,21 @@
     <div class="box">
         <h5 class="title is-5">Shipping</h5>
 
-        <!--<component :is="userShipping.type" :meta="userShipping.meta" :shipping="shipping" @shipping-ready="shippingReadyEvent"></component>-->
+        <div class="columns">
+
+
+            <div class="field">
+                <p class="control">
+                    <label class="radio" v-for="shipping in checkout.shippings">
+                        <input type="radio" name="shipping" v-model="selectedShipping" :value="shipping">
+                        {{ shipping.name }}
+                    </label>
+                </p>
+            </div>
+        </div>
+
+
+        <component :is="selectedShipping.slug" :meta="selectedShipping.meta" :shipping="selectedShipping" @shipping-ready="shippingReadyEvent"></component>
 
 
     </div>
@@ -14,16 +28,25 @@
     import NovaPoshta from '../shippings/NovaPoshta.vue'
 
     export default {
-        props: [],
+        props: ['checkout'],
         data(){
-            return {}
+            return {
+                selectedShipping: ''
+            }
         },
-        methods: {},
+        methods: {
+            selectShipping(shipping){
+                this.selectedShipping = shipping;
+            },
+            shippingReadyEvent(){
+
+            }
+        },
         computed: {},
         mounted() {
         },
         components: {
-            NovaPoshta,
+            nova_poshta: NovaPoshta,
         }
     }
 </script>
