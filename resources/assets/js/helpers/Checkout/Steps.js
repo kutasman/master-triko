@@ -3,9 +3,9 @@
  */
 
 export default class Steps {
-    constructor (stepNames, defaultStep){
-        this.steps = stepNames;
-        this.current = this.defaultStep =  defaultStep;
+    constructor (config){
+        this.steps = config.steps;
+        this.current = this.defaultStep =  config.defaultStep;
     }
 
     is(name){

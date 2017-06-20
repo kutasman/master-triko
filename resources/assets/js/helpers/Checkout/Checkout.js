@@ -3,20 +3,23 @@
  */
 
 import Steps from './Steps';
+import Contacts from './Contacts';
+import Validator from './Validator';
+
 export default class Checkout {
 
-    constructor (config){
-        this.steps = new Steps(config.steps.names, config.steps.default_step);
+    constructor (shippings, payments, cart){
 
-        this.contacts = {
-            first_name:'',
-            email: '',
-            phone: ''
-        };
+        this.steps = new Steps({
+            steps: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
+            defaultStep: 'contacts',
+        });
 
-        this.shippings = config['shippings'];
+        this.contacts = new Contacts();
 
-        this.validator = config['validator'];
+        this.validator = new Validator('checkout/validate/');
+
+        /*this.shippings = config['shippings'];*/
     }
 
     validate(){

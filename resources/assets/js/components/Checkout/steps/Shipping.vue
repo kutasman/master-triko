@@ -26,12 +26,13 @@
 
 <script>
     import NovaPoshta from '../shippings/NovaPoshta.vue'
+    import Curier from '../shippings/Curier.vue';
 
     export default {
         props: ['checkout'],
         data(){
             return {
-                selectedShipping: ''
+                selectedShipping: '',
             }
         },
         methods: {
@@ -42,11 +43,13 @@
 
             }
         },
-        computed: {},
+        computed: {
+        },
         mounted() {
         },
         components: {
             nova_poshta: NovaPoshta,
+            curier: Curier,
         }
     }
 </script>
