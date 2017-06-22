@@ -13,10 +13,17 @@ export default class Shipping {
     }
 
     getDataForValidation(){
-        return {
+        let data = {
             shipping: this.selected,
-            data: this.data,
         };
+        //If NP - add data about city and warehouse
+        if ('nova_poshta' === this.selected.slug){
+            data.data = {
+                city: this.np.city,
+                warehouse: this.np.warehouse,
+            };
+        }
+        return data;
     }
 
     createNovaPoshtaApiInstance(apiKey){

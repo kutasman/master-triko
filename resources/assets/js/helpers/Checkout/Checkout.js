@@ -26,18 +26,14 @@ export default class Checkout {
     validate(){
 
         this.validator.validate( this.steps.current, this.getObjectForValidation( this.steps.current ).getDataForValidation() )
-            .then(status => {
-                console.log(status);
+            .then(res => {
+                console.log(res.status);
                 this.steps.nextStep();
                 alert('go to ' + this.steps.current + ' step');
             })
             .catch(errors => {
                 console.log(errors);
             });
-
-        /*return new Promise((resolve, reject) => {
-            reject(['errors'])
-        });*/
     }
 
     getObjectForValidation(step){

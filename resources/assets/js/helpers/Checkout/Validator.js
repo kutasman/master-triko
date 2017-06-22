@@ -13,6 +13,7 @@ export default class Validator{
                 .then(res => {
                     if (200 === res.status){
                         this.clearErrors();
+                        resolve(res);
                     }
                 })
                 .catch(error => {

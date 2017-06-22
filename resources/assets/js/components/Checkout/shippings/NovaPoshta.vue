@@ -5,7 +5,7 @@
             <div class="control" v-if="citySelected">
                 <input autocomplete="off" class="input" type="text" v-model="np.citySearchKey" @input="np.removeCity()"/>
             </div>
-            <div v-else class="control">
+            <div v-else class="control" >
 
                 <input  placeholder="Find your city" autocomplete="off" v-model="np.citySearchKey"  @input="filterCities()" type="text" title="city" class="input" :class="{'is-danger': checkout.validator.hasError('data.city')}" required="required">
 
