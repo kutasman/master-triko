@@ -15,17 +15,15 @@
                     <li class="list-group-item city-candidate"  v-for="(city, index) in np.filteredCities" @click="np.setCity(city)">{{ city.DescriptionRu }}</li>
                 </ul>
             </div>
-
-
         </div>
 
 
-        <div v-if="cityRef" class="field">
+        <div v-if="citySelected && warehousesReady" class="field">
             <label for="warehouse" class="label">Warehouse</label>
             <div class="control">
                 <div class="select is-small" :class="{'is-danger': checkout.validator.hasError('data.warehouse')}">
-                    <select v-model="meta.warehouse" name="warehouse" id="warehouse">
-                        <option v-for="warehouse in warehouses" :value="warehouse"> {{ warehouse.DescriptionRu }} </option>
+                    <select v-model="np.warehouse" name="warehouse" id="warehouse">
+                        <option v-for="warehouse in np.getWarehouses()" :value="warehouse"> {{ warehouse.DescriptionRu }} </option>
                     </select>
                 </div>
                 <p class="help is-danger" v-show="checkout.validator.hasError('data.warehouse')">Select warehouse</p>
@@ -141,6 +139,9 @@
             },
             citySelected(){
                 return !_.isEmpty(this.np.city);
+            },
+            warehousesReady(){
+                return !_.isEmpty(this.np.getWarehouses());
             }
 
         },

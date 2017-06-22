@@ -26,14 +26,20 @@ export default class NovaPoshta{
         this.city = city;
         this.filteredCities = [];
         this.citySearchKey = city.DescriptionRu;
+        this.warehousesRepository.retrieveWarehouses(this.city.Ref);
     }
     removeCity(){
         this.city = {};
+        this.warehouse = {};
+        this.warehousesRepository.clear();
     }
     citySelected(){
         return !_.isEmpty(this.city);
     }
 
+    getWarehouses(){
+        return this.warehousesRepository.get();
+    }
 
     filterCities(){
         this.filteredCities = (_.isEmpty(this.citySearchKey)) ? {} : this.citiesRepository.filter(this.citySearchKey);
