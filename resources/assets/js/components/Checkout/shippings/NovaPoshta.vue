@@ -1,28 +1,44 @@
 <template>
     <div>
-        <div  class="form-group">
-            <label for="city" class="col-sm-2 control-label">City</label>
-            <div  class="col-sm-10">
+        <div class="field">
+            <label class="label">City</label>
+            <div class="control" v-if="citySelected">
+                <input autocomplete="off" class="input" type="text" v-model="np.citySearchKey" @input="np.removeCity()"/>
+            </div>
+            <div v-else class="control">
 
-                <input placeholder="Find your city" autocomplete="off" v-model="searchCityString" type="text" name="city" id="city" class="form-control" value="" title="" required="required">
+                <input  placeholder="Find your city" autocomplete="off" v-model="np.citySearchKey"  @input="filterCities()" type="text" title="city" class="input" :class="{'is-danger': checkout.validator.hasError('data.city')}" required="required">
 
+                <p class="help is-danger" v-show="checkout.validator.hasError('data.city')" >Select city</p>
 
-                <ul v-if="filtering" class="list-group">
-                    <li class="list-group-item city-candidate"  v-for="(city, index) in filteredCities" @click="chooseCity(city)">{{ city.DescriptionRu }}</li>
+                <ul class="list-group">
+                    <li class="list-group-item city-candidate"  v-for="(city, index) in np.filteredCities" @click="np.setCity(city)">{{ city.DescriptionRu }}</li>
                 </ul>
             </div>
 
+
         </div>
 
 
-        <div v-if="cityRef" class="form-group">
-            <label for="warehouse" class="col-sm-2 control-label">Warehouse</label>
-            <div class="col-sm-10">
-                <select v-model="meta.warehouse" name="warehouse" id="warehouse" class="form-control">
-                    <option v-for="warehouse in warehouses" :value="warehouse"> {{ warehouse.DescriptionRu }} </option>
-                </select>
+        <div v-if="cityRef" class="field">
+            <label for="warehouse" class="label">Warehouse</label>
+            <div class="control">
+                <div class="select is-small" :class="{'is-danger': checkout.validator.hasError('data.warehouse')}">
+                    <select v-model="meta.warehouse" name="warehouse" id="warehouse">
+                        <option v-for="warehouse in warehouses" :value="warehouse"> {{ warehouse.DescriptionRu }} </option>
+                    </select>
+                </div>
+                <p class="help is-danger" v-show="checkout.validator.hasError('data.warehouse')">Select warehouse</p>
             </div>
         </div>
+
+        <div class="field">
+            <label class="label"></label>
+            <div class="control">
+                <div class="button is-success" @click="checkout.validate()">Next</div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -34,8 +50,9 @@
 </style>
 
 <script>
+
     export default {
-        props: ['shipping', 'meta'],
+        props: ['shipping', 'checkout'],
         data(){
             return {
                 queryUrl: 'https://api.novaposhta.ua/v2.0/json/',
@@ -52,13 +69,18 @@
             }
         },
         methods: {
+            filterCities: _.debounce(function() {
+                this.np.filterCities();
+            }, 400),
+
             chooseCity(city){
-              this.meta.city = city;
-              this.cityRef = city.Ref;
-              this.filteredCities = {};
-              //this.searchCityString = city.DescriptionRu;
-              this.filtering = false;
-              this.getWarehouses();
+                this.meta.city = city;
+                this.checkout.shipping.data.city = city;
+                this.cityRef = city.Ref;
+                this.filteredCities = {};
+                //this.searchCityString = city.DescriptionRu;
+                this.filtering = false;
+                this.getWarehouses();
             },
             getCity: _.debounce(function () {
                 console.log('find city by string ' + this.searchCityString);
@@ -71,55 +93,17 @@
                     })
 
             }, 2000),
-            getCities(){
-                axios.get('nova-poshta-cities')
-                    .then((response) => {
-                        if (204 == response.status){
-                            console.log('no cities');
-                            this.updateCities();
-                        } else if (200 == response.status){
-                            this.cities = response.data;
-                        }
-                    })
-            },
+
             getWarehouses(){
-                this.axiosInstance.post(this.queryUrl, this.getQuery('Address', 'getWarehouses', {'CityRef': this.meta.city.Ref}))
+                this.removeDefaultAxiosHeaders();
+                axios.post(this.queryUrl, this.getQuery('Address', 'getWarehouses', {'CityRef': this.meta.city.Ref}), {headers: {}})
                     .then((response) =>{
                         this.warehouses = response.data.data;
-                    })
-            },
-            updateCities(){
-                this.axiosInstance.post(this.queryUrl, this.getQuery('Address','getCities' ))
-                    .then((response) => {
-                        this.cities = response.data.data;
-                        this.response = response;
-                        this.saveCities();
-                    })
-                    .catch((error) => {
                     });
+                this.restoreDefaultAxiosHeaders();
             },
-            saveCities(){
-                axios.put('nova-poshta-cities', {np_cities: this.cities})
-                    .then((response) => {
 
-                    })
-                    .catch((error) => {
-                        console.log(error.response.data);
-                    })
 
-            },
-            filterCities: _.debounce(function(){
-                this.filtering = true;
-                if ('' == this.searchString){
-                    this.filteredCities = {};
-                } else {
-                    console.log('filter with ' + this.searchCityString);
-                    this.filteredCities = this.cities.filter((city) =>{
-                        return city.Description.search( new RegExp('^' + this.searchString, 'i')) != -1 || city.DescriptionRu.search( new RegExp('^' + this.searchString, 'i')) != -1;
-                    });
-                }
-
-            }, 400),
             getQuery(model_name, method_name, prop){
                 return {
                     modelName: model_name,
@@ -127,7 +111,7 @@
                     methodProperties: prop,
                     apiKey: this.apiKey
                 }
-            }
+            },
         },
         watch:{
             searchCityString: function () {
@@ -138,7 +122,7 @@
                 this.getWarehouses();
             },
             'meta.warehouse': function () {
-
+                console.log(this.meta.warehouse);
             },
 
         },
@@ -149,14 +133,21 @@
             searchString(){
                 return _.toLower( this.searchCityString );
             },
+            meta(){
+                return this.shipping.meta;
+            },
+            np(){
+                return this.checkout.shipping.np;
+            },
+            citySelected(){
+                return !_.isEmpty(this.np.city);
+            }
 
         },
         mounted() {
-            let instance = axios.create();
-            instance.defaults.headers.common = [];
 
-            this.axiosInstance = instance;
-            this.getCities();
+
+            this.checkout.shipping.createNovaPoshtaApiInstance(this.shipping.meta.apiKey);
 
         },
     }

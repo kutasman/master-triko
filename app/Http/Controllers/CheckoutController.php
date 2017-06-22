@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Cache;
 use App\Contracts\Shop\Cart as CartInterface;
+use Illuminate\Validation\Rule;
+
 class CheckoutController extends Controller
 {
 	public function index(Request $request, CartInterface $cart)
@@ -63,14 +65,13 @@ class CheckoutController extends Controller
 	}
 
 	public function validateShipping(Request $request) {
-
-		$this->validate($request, [
-			'type' => 'string|required|exists:shipping_types,slug',
-			'data' => 'sometimes',
-		]);
-
-		return response($request->all());
-	}
+         $this->validate($request, [
+             'shipping.id' => 'numeric|required|exists:shipping_types,id',
+             //for nova poshta delivery service
+             'data.city' => 'required_if:shipping.slug,nova_poshta',
+             'data.warehouse' => 'required_if:shipping.slug,nova_poshta'
+         ]);
+    }
 
 	public function validatePayment(Request $request) {
 		$this->validate($request, [

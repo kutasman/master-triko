@@ -7,8 +7,8 @@
 
             <div class="field">
                 <p class="control">
-                    <label class="radio" v-for="shipping in checkout.shippings">
-                        <input type="radio" name="shipping" v-model="selectedShipping" :value="shipping">
+                    <label class="radio" v-for="shipping in checkout.shipping.shippings">
+                        <input type="radio" name="shipping" v-model="checkout.shipping.selected" :value="shipping">
                         {{ shipping.name }}
                     </label>
                 </p>
@@ -16,7 +16,9 @@
         </div>
 
 
-        <component :is="selectedShipping.slug" :meta="selectedShipping.meta" :shipping="selectedShipping" @shipping-ready="shippingReadyEvent"></component>
+        <component :is="checkout.shipping.selected.slug" :shipping="checkout.shipping.selected" :checkout="checkout"></component>
+
+
 
 
     </div>
@@ -32,16 +34,10 @@
         props: ['checkout'],
         data(){
             return {
-                selectedShipping: '',
             }
         },
         methods: {
-            selectShipping(shipping){
-                this.selectedShipping = shipping;
-            },
-            shippingReadyEvent(){
 
-            }
         },
         computed: {
         },

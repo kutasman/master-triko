@@ -7,6 +7,11 @@ export default class Contacts {
         this.email = '';
         this.phone = '';
     }
-
-
+    getDataForValidation(){
+        return {
+            email: this.email,
+            first_name: this.first_name,
+            phone: this.phone,
+        }
+    }
 }

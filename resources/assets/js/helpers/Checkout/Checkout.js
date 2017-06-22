@@ -4,6 +4,7 @@
 
 import Steps from './Steps';
 import Contacts from './Contacts';
+import Shipping from './Shipping';
 import Validator from './Validator';
 
 export default class Checkout {
@@ -12,22 +13,23 @@ export default class Checkout {
 
         this.steps = new Steps({
             steps: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
-            defaultStep: 'contacts',
+            defaultStep: 'shipping',
         });
 
         this.contacts = new Contacts();
 
         this.validator = new Validator('checkout/validate/');
 
-        /*this.shippings = config['shippings'];*/
+        this.shipping = new Shipping(shippings);
     }
 
     validate(){
 
-        this.validator.validate( this.steps.current, this.getObjectForValidation( this.steps.current ) )
+        this.validator.validate( this.steps.current, this.getObjectForValidation( this.steps.current ).getDataForValidation() )
             .then(status => {
                 console.log(status);
-                this.steps.nextStep()
+                this.steps.nextStep();
+                alert('go to ' + this.steps.current + ' step');
             })
             .catch(errors => {
                 console.log(errors);
