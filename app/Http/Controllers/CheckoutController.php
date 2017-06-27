@@ -75,7 +75,7 @@ class CheckoutController extends Controller
 
 	public function validatePayment(Request $request) {
 		$this->validate($request, [
-			'type' => 'string|required|exists:payment_types,slug',
+			'payment_type' => 'string|required|exists:payment_types,slug',
 		]);
 
 		if ($request->ajax()){

@@ -8,8 +8,9 @@ export default class Shipping {
     constructor(shippings){
         this.shippings = shippings;
         this.data = {};
-        this.selected = {};
+        this.selected = _.first(this.shippings);
         this.np = {};
+
     }
 
     getDataForValidation(){

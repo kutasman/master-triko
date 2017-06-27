@@ -4,19 +4,48 @@
 
         <div class="columns">
 
+                <div class="column is-4">
+                    <div class="field">
+                        <label class="label">Select shipping type</label>
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="checkout.shipping.selected">
+                                    <option v-for="shipping in checkout.shipping.shippings" :value="shipping" v-text="shipping.name"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="field">
+            <div class="column is-8">
+                <p>
+                    {{ checkout.shipping.selected.description }}
+                </p>
+                <component :is="checkout.shipping.selected.slug" :shipping="checkout.shipping.selected" :checkout="checkout"></component>
+
+            </div>
+
+
+
+
+            <!--<div class="field">
                 <p class="control">
                     <label class="radio" v-for="shipping in checkout.shipping.shippings">
                         <input type="radio" name="shipping" v-model="checkout.shipping.selected" :value="shipping">
                         {{ shipping.name }}
                     </label>
                 </p>
+            </div>-->
+        </div>
+
+        <div class="field">
+            <label class="label"></label>
+            <div class="control">
+                <div class="button is-success" @click="checkout.validate()">Next</div>
             </div>
         </div>
 
 
-        <component :is="checkout.shipping.selected.slug" :shipping="checkout.shipping.selected" :checkout="checkout"></component>
 
 
 

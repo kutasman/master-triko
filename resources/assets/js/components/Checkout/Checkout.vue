@@ -9,7 +9,9 @@
 
                 <shipping :checkout="checkout"></shipping>
 
-                <payment></payment>
+                <payment :checkout="checkout">
+
+                </payment>
 
             </div>
             <!--<div class="column is-4">

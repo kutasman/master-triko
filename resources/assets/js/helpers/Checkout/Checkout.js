@@ -5,6 +5,7 @@
 import Steps from './Steps';
 import Contacts from './Contacts';
 import Shipping from './Shipping';
+import Payment from './Payment';
 import Validator from './Validator';
 
 export default class Checkout {
@@ -13,7 +14,7 @@ export default class Checkout {
 
         this.steps = new Steps({
             steps: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
-            defaultStep: 'shipping',
+            defaultStep: 'contacts',
         });
 
         this.contacts = new Contacts();
@@ -21,6 +22,8 @@ export default class Checkout {
         this.validator = new Validator('checkout/validate/');
 
         this.shipping = new Shipping(shippings);
+
+        this.payment = new Payment(payments);
     }
 
     validate(){
