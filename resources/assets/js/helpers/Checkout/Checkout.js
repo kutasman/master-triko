@@ -13,7 +13,7 @@ export default class Checkout {
     constructor (shippings, payments, cart){
 
         this.steps = new Steps({
-            steps: ['contacts', 'shipping', 'payment', 'confirm', 'success'],
+            steps: ['contacts', 'shipping', 'payment', 'confirm', 'finish'],
             defaultStep: 'contacts',
         });
 
@@ -32,14 +32,31 @@ export default class Checkout {
             .then(res => {
                 console.log(res.status);
                 this.steps.nextStep();
-                alert('go to ' + this.steps.current + ' step');
             })
             .catch(errors => {
                 console.log(errors);
             });
     }
 
+    createOrder(){
+        axios.post('checkout/confirm-order', this.getOrderData())
+            .then((res => {
+                if (res.status === 200){
+                    this.steps.set('finish');
+                }
+            }))
+            .catch(error => {
+                console.log(error.response.data);
+            })
+    }
+
     getObjectForValidation(step){
         return this[step];
+    }
+
+    getOrderData(){
+        return {
+            
+        }
     }
 }

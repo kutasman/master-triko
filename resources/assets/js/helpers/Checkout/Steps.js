@@ -6,6 +6,7 @@ export default class Steps {
     constructor (config){
         this.steps = config.steps;
         this.current = this.defaultStep =  config.defaultStep;
+        this.passed = [];
     }
 
     is(name){
@@ -14,9 +15,15 @@ export default class Steps {
 
     set(name){
         this.current = name;
+        this.updatePassedSteps();
     }
     nextStep(){
         this.set(this.getNextStepName());
+    }
+    prevStep(step = null){
+
+        this.set(this.getCurrentStepIndex()-1);
+
     }
     getNextStepName(){
         return this.steps[this.getCurrentStepIndex()+1];
@@ -24,5 +31,16 @@ export default class Steps {
     getCurrentStepIndex(){
         return _.indexOf(this.steps, this.current);
     }
+
+    updatePassedSteps(){
+        this.passed = _.slice(this.steps, 0, this.getCurrentStepIndex());
+    }
+
+    isPassed(step){
+        return _.includes(this.passed, step);
+    }
+
+
+
 
 }

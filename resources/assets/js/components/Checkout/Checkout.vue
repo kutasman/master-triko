@@ -14,8 +14,8 @@
                 </payment>
 
             </div>
-            <!--<div class="column is-4">
-                    <div class=" well well-sm">
+            <div class="column is-4">
+                    <!--<div class=" well well-sm">
                         <h3>Summary</h3>
 
                         <p v-if="canEdit('contacts')">
@@ -43,9 +43,11 @@
                         <p>
                             total: {{ cartTotal }}
                         </p>
-                    </div>
-                    <button v-if="steps.is('confirm')" @click.prevent="createOrder" class="btn btn-block btn-lg btn-success">Confirm order! <span class="badge">{{ cartTotal }} грн.</span></button>
-                </div>-->
+                    </div>-->
+
+
+                    <confirm :checkout="checkout"></confirm>
+                </div>
         </div>
 
     </div> <!--.panel-default-->
@@ -66,6 +68,7 @@
 
     import Checkout from '../../helpers/Checkout/Checkout';
 
+    import Confirm from './steps/Confirm.vue';
     import Contacts from './steps/Contacts.vue';
     import Shipping from './steps/Shipping.vue';
     import Payment from './steps/Payment.vue';
@@ -125,7 +128,7 @@
                   shipping: this.userShipping,
                   payment: this.userPayment,
               }).then((response) => {
-                    if (200 == response.status){
+                    if (200 === response.status){
                         this.order_id = response.data;
                         this.finish();
                     }
@@ -160,6 +163,7 @@
             Contacts,
             Shipping,
             Payment,
+            Confirm,
         }
     }
 </script>

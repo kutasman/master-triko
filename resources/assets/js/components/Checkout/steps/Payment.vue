@@ -1,8 +1,13 @@
 <template>
     <div class="box">
-        <h5 class="title is-5">Payment</h5>
+        <h5 class="title is-5">
+            Payment
+            <span v-show="checkout.steps.isPassed('payment')"
+                  class="button is-pulled-right"
+                  @click="checkout.steps.set('payment')">edit</span>
+        </h5>
 
-        <div class="columns">
+        <div class="columns" v-show="checkout.steps.is('payment')">
             <div class="column is-4">
                 <div class="field">
                     <label class="label">Select payment type</label>
@@ -22,14 +27,16 @@
                     {{ checkout.payment.selected.description }}
                 </p>
             </div>
+
         </div>
 
-        <div class="field">
+        <div class="field" v-show="checkout.steps.is('payment')">
             <label class="label"></label>
             <div class="control">
                 <div class="button is-success" @click="checkout.validate()">Next</div>
             </div>
         </div>
+
 
     </div>
 </template>

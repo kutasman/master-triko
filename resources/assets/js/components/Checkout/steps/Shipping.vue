@@ -1,8 +1,12 @@
 <template>
     <div class="box">
-        <h5 class="title is-5">Shipping</h5>
+        <h5 class="title is-5">
+            Shipping
+            <span v-show="checkout.steps.isPassed('shipping')" class="button is-pulled-right" @click="checkout.steps.set('shipping')">edit</span>
 
-        <div class="columns">
+        </h5>
+
+        <div class="columns" v-show="checkout.steps.is('shipping')">
 
                 <div class="column is-4">
                     <div class="field">
@@ -25,30 +29,14 @@
 
             </div>
 
-
-
-
-            <!--<div class="field">
-                <p class="control">
-                    <label class="radio" v-for="shipping in checkout.shipping.shippings">
-                        <input type="radio" name="shipping" v-model="checkout.shipping.selected" :value="shipping">
-                        {{ shipping.name }}
-                    </label>
-                </p>
-            </div>-->
         </div>
 
-        <div class="field">
+        <div class="field" v-show="checkout.steps.is('shipping')">
             <label class="label"></label>
             <div class="control">
                 <div class="button is-success" @click="checkout.validate()">Next</div>
             </div>
         </div>
-
-
-
-
-
 
     </div>
 </template>
