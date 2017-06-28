@@ -2,6 +2,7 @@
  * Created by kutas on 6/7/17.
  */
 
+import Cart from '../Cart';
 import Steps from './Steps';
 import Contacts from './Contacts';
 import Shipping from './Shipping';
@@ -11,6 +12,8 @@ import Validator from './Validator';
 export default class Checkout {
 
     constructor (shippings, payments, cart){
+
+        this.cart = new Cart(cart);
 
         this.steps = new Steps({
             steps: ['contacts', 'shipping', 'payment', 'confirm', 'finish'],
@@ -56,7 +59,7 @@ export default class Checkout {
 
     getOrderData(){
         return {
-            
+
         }
     }
 }
